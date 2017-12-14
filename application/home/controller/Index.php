@@ -9,7 +9,7 @@
 // | Date: 2017-12-14
 // +----------------------------------------------------------------------
 
-namespace app\admin\controller;
+namespace app\home\controller;
 
 use think\Controller;
 
@@ -23,6 +23,6 @@ class Index extends Controller
      */
     public function index()
     {
-        echo 'admin';
+        echo 'home';
     }
 }
