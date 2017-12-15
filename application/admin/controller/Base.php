@@ -4,24 +4,18 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: dorisnzy <dorisnzy@163.com>
+// | Author: alwayswhl <576106898@qq.com>
 // +----------------------------------------------------------------------
-// | Date: 2017-12-14
+// | Date: 2017-12-15
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
 
-use app\admin\controller\Base;
+use think\Controller;
 
 /**
- * 后台首页控制器
+ * 后台公共控制器
  */
-class Index extends Base {   
-    /**
-     * 首页
-     */
-    public function index()
-    {	
-        return $this->fetch();
-    }
+class Base extends Controller {
+
 }
