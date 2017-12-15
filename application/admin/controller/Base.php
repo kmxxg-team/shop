@@ -16,6 +16,7 @@ use think\Controller;
 /**
  * 后台公共控制器
  */
-class Base extends Controller {
+class Base extends Controller 
+{
 
 }

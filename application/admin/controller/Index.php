@@ -16,7 +16,8 @@ use app\admin\controller\Base;
 /**
  * 后台首页控制器
  */
-class Index extends Base {   
+class Index extends Base 
+{   
     /**
      * 首页
      */

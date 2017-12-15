@@ -53,13 +53,12 @@ class Admin extends Base
 		$this->assign('list', $list);
         return $this->fetch();
     }
-
-class Admin extends Base {
-
+	
 	/**
 	 * 管理员登录
 	 */
-	public function login(){
+	public function login()
+	{
 		// 检测是否已登录
 		if (isLogin()) {
 			$this->error('您已登陆',url('Index/index'));
@@ -100,7 +99,8 @@ class Admin extends Base {
 	/**
 	 * 注销登录
 	 */
-	public function logout(){
+	public function logout()
+	{
 		//清空session信息
 		$this->success('注销成功', url('Admin/login'));
 	}
