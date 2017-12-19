@@ -18,4 +18,4 @@ return [
         'type' => 'layui',
         'list_rows' => 15,
     ],
-];
+]
