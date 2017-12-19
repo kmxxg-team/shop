@@ -4,37 +4,38 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: alwayswhl <576106898@qq.com>
+// | Author: dorisnzy <dorisnzy@163.com>
 // +----------------------------------------------------------------------
-// | Date: 2017-12-15
+// | Date: 2017-12-19
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
 
-use think\Controller;
+use app\admin\controller\Base;
 
 /**
- * 后台公共控制器
+ * 会员控制器
  */
-class Base extends Controller 
+class User extends Base
 {
+    // 用户模型
+    protected $modelUser;
+
     /**
-     * 系统初始化
+     * 初始化
      */
-    protected function _initialize()
+    public function _initAdmin()
     {
-        $this->_initAdmin();
+        $this->modelUser = model('user');
+        $this->setMeta('用户管理');
     }
 
     /**
-     * 后台初始化
+     * 列表展示
      */
-    protected function _initAdmin(){}
-
-    /**
-     * 设置页面meta
-     */
-    protected function setMeta($meta_title = ''){
-        $this->assign('meta_title', $meta_title);
+    public function index()
+    {
+        return $this->fetch();                     
     }
+    
 }
