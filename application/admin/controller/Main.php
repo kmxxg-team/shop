@@ -4,19 +4,17 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: dorisnzy <dorisnzy@163.com>
+// | Author: 陈果 <yayuneko@163.com> 
 // +----------------------------------------------------------------------
-// | Date: 2017-12-14
+// | Date: 2017-12-19
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
 
-use app\admin\controller\Base;
-
 /**
- * 后台入口控制器
+ * 后台首页控制器
  */
-class Index extends Base 
+class Main extends Base
 {   
     /**
      * 首页
