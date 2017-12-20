@@ -20,51 +20,46 @@ use think\Request;
  */
 class Base extends Model
 {
-    /*----------- 后台自定义分页 -----------------*/
-    // 每页显示记录数目
-    protected $listRows;
-    // 分页类型
-    protected $pageType;
+    // 当前页
+    protected $pageNow;
+    // 每页显示记录数
+    protected $pageLimit;
 
     protected function initialize()
     {
-        // 加载分页配置
-        $this->loadPageConfig();
+        $this->loadPage();
     }
 
     /**
-     * 加载分页配置
+     * 加载数据分页
      *
-     * @return voild
+     * @return void
      */
-    protected function loadPageConfig()
+    protected function loadPage()
     {
         $page = Config::get('page');
-        $rows = Request::instance()->param('rows', 0, 'intval');
-        $this->listRows = $rows ? : $page['list_rows'];
-        $this->pageType = $page['type'];
+        $rows = Request::instance()->param('limit', 0, 'intval');
+        $this->pageLimit = $rows ? : $page['list_rows'];
+        $this->pageNow = Request::instance()->param('page', 1, 'intval');
     }
 
     /**
-     * 分页获取数据
+     * 获取每页显示条数
      *
-     * @param  array  $map 查询条件
-     *
-     * @return object      数据集
+     * @return integer 每页显示条数
      */
-    public function getList()
+    public function getPageLimit()
     {
-        return $this->$pageType($map);
+        return $this->pageLimit;        
     }
 
     /**
-     * layui数据分页
+     * 获取当前页
      *
-     * @return object 数据集
+     * @return integer 当前页码
      */
-    protected function layui()
+    public function getPageNow()
     {
-        $page_now = Request::instance()->param('page', 1, 'intval');
-        $list = $this->page($page_now, $this->listRows)->select();     
+        return $this->pageNow;
     }
 }

@@ -12,6 +12,12 @@
 namespace app\admin\controller;
 
 use think\Controller;
+use think\Config;
+use think\exception\HttpResponseException;
+use think\Request;
+use think\Response;
+use think\response\Redirect;
+use think\Url;
 
 /**
  * 后台公共控制器
@@ -30,11 +36,4 @@ class Base extends Controller
      * 后台初始化
      */
     protected function _initAdmin(){}
-
-    /**
-     * 设置页面meta
-     */
-    protected function setMeta($meta_title = ''){
-        $this->assign('meta_title', $meta_title);
-    }
 }
