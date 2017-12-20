@@ -13,6 +13,7 @@ namespace app\admin\controller;
 
 use think\Controller;
 use think\Db;
+use think\Session;
 use app\admin\controller\Base;
 
 /**
@@ -194,6 +195,58 @@ class Admin extends Base
     public function logout()
     {
         //清空session信息
+        session(null);
+        session::clear();
         $this->success('注销成功', url('Admin/login'));
+    }
+
+    /**
+     * 修改当前管理员密码
+     */
+    public function modify_pwd()
+    {
+        $id   = input('admin_id/a', 0);
+        // 获取密码 
+        $data = $this->request->post();
+        $oldPwd = $data['oldPwd'];
+        $newPwd = $data['newPwd'];
+        $newPwdCheck = $data['newPwdCheck']; 
+
+        if ($id) {
+            $info = db('admin')
+                ->where("admin_id", $id)
+                ->find()
+            ;
+            $info['password'] = '';
+            $this->assign('info',$info);
+        }
+
+        if ($this->request->isPost()) {
+            // 对新旧密码加密处理
+            $enOldPwd = encrypt($oldPwd);
+            $enNewPwd = encrypt($newPwd);
+            $admin = db('admin')
+                ->where('admin_id', $id)
+                ->find()
+            ;
+            // 验证密码格式
+            if (!$admin || $admin['password'] != $enOldPwd) {
+                $this->error('旧密码不正确');
+            } else if ($newPwd != $newPwdCheck) {
+                $this->error('两次密码不一致');
+            } else {
+                $row = db('admin')
+                    ->where('admin_id', $id)
+                    ->update(array('password' => $enNewPwd))
+                ;
+                //返回值判断修改状态
+                if ($row) {
+                    $this->success('修改成功');
+                } else {
+                    $this->error('修改失败');
+                }
+            }
+        }
+        return $this->fetch();
     }
 }

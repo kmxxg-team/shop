@@ -49,3 +49,37 @@ function updateSession($info){
 		return false;
 	}	
 }
+
+/**
+ * 递归删除文件
+ * @param path 文件路径
+ * @param delDir 指定删除路径
+ * @return 失败 false 有指定时成功返回删除路径结果
+ */
+function delFile($path, $delDir = false)
+{	
+	if (!is_dir($path)) {
+		return false;
+	}
+	$handle = opendir($path);
+	//是否读取路径
+	if ($handle) {
+		// 打开目录然后读取其内容 删除子文件
+		while (false !== ($item = readdir($handle))) {
+			// 读取到的文件名不为返回上一级.. 或 .
+			if ($item != '.' && $item != '..') {
+				// 判断当前路径下是否有子文件夹 有则递归 无则删除其中文件
+				is_dir("$path/$item") ? delFile("$path/$item", $delDir) : unlink("$path/$item");
+			}
+		}
+		closedir($handle);
+		//删除目录
+		if ($delDir) return rmdir($path);
+	} else {
+		if (file_exists($path)) {
+			return unlink($path);
+		} else {
+			return false;
+		}
+	}
+}
