@@ -13,6 +13,7 @@ namespace app\admin\controller;
 
 use think\Controller;
 use think\Db;
+use think\Session;
 use app\admin\controller\Base;
 
 /**
@@ -68,47 +69,82 @@ class Admin extends Base
     }
 
     /**
-     * 获取管理员列表信息json数据
+     * 管理员信息页面
      */
-    public function adminJson()
+    public function adminInfo()
+    {
+        $admin_id = input('admin_id');
+
+        // 根据id查询管理员信息
+        $info = array();
+        if ($admin_id) {
+            $info = Db::name('admin')->find('admin_id');
+            $info['password'] = '';
+            $this->assign('info', $info);
+        }
+
+        // 根据是否有id 判断操作是新增或修改
+        $act = empty($admin_id) ? 'add' : 'edit';
+        $this->assign('act', $act);
+
+        // 角色列表
+        $role = Db::name('admin_role')->select();
+        $this->assign('role', $role);
+
+        return $this->fetch('admin_info');
+    }
+
+    /**
+     * 管理员增删改
+     */
+    public function adminHandle()
     {
         // 接收表单传值
-        $data = input('param.');
+        $data = input('post.');
 
-        // 处理搜索条件
-        $map = array();
 
-        if (!empty($data['keyword'])) {
-            $condition = array('like', '%'.$keyword.'%');
-            $map['user_name|email'] = array(
-                $condition,
-                $condition,
-                $condition,
-                '_multi' => true,
-            );
+        // 密码字段处理
+        if(empty($data['password'])){
+            unset($data['password']);
+        }else{
+            $data['password'] = encrypt($data['password']);
         }
 
-        //查询管理员表
-        $res = Db::name('admin')
-            ->where($map)
-            ->order('admin_id')
-            ->select()
-        ;
-
-        //查询权限表
-        $role = Db::name('admin_role')->column('role_id, role_name');
-
-        //将管理员所属角色名 存入数组
-        $list = array();
-        
-        if ($res && $role) {
-            foreach ($res as $val) {
-                $val['role'] =  $role[$val['role_id']];
-                $list[] = $val;
+        // 操作：新增
+        if($data['act'] == 'add'){
+            unset($data['admin_id']);           
+            $data['add_time'] = time();
+            if (Db::name('admin')->where("user_name", $data['user_name'])->count()) {
+                return "此用户名已被注册，请更换";
+            } else {
+                $result = Db::name('admin')
+                    ->strict(false)
+                    ->insert($data)
+                ;
             }
         }
-
-        return json($list);
+        
+        // 操作：修改
+        if($data['act'] == 'edit'){
+            $result = Db::name('admin')
+                ->where('admin_id', $data['admin_id'])
+                ->strict(false)
+                ->update($data)
+            ;
+        }
+        
+        // 操作：删除
+        if ($data['act'] == 'del' && $data['admin_id'] > 1) {
+            $result = Db::name('admin')->where('admin_id', $data['admin_id'])->delete();
+            exit(json_encode(1));
+        }
+        
+        // 结果反馈
+        if($result) {
+            return '操作成功';
+        } else {
+            return '操作失败';
+        }
     }
 
     /**
@@ -159,6 +195,58 @@ class Admin extends Base
     public function logout()
     {
         //清空session信息
+        session(null);
+        session::clear();
         $this->success('注销成功', url('Admin/login'));
+    }
+
+    /**
+     * 修改当前管理员密码
+     */
+    public function modify_pwd()
+    {
+        $id   = input('admin_id/a', 0);
+        // 获取密码 
+        $data = $this->request->post();
+        $oldPwd = $data['oldPwd'];
+        $newPwd = $data['newPwd'];
+        $newPwdCheck = $data['newPwdCheck']; 
+
+        if ($id) {
+            $info = db('admin')
+                ->where("admin_id", $id)
+                ->find()
+            ;
+            $info['password'] = '';
+            $this->assign('info',$info);
+        }
+
+        if ($this->request->isPost()) {
+            // 对新旧密码加密处理
+            $enOldPwd = encrypt($oldPwd);
+            $enNewPwd = encrypt($newPwd);
+            $admin = db('admin')
+                ->where('admin_id', $id)
+                ->find()
+            ;
+            // 验证密码格式
+            if (!$admin || $admin['password'] != $enOldPwd) {
+                $this->error('旧密码不正确');
+            } else if ($newPwd != $newPwdCheck) {
+                $this->error('两次密码不一致');
+            } else {
+                $row = db('admin')
+                    ->where('admin_id', $id)
+                    ->update(array('password' => $enNewPwd))
+                ;
+                //返回值判断修改状态
+                if ($row) {
+                    $this->success('修改成功');
+                } else {
+                    $this->error('修改失败');
+                }
+            }
+        }
+        return $this->fetch();
     }
 }
