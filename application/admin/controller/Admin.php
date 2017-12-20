@@ -68,47 +68,82 @@ class Admin extends Base
     }
 
     /**
-     * 获取管理员列表信息json数据
+     * 管理员信息页面
      */
-    public function adminJson()
+    public function adminInfo()
+    {
+        $admin_id = input('admin_id');
+
+        // 根据id查询管理员信息
+        $info = array();
+        if ($admin_id) {
+            $info = Db::name('admin')->find('admin_id');
+            $info['password'] = '';
+            $this->assign('info', $info);
+        }
+
+        // 根据是否有id 判断操作是新增或修改
+        $act = empty($admin_id) ? 'add' : 'edit';
+        $this->assign('act', $act);
+
+        // 角色列表
+        $role = Db::name('admin_role')->select();
+        $this->assign('role', $role);
+
+        return $this->fetch('admin_info');
+    }
+
+    /**
+     * 管理员增删改
+     */
+    public function adminHandle()
     {
         // 接收表单传值
-        $data = input('param.');
+        $data = input('post.');
 
-        // 处理搜索条件
-        $map = array();
 
-        if (!empty($data['keyword'])) {
-            $condition = array('like', '%'.$keyword.'%');
-            $map['user_name|email'] = array(
-                $condition,
-                $condition,
-                $condition,
-                '_multi' => true,
-            );
+        // 密码字段处理
+        if(empty($data['password'])){
+            unset($data['password']);
+        }else{
+            $data['password'] = encrypt($data['password']);
         }
 
-        //查询管理员表
-        $res = Db::name('admin')
-            ->where($map)
-            ->order('admin_id')
-            ->select()
-        ;
-
-        //查询权限表
-        $role = Db::name('admin_role')->column('role_id, role_name');
-
-        //将管理员所属角色名 存入数组
-        $list = array();
-        
-        if ($res && $role) {
-            foreach ($res as $val) {
-                $val['role'] =  $role[$val['role_id']];
-                $list[] = $val;
+        // 操作：新增
+        if($data['act'] == 'add'){
+            unset($data['admin_id']);           
+            $data['add_time'] = time();
+            if (Db::name('admin')->where("user_name", $data['user_name'])->count()) {
+                return "此用户名已被注册，请更换";
+            } else {
+                $result = Db::name('admin')
+                    ->strict(false)
+                    ->insert($data)
+                ;
             }
         }
-
-        return json($list);
+        
+        // 操作：修改
+        if($data['act'] == 'edit'){
+            $result = Db::name('admin')
+                ->where('admin_id', $data['admin_id'])
+                ->strict(false)
+                ->update($data)
+            ;
+        }
+        
+        // 操作：删除
+        if ($data['act'] == 'del' && $data['admin_id'] > 1) {
+            $result = Db::name('admin')->where('admin_id', $data['admin_id'])->delete();
+            exit(json_encode(1));
+        }
+        
+        // 结果反馈
+        if($result) {
+            return '操作成功';
+        } else {
+            return '操作失败';
+        }
     }
 
     /**
