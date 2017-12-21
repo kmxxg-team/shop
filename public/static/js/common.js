@@ -70,7 +70,7 @@ layui.use(module, function(){
     var show_dialogue = function(me, current, where){
         var tips = $(me).attr('data-tips');
         tips = tips || '您确定要操作？';
-        layer.msg(tips, {btn:['确定', '取消']},
+        layer.confirm(tips, {btn:['确定', '取消']},
             function(){
                 var server_url = $(me).attr('data-url');
                 $.get(server_url, {}, function(result){
@@ -85,10 +85,10 @@ layui.use(module, function(){
                 });
             },
             function(){
-                return false;
-            }
+                return;
+            },
         );
-    };
+    }
 
     // 序列化表单对象为json格式
     $.fn.serializeObject = function(){
@@ -105,7 +105,7 @@ layui.use(module, function(){
             }
         });
         return o;
-    };
+    }
 
 // ----------------- 普通调用 ---------------------
     if ($('.layui-table').attr('data-url')) {
