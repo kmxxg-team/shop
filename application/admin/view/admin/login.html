@@ -17,10 +17,10 @@
 </head>
 <body>
 <div class="login-head">
-    <h1>shop</h1>
+    <h1>B2C商城后台登陆</h1>
 </div>
 <div class="login-box">
-    <form method="post" class="layui-form layui-form-pane" enctype="multipart/form-data">
+    <form method="post" class="layui-form layui-form-pane" id="form" enctype="multipart/form-data">
         <fieldset class="layui-elem-field layui-field-title">
             <legend>后台管理登录</legend>
         </fieldset>
@@ -38,13 +38,43 @@
         </div>
 
         <!-- {:token('__token__', 'sha1')}  -->     
-        <input type="submit" value="登陆" lay-filter="formSubmit" class="layui-btn">
+        <input type="submit" value="登陆" id="submit" class="layui-btn" data-url="{:url('Admin/login')}">
     </form>
   <!--   <div class="copyright">
         © 2017-2018 <a href="http://www.hisiphp.com?v=thinkphp5" target="_blank">shop</a> All Rights Reserved.
     </div> -->
 </div>
 <script src="__ROOT__/plugins/layui/layui.js"></script>
-<script type="text/javascript"></script>
+<script type="text/javascript">
+    layui.use(['jquery','form'], function(){
+      var form = layui.form;
+      var $ = layui.$;
+
+      $("#submit").on('click', function(){
+        var info = $("#form")[0];
+        var formdata = new FormData(info);
+        var url = $(this).attr('data-url');
+        $.ajax({
+            url:url,
+            data:formdata,
+            type:"POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function(res){  
+                 if (res.code == 1) {
+                    var index = layer.load(1, {
+                      shade: [0.1,'#fff']
+                    });
+                    window.location.href = res.url;
+                 } else {
+                    layer.msg(res.msg);
+                 }  
+            }  
+        }); 
+        return false;
+      });
+    });
+</script>
 </body>
 </html>

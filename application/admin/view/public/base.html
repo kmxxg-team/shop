@@ -47,7 +47,6 @@
       //主入口
       app.set({
           type: 'iframe',
-          mainUrl: 'admin/Admin/index'
       }).init();
 
       //修改密码
@@ -64,6 +63,22 @@
           } 
          })
       });
+      //注销
+      $('#logout').click('on',function(){
+        $.ajax({
+            url:"{:url('Admin/logout')}",
+            type:"POST",
+            success:function(res){  
+              layer.confirm('确定要注销么？', {
+                btn: ['是的','算了'] //按钮
+              }, function(){
+                layer.msg(res.msg, {icon: 1});
+                window.location.href = res.url;
+              });
+            }  
+        });
+        return false; 
+      })
     });
 </script>
 

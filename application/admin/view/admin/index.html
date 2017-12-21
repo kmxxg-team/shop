@@ -1,38 +1,64 @@
 <extend name="public/public">
 
 <block name="body">
-  <!-- <blockquote class="layui-elem-quote">而这里是管理员页面！</blockquote> -->
+<!-- 页面标题 -->
+<fieldset class="layui-elem-field layui-field-title">
+  <legend>管理员管理</legend>
+</fieldset>
 
-  <fieldset class="layui-elem-field layui-field-title">
-    <legend>管理员页面</legend>
-  </fieldset>
+<!-- 搜索表单 -->
+<form class="layui-form layui-form-pane keyword"> 
+  <div class="layui-form-item"> 
+    <div class="layui-inline"> 
+      <label class="layui-form-label">搜索</label> 
+      <div class="layui-input-inline"> 
+        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="可根据用户名/邮箱查询" > 
+      </div> 
+    </div>
+    <div class="layui-inline"> 
+      <label class="layui-form-label">所属角色</label> 
+      <div class="layui-input-inline"> 
+        <select name="role_id" lay-verify="">
+          <option value="">请选择角色</option>
+          <volist name="role" id="item">
+            <option value="{$i}">{$item}</option>
+          </volist>
+        </select>  
+      </div> 
+    </div>
+    <div class="layui-inline"> 
+      <type type="button" class="layui-btn" id="keyword">查询</button>
+    </div>
+  </div> 
+</form>
 
-  <table id="demo"></table>
+<!-- 批量操作按钮 -->
+<div class="layui-btn-group">
+  <button class="layui-btn">
+    <i class="layui-icon">&#xe654;</i>新增
+  </button>
+  <button class="layui-btn">
+    <i class="layui-icon">&#xe640;</i>删除
+  </button>
+</div> 
 
-<script>
-  layui.use('table', function(){
-    var table = layui.table;
-    
-    //第一个实例
-    table.render({
-      elem: '#demo'
-      ,height: 315
-      ,url: 'adminJson' //数据接口
-      ,page: true //开启分页
-      ,cols: [[ //表头
-        {field: 'id', title: 'ID', width:80, fixed: 'left'}
-        ,{field: 'username', title: '用户名', width:80}
-        ,{field: 'sex', title: '性别', width:80}
-        ,{field: 'city', title: '城市', width:80} 
-        ,{field: 'sign', title: '签名', width: 177}
-        ,{field: 'experience', title: '积分', width: 80}
-        ,{field: 'score', title: '评分', width: 80}
-        ,{field: 'classify', title: '职业', width: 80}
-        ,{field: 'wealth', title: '财富', width: 135}
-      ]]
-    });
-    
-  });
-</script>
-
+<!-- 数据表格 -->
+<table class="layui-table" data-url="{:url('')}"></table>
+<!-- 分页 -->
+<div id="page" style="text-align: center;"></div>
 </block>
+
+<block name="script">
+  <script type="text/javascript">
+    layui.use('element', function(){
+      var element = layui.element;
+      
+      element.tabAdd('demo', {
+        title: '选项卡的标题'
+        ,content: '选项卡的内容' //支持传入html
+        ,id: 666
+      });
+    });
+  </script>
+</block>
+

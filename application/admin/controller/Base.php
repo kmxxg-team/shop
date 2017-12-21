@@ -40,7 +40,7 @@ class Base extends Controller
                 // 执行权限检测
                 $this->checkPriv();
             } else {
-                $this->error('请先登录', url('Admin/login'), 1);
+                $this->error('请先登录', url('Admin/login'));
             }
         }
 

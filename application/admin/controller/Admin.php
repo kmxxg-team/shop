@@ -11,7 +11,6 @@
 
 namespace app\admin\controller;
 
-use think\Controller;
 use think\Db;
 use think\Session;
 use app\admin\controller\Base;
@@ -21,8 +20,19 @@ use app\admin\controller\Base;
  */
 class Admin extends Base
 {   
+    // 管理员模型
+    protected $modelAdmin;
+
     /**
-     * 首页
+     * 初始化
+     */
+    public function _initAdmin()
+    {
+        $this->modelAdmin = model('Admin');
+    }
+
+    /**
+     * 列表展示
      */
     public function index()
     {
@@ -30,41 +40,59 @@ class Admin extends Base
         $data = input('param.');
 
         // 处理搜索条件
-        $map = array();
+        $map = [];
 
+        // 关键词：按照用户名和邮箱进行搜索
         if (!empty($data['keyword'])) {
-            $condition = array('like', '%'.$keyword.'%');
-            $map['user_name|email'] = array(
-                $condition,
-                $condition,
-                $condition,
-                '_multi' => true,
-            );
+            $map['user_name | email'] = array('like', '%'.$data['keyword'].'%');
         }
 
-        //查询管理员表
-        $res = Db::name('admin')
-            ->where($map)
-            ->order('admin_id')
-            ->paginate(1)
-        ;
-        $page = $res->render();
+        // 角色ID
+        if (!empty($data['role_id'])) {
+            $map['role_id'] = array('eq', $data['role_id']);
+        }
 
-        //查询权限表
+        // 查询权限表 注意：是 role_id => role_name 的一维关联数组
         $role = Db::name('admin_role')->column('role_id, role_name');
+        $this->assign('role', $role);
 
-        //将管理员所属角色名 存入数组
-        $list = array();
-        
-        if ($res && $role) {
-            foreach ($res as $val) {
-                $val['role'] =  $role[$val['role_id']];
-                $list[] = $val;
+        // 若为AJAX
+        if ($this->request->isAjax()) {
+            // list用于存放：包含所属角色名的 管理员信息数组
+            $list = array();
+            $count = $this->modelAdmin->where($map)->count();
+
+            //查询管理员表
+            $res = $this->modelAdmin
+                ->where($map)
+                ->page($this->modelAdmin->getPageNow(), $this->modelAdmin->getPageLimit())
+                ->select()
+            ;
+
+            if (!$res) {
+                return $this->error('信息不存在');
             }
+
+            // 将角色名称信息 添加进list数组
+            if ($res && $role) {
+                foreach ($res as $val) {
+                    $val['role'] =  $role[$val['role_id']];
+                    $list[] = $val;
+                }
+            }
+
+            $this->assign('list', $list);
+            $html = $this->fetch('index_ajax');
+
+            $data = [
+                'list'  => $html,
+                'count' => $count,
+                'limit' => $this->modelAdmin->getPageLimit()
+            ];
+
+            $this->success('获取成功', '', $data);
         }
 
-        $this->assign('list', $list);
-        $this->assign('page', $page);
         return $this->fetch();
     }
 
@@ -184,10 +212,10 @@ class Admin extends Base
                     $url = session('from_url') ? session('from_url') : url('Index/index');
                     $this->success('登陆成功',$url);
                 } else {
-                    $this->error('账号密码不正确！');
+                    $this->error('账号密码不正确！', '', $data);
                 }
             } else {
-                $this->error('登录名或密码不能为空');
+                $this->error('登录名或密码不能为空', '', $data);
             }
         }
         return $this->fetch();

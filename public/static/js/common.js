@@ -19,7 +19,6 @@ layui.use(module, function(){
 
     // 分页获取数据 
     var get_list = function(element, current, where){
-        
         var element = element ? element : $('.layui-table');
         var current = current ? current : 1;
 
