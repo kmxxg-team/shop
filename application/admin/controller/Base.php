@@ -115,4 +115,12 @@ class Base extends Controller
         }
         $this->assign('shop_config', $shop_config);
     }
+
+    /**
+     * ajax请求修改密码页面
+     */
+    public function pwdAjax()
+    {
+        return $this->fetch('Admin/modifyPwd'); 
+    }
 }

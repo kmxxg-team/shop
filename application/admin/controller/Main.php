@@ -23,12 +23,4 @@ class Main extends Base
     {
         return $this->fetch();
     }
-
-    /**
-     * ajax请求修改密码页面
-     */
-    public function pwdAjax()
-    {
-    	return $this->fetch('Admin/modifyPwd'); 
-    }
 }
