@@ -128,7 +128,11 @@ class Admin extends Base
             if (!empty($data['user_name']) && !empty($data['password'])) {
                 // 密码加密
                 $data['password'] = encrypt($data['password']);
-                $info = db('admin')->where($data)->join('tp_admin_role', 'tp_admin.role_id = tp_admin_role.role_id','INNER')->find();
+                $info = db('admin')
+                    ->where($data)
+                    ->join('tp_admin_role', 'tp_admin.role_id = tp_admin_role.role_id','INNER')
+                    ->find()
+                ;
                 //检测登陆行为
                 if ($info) {
                     // 登录成功 更新登录时间ip
@@ -168,25 +172,25 @@ class Admin extends Base
     /**
      * 修改当前管理员密码
      */
-    public function modify_pwd()
-    {
-        $id   = input('admin_id/a', 0);
-        // 获取密码 
-        $data = $this->request->post();
-        $oldPwd = $data['oldPwd'];
-        $newPwd = $data['newPwd'];
-        $newPwdCheck = $data['newPwdCheck']; 
-
-        if ($id) {
-            $info = db('admin')
-                ->where("admin_id", $id)
-                ->find()
-            ;
-            $info['password'] = '';
-            $this->assign('info',$info);
-        }
-
+    public function modifyPwd()
+    {     
         if ($this->request->isPost()) {
+            $id = session('admin_id');
+            // 获取密码 
+            $data = $this->request->post();
+            $oldPwd = $data['oldPwd'];
+            $newPwd = $data['newPwd'];
+            $newPwdCheck = $data['newPwdCheck']; 
+
+            if ($id) {
+                $info = db('admin')
+                    ->where("admin_id", $id)
+                    ->find()
+                ;
+                $info['password'] = '';
+                $this->assign('info',$info);
+            }
+
             // 对新旧密码加密处理
             $enOldPwd = encrypt($oldPwd);
             $enNewPwd = encrypt($newPwd);
@@ -206,12 +210,12 @@ class Admin extends Base
                 ;
                 //返回值判断修改状态
                 if ($row) {
-                    $this->success('修改成功');
+                    $this->success('修改成功',url('Index/index'));
                 } else {
                     $this->error('修改失败');
                 }
             }
-        }
+        }     
         return $this->fetch();
     }
 }

@@ -49,8 +49,24 @@
           type: 'iframe',
           mainUrl: 'admin/Admin/index'
       }).init();
+
+      //修改密码
+      $('#pwd').click('on',function(){
+         $.ajax({
+          url:"{:url('Main/pwdAjax')}",
+          success: function(msg){  
+            layer.open({
+              type: 1,
+              skin: 'layui-layer-rim', //加上边框
+              area: ['420px', '320px'], //宽高
+              content: msg,
+            });       
+          } 
+         })
+      });
     });
 </script>
+
 </body>
 
 </html>

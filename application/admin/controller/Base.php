@@ -33,12 +33,12 @@ class Base extends Controller
             // 判断是否登录
             if (session('admin_id') > 0) {
                 // 执行权限检测
-                $this->check_priv();
+                $this->checkPriv();
             } else {
                 $this->error('请先登录', url('Admin/login'), 1);
             }
         }
-        $this->public_assign();
+        $this->publicAssign();
     }
 
     /**
@@ -56,7 +56,7 @@ class Base extends Controller
     /**
      * 管理员权限检测
      */
-    public function check_priv()
+    public function checkPriv()
     {   
         // 获取当前请求控制器和方法
         $request = \think\Request::instance();
@@ -65,7 +65,7 @@ class Base extends Controller
         // 权限信息
         $act_list = session('act_list');
         // 无需验证权限
-        $uneed_check = array('login', 'logout');
+        $uneed_check = array('login', 'logout','modifypwd');
         if ($ctl == 'Index' || $act_list == 'all') {
             // 超级管理员无需验证
             return true;
@@ -89,7 +89,7 @@ class Base extends Controller
 
             // 检查匹配权限
             if (!in_array($ctl.'@'.$act, $role_right)) {
-                $this->error('您没有操作权限['.($ctl.'@'.$act).'],请联系超管分配', url('Index/index'));
+                $this->error('您没有操作权限['.($ctl.'@'.$act).'],请联系超管分配');
             }
          }
     }
@@ -97,7 +97,7 @@ class Base extends Controller
     /**
      * 配置信息输出到模板
      */
-    public function public_assign()
+    public function publicAssign()
     {
         $shop_config = array();
         $tp_config = db('config')->cache(true)->select();
@@ -106,13 +106,5 @@ class Base extends Controller
             $shop_config[$v['inc_type'].'_'.$v['name']] = $v['value'];
         }
         $this->assign('shop_config', $shop_config);
-    }
-
-    /**
-     * 公共ajax数据返回
-     */
-    public function ajaxReturn($data, $type = 'json')
-    {
-        return json_encode($data);
     }
 }
