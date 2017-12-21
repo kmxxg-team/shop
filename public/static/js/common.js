@@ -27,7 +27,7 @@ layui.use(module, function(){
         if (!server_url) return false;
 
         layer.load(2, {shade: 0.1});
-
+        
         var o = {};
 
         o.page = current;

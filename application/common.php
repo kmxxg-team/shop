@@ -23,7 +23,6 @@ function isLogin(){
 	}
 }
 
-
 /**
  * md5加密密码处理
  * @param str 需要加密数据
