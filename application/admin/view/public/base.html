@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>layout 后台大布局 - Layui</title>
   <link rel="stylesheet" href="__ROOT__/plugins/layui/css/layui.css" media="all">
-  <link rel="stylesheet" href="__ROOT__/admin/css/app.css" media="all">
+  <script src="__ROOT__/plugins/layui/layui.js"></script>
   <script src="__ROOT__/static/js/common.js"></script>
 </head>
 
@@ -30,26 +30,15 @@
 
   </div>
 
-<script src="__ROOT__/plugins/layui/layui.js"></script>
 <script>
-    // var message;
-    // layui.config({
-    //   base: '__ROOT__/admin/js/'
-    // }).use(['app', 'message'], function() {
-    //   var app = layui.app,
-    //       $ = layui.jquery,
-    //       layer = layui.layer;
-    //   //将message设置为全局以便子页面调用
-    //   message = layui.message;
-    //   //主入口
-    //   app.set({
-    //       type: 'iframe',
-    //   }).init();
-
+    layui.use('element', function(){
+      var element = layui.element;
+      var $ = layui.jquery;
+      
       //修改密码
       $('#pwd').click('on',function(){
          $.ajax({
-          url:"{:url('Main/pwdAjax')}",
+          url:"{:url('Base/pwdAjax')}",
           success: function(msg){  
             layer.open({
               type: 1,
@@ -76,7 +65,9 @@
         });
         return false; 
       })
-    // });
+
+    });
+
 </script>
 
 </body>

@@ -3,6 +3,13 @@
     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
     <ul class="layui-nav layui-nav-tree"  lay-filter="test">
       <li class="layui-nav-item layui-nav-itemed">
+        <a href="javascript:;">第一阶段页面</a>
+        <dl class="layui-nav-child">
+          <dd><a href="{:url('user/index')}">会员</a></dd>
+          <dd><a href="{:url('admin/index')}">管理员</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item ">
         <a class="" href="javascript:;">所有商品</a>
         <dl class="layui-nav-child">
           <dd><a href="javascript:;">列表一</a></dd>
