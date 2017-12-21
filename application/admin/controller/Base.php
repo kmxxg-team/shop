@@ -12,6 +12,12 @@
 namespace app\admin\controller;
 
 use think\Controller;
+use think\Config;
+use think\exception\HttpResponseException;
+use think\Request;
+use think\Response;
+use think\response\Redirect;
+use think\Url;
 
 /**
  * 后台公共控制器
@@ -23,11 +29,10 @@ class Base extends Controller
      */
     protected function _initialize()
     {
-        $this->_initAdmin();
 
         $request= \think\Request::instance();
         // 过滤不需要登录验证的行为
-        if (in_array($request->action(), array('login', 'logout', 'vertify'))) {
+        if (in_array($request->action(), array('login', 'logout', 'vertify','index'))) {
 
         } else {
             // 判断是否登录
@@ -38,7 +43,10 @@ class Base extends Controller
                 $this->error('请先登录', url('Admin/login'), 1);
             }
         }
-        $this->publicAssign();
+        
+        $this->public_assign();
+
+        $this->_initAdmin();
     }
 
     /**

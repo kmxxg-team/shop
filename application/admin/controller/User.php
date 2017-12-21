@@ -26,8 +26,7 @@ class User extends Base
      */
     public function _initAdmin()
     {
-        $this->modelUser = model('user');
-        $this->setMeta('用户管理');
+        $this->modelUser = model('User');
     }
 
     /**
@@ -35,6 +34,43 @@ class User extends Base
      */
     public function index()
     {
+        $map = [];
+        
+        // 按昵称搜索
+        if ($this->request->param('nickname')) {
+            $map['nickname'] = ['like', '%'. $this->request->param('nickname') . '%'];
+        }
+
+        // 按手机号搜索
+        if ($this->request->param('mobile')) {
+            $map['mobile'] = ['like', '%'. $this->request->param('mobile') . '%'];
+        }
+
+        if ($this->request->isAjax()) {
+            $count = $this->modelUser->where($map)->count();
+
+            $list  = $this->modelUser
+                ->where($map)
+                ->page($this->modelUser->getPageNow(), $this->modelUser->getPageLimit())
+                ->select()
+            ;
+
+            if (!$list) {
+                return $this->error('信息不存在');
+            }
+
+            $this->assign('list', $list);
+            $html = $this->fetch('index_ajax');
+
+            $data = [
+                'list'  => $html,
+                'count' => $count,
+                'limit' => $this->modelUser->getPageLimit()
+            ];
+
+            return $this->success('获取成功', '', $data);
+        }
+
         return $this->fetch();                     
     }
     
