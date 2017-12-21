@@ -32,7 +32,7 @@ class Base extends Controller
 
         $request= \think\Request::instance();
         // 过滤不需要登录验证的行为
-        if (in_array($request->action(), array('login', 'logout', 'vertify'))) {
+        if (in_array($request->action(), array('login', 'logout', 'vertify','index'))) {
 
         } else {
             // 判断是否登录

@@ -8,58 +8,62 @@
  * ---------------------------------------------
  */
 
-// 预加载layui模块
-var module = ['jquery','form', 'upload', 'laypage', 'laydate', 'layer'];
+var module = ['jquery','form', 'upload', 'laydate', 'layer'];
 layui.use(module, function(){
     var form      = layui.form
         ,$        = layui.$
         ,upload   = layui.upload
-        ,laypage  = layui.laypage
         ,laydate  = layui.laydate
         ,layer    = layui.layer
     ;
 
-    // 分页获取数据
-    var get_list = function(config){
-        var element    = $('.layui-table');
+    // 分页获取数据 
+    var get_list = function(element, current, where){
+
+        layer.load(2, {shade: 0.1});
+
+        var element = element ? element : $('.layui-table');
+        var current = current ? current : 1;
+
         var server_url = element.attr('data-url');
-        var count      = parseInt(element.attr('data-count'));
+        if (!server_url) return false;
 
-        if (!server_url || !count)
-            return false;
+        var o = {};
 
-        laypage.render({
-            elem: 'page' 
-            ,count: count
-            ,limit: 15
-            ,jump:function(obj, first){
-                var current = obj.curr;
-                var limit   = obj.limit;
-                var param   = {page:current, limit:limit}
+        o.page = current;
+        o      = $.extend(o, where);
 
-                param = $.extend(param, config);
-
-                layer.load(2, {shade: 0.1});
-
-                $.get(server_url, param, function(result){
-                    if (!result.code){
-                        element.css('text-align', 'center').html('~Oh!暂无数据');
-                    }
-
-                    element.attr('data-count', result.data.count);
-                    element.html(result.data.list);
-                    layer.closeAll();
-                    // TODO::设置配置
-                    
-                });
+        $.get(server_url, o, function(result){
+            if (!result.code){
+                element.css('text-align', 'center').html('~Oh!暂无数据');
             }
+
+            layer.closeAll();
+            element.html(result.data.list);
+
+            layui.use('laypage', function(){
+                var laypage  = layui.laypage;
+                laypage.render({
+                    elem: 'page' 
+                    ,count: result.data.count
+                    ,curr: current
+                    ,limit: result.data.limit || 15
+                    ,jump:function(obj, first){
+                        current = obj.curr;
+                        if (!first) {
+                            get_list('', current, where);
+                        }
+                    }
+                });
+            });
+
         });
-    };
+    }
 
     // 关键词搜索
     var keyword = function(){
         var form = $('.keyword');
-        get_list(form.serializeObject());
+        get_list('', 1, form.serializeObject());
     };
 
     // 序列化表单对象为json格式
@@ -80,6 +84,6 @@ layui.use(module, function(){
     };
 
 // ----------------- 普通调用 ---------------------
-    get_list({});
+    get_list('', 1, {});
     $('#keyword').on('click', function(){keyword();});
 });

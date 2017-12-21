@@ -38,17 +38,26 @@ class User extends Base
         
         // 按昵称搜索
         if ($this->request->param('nickname')) {
-            $map['nickname'] = $this->request->param('nickname');
+            $map['nickname'] = ['like', '%'. $this->request->param('nickname') . '%'];
         }
-        
-        $count = $this->modelUser->count();
+
+        // 按手机号搜索
+        if ($this->request->param('mobile')) {
+            $map['mobile'] = ['like', '%'. $this->request->param('mobile') . '%'];
+        }
 
         if ($this->request->isAjax()) {
+            $count = $this->modelUser->where($map)->count();
+
             $list  = $this->modelUser
                 ->where($map)
                 ->page($this->modelUser->getPageNow(), $this->modelUser->getPageLimit())
                 ->select()
             ;
+
+            if (!$list) {
+                return $this->error('信息不存在');
+            }
 
             $this->assign('list', $list);
             $html = $this->fetch('index_ajax');
@@ -56,12 +65,12 @@ class User extends Base
             $data = [
                 'list'  => $html,
                 'count' => $count,
+                'limit' => $this->modelUser->getPageLimit()
             ];
 
             return $this->success('获取成功', '', $data);
         }
 
-        $this->assign('count', $count);
         return $this->fetch();                     
     }
     
