@@ -55,6 +55,10 @@ class User extends Base
                 ->select()
             ;
 
+            if (!$list) {
+                return $this->error('信息不存在');
+            }
+
             $this->assign('list', $list);
             $html = $this->fetch('index_ajax');
 
@@ -66,7 +70,7 @@ class User extends Base
 
             return $this->success('获取成功', '', $data);
         }
-        
+
         return $this->fetch();                     
     }
     
