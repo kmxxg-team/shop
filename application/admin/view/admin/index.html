@@ -7,32 +7,30 @@
     <legend>管理员页面</legend>
   </fieldset>
 
-  <table id="demo"></table>
+  <table id="data_table"></table>
 
+</block>
+
+<block name="script">
 <script>
-  layui.use('table', function(){
-    var table = layui.table;
-    
-    //第一个实例
-    table.render({
-      elem: '#demo'
-      ,height: 315
-      ,url: 'adminJson' //数据接口
-      ,page: true //开启分页
-      ,cols: [[ //表头
-        {field: 'id', title: 'ID', width:80, fixed: 'left'}
-        ,{field: 'username', title: '用户名', width:80}
-        ,{field: 'sex', title: '性别', width:80}
-        ,{field: 'city', title: '城市', width:80} 
-        ,{field: 'sign', title: '签名', width: 177}
-        ,{field: 'experience', title: '积分', width: 80}
-        ,{field: 'score', title: '评分', width: 80}
-        ,{field: 'classify', title: '职业', width: 80}
-        ,{field: 'wealth', title: '财富', width: 135}
-      ]]
-    });
-    
+layui.use('table', function(){
+  var table = layui.table;
+  
+  //第一个实例
+  table.render({
+    elem: '#data_table'
+    ,url: "{:url('admin/adminJson')}" //数据接口
+    ,page: true //开启分页
+    ,limit: 3
+    ,limits: [3,5,7,10,15]
+    ,cols: [[ //表头
+      {type:'checkbox'}
+      ,{field: 'admin_id', title: '管理员ID', width: 100, fixed: 'left', sort: true}
+      ,{field: 'user_name', title: '用户名', width: 300}
+      ,{field: 'email', title: '邮箱', width: 500}
+      ,{field: 'add_time', title: '加入时间', width: 200} 
+    ]]
   });
+});
 </script>
-
 </block>
