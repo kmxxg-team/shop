@@ -20,14 +20,13 @@ layui.use(module, function(){
     // 分页获取数据 
     var get_list = function(element, current, where){
 
-        layer.load(2, {shade: 0.1});
-
         var element = element ? element : $('.layui-table');
         var current = current ? current : 1;
 
         var server_url = element.attr('data-url');
         if (!server_url) return false;
-
+        
+        layer.load(2, {shade: 0.1});
         var o = {};
 
         o.page = current;

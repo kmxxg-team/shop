@@ -184,10 +184,10 @@ class Admin extends Base
                     $url = session('from_url') ? session('from_url') : url('Index/index');
                     $this->success('登陆成功',$url);
                 } else {
-                    $this->error('账号密码不正确！');
+                    $this->error('账号密码不正确！', '', $data);
                 }
             } else {
-                $this->error('登录名或密码不能为空');
+                $this->error('登录名或密码不能为空', '', $data);
             }
         }
         return $this->fetch();
