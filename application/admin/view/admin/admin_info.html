@@ -9,23 +9,23 @@
 <!-- 操作类型 -->
 <input type="hidden" name="act" value="{$act}">
 <!-- 管理员ID -->
-<input type="hidden" name="admin_id" value="{$info.admin_id ? $info.admin_id : ''}">
+<input type="hidden" name="admin_id" value="{$info.admin_id|default=''}">
   <div class="layui-form-item">
     <label class="layui-form-label">用户名</label>
     <div class="layui-input-block">
-      <input type="text" name="user_name" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" value="{$info.user_name ? $info.user_name : ''}">
+      <input type="text" name="user_name" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" value="{$info.user_name|default=''}">
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">email地址</label>
     <div class="layui-input-block">
-      <input type="text" name="email" required lay-verify="required" placeholder="请输入邮箱地址" autocomplete="off" class="layui-input" value="{$info.email ? $info.email : ''}">
+      <input type="text" name="email" required lay-verify="required" placeholder="请输入邮箱地址" autocomplete="off" class="layui-input" value="{$info.email|default=''}">
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">登陆密码</label>
     <div class="layui-input-inline">
-      <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" value="{$info.password ? $info.password : ''}">
+      <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" value="{$info.password|default=''}">
     </div>
     <div class="layui-form-mid layui-word-aux">辅助文字</div>
   </div>
