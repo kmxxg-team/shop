@@ -1,4 +1,4 @@
-<extend name="public/public">
+<extend name="public/base">
 
 <block name="body">
 <!-- 页面标题 -->
@@ -46,19 +46,5 @@
 <table class="layui-table" data-url="{:url('')}"></table>
 <!-- 分页 -->
 <div id="page" style="text-align: center;"></div>
-</block>
-
-<block name="script">
-  <script type="text/javascript">
-    layui.use('element', function(){
-      var element = layui.element;
-      
-      element.tabAdd('demo', {
-        title: '选项卡的标题'
-        ,content: '选项卡的内容' //支持传入html
-        ,id: 666
-      });
-    });
-  </script>
 </block>
 
