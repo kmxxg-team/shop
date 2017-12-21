@@ -24,25 +24,21 @@
 		</div>
 	    <div class="layui-form-item" style="margin-top: 30px">
 		    <div class="layui-input-block">
-		      	<a class="layui-btn" lay-submit lay-filter="formDemo" id="submitBtn">立即提交</a>
+		      	<a href="javascript:;" class="layui-btn" id="submitBtn">立即提交</a>
 		      	<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 		    </div>
 		</div>
 	</form>
-<script>
-	layui.use(['jquery','form'], function(){
-	  var form = layui.form;
-	  var $ = layui.$;
+	<script>
+		layui.use(['jquery','form'], function(){
+		  var form = layui.form;
+		  var $ = layui.$;
+		  console.log('test');
 
-	  $("#submitBtn").on('click', function(){
-	  	console.log('test');
-	  });
-
-	  //监听提交
-	  form.on('submit(submitBtn)', function(data){
-	  	console.log(data);
-	    return false;
-	  });
-	});
-</script>
+		  form.on('submit(formDemo)', function(data){
+		    layer.msg(JSON.stringify(data.field));
+		    return false;
+		  });
+		});
+	</script>
 </block>
