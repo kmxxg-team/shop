@@ -43,8 +43,8 @@ class Base extends Controller
                 $this->error('请先登录', url('Admin/login'), 1);
             }
         }
-        
-        $this->public_assign();
+
+        $this->publicAssign();
 
         $this->_initAdmin();
     }
