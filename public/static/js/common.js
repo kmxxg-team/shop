@@ -19,27 +19,34 @@ layui.use(module, function(){
 
     // 分页获取数据 
     var get_list = function(element, current, where){
-
-        layer.load(2, {shade: 0.1});
-
+        
         var element = element ? element : $('.layui-table');
         var current = current ? current : 1;
 
         var server_url = element.attr('data-url');
         if (!server_url) return false;
 
+        layer.load(2, {shade: 0.1});
+        
         var o = {};
 
         o.page = current;
         o      = $.extend(o, where);
 
         $.get(server_url, o, function(result){
+            layer.closeAll();
             if (!result.code){
                 element.css('text-align', 'center').html('~Oh!暂无数据');
+                return false;
             }
 
-            layer.closeAll();
             element.html(result.data.list);
+
+            if ($('.dialogue').attr('data-url')) {  
+                $('.dialogue').bind('click', function(){
+                    show_dialogue(this, current, where);
+                });
+            }
 
             layui.use('laypage', function(){
                 var laypage  = layui.laypage;
@@ -60,10 +67,28 @@ layui.use(module, function(){
         });
     }
 
-    // 关键词搜索
-    var keyword = function(){
-        var form = $('.keyword');
-        get_list('', 1, form.serializeObject());
+    // 对话询问操作
+    var show_dialogue = function(me, current, where){
+        var tips = $(me).attr('data-tips');
+        tips = tips || '您确定要操作？';
+        layer.msg(tips, {btn:['确定', '取消']},
+            function(){
+                var server_url = $(me).attr('data-url');
+                $.get(server_url, {}, function(result){
+                    if (!result.code) {
+                        layer.msg(result.msg || '操作失败');
+                        return false;
+                    }
+
+                    layer.msg(result.msg || '操作成功');
+
+                    setTimeout(function(){get_list('', current, where);},2000);
+                });
+            },
+            function(){
+                return false;
+            }
+        );
     };
 
     // 序列化表单对象为json格式
@@ -84,6 +109,12 @@ layui.use(module, function(){
     };
 
 // ----------------- 普通调用 ---------------------
-    get_list('', 1, {});
-    $('#keyword').on('click', function(){keyword();});
+    if ($('.layui-table').attr('data-url')) {
+        get_list('', 1, {});
+    }
+    if ($('#keyword')) {        
+        $('#keyword').on('click', function(){
+            get_list('', 1, $('.keyword').serializeObject());  
+        });
+    }
 });

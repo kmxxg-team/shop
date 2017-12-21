@@ -74,4 +74,11 @@ class User extends Base
         return $this->fetch();                     
     }
     
+    /**
+     * 删除会员
+     */
+    public function delete()
+    {
+        return $this->success('删除失败');
+    }
 }
