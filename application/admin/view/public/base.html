@@ -31,43 +31,42 @@
   </div>
 
 <script>
-    layui.use('element', function(){
-      var element = layui.element;
-      var $ = layui.jquery;
-      
-      //修改密码
-      $('#pwd').click('on',function(){
-         $.ajax({
-          url:"{:url('Base/pwdAjax')}",
-          success: function(msg){  
-            layer.open({
-              type: 1,
-              skin: 'layui-layer-rim', //加上边框
-              area: ['420px', '320px'], //宽高
-              content: msg,
-            });       
-          } 
-         })
-      });
-      //注销
-      $('#logout').click('on',function(){
-        $.ajax({
-            url:"{:url('Admin/logout')}",
-            type:"POST",
-            success:function(res){  
-              layer.confirm('确定要注销么？', {
-                btn: ['是的','算了'] //按钮
-              }, function(){
-                layer.msg(res.msg, {icon: 1});
-                window.location.href = res.url;
-              });
-            }  
-        });
-        return false; 
-      })
+  layui.use(['jquery','layer','element'], function(){
+    var $ = layui.$
+    ,layer =  layui.layer
+    ,element = layui.element;
 
+     //修改密码
+    $('#pwd').click('on',function(){
+       $.ajax({
+        url:"{:url('Base/pwdAjax')}",
+        success: function(msg){  
+          layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['420px', '320px'], //宽高
+            content: msg,
+          });       
+        } 
+       })
     });
-
+    //注销
+    $('#logout').click('on',function(){
+      $.ajax({
+          url:"{:url('Admin/logout')}",
+          type:"POST",
+          success:function(res){  
+            layer.confirm('确定要注销么？', {
+              btn: ['是的','算了'] //按钮
+            }, function(){
+              layer.msg(res.msg, {icon: 1});
+              window.location.href = res.url;
+            });
+          }  
+      });
+      return false; 
+    });
+  });
 </script>
 
 </body>

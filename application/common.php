@@ -40,6 +40,7 @@ function encrypt($str){
 function updateSession($info){
 	if ($info) {
 		session('admin_id', $info['admin_id']);
+		session('user_name', $info['user_name']);
 	    session('act_list', $info['act_list']);
 	    session('last_login_time', $info['last_login']);
 	    session('last_login_ip', $info['last_ip']);
