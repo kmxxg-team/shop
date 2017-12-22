@@ -4,23 +4,22 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: 陈果 <yayuneko@163.com> 
+// | Author: 陈果 <yayuneko@163.com>
 // +----------------------------------------------------------------------
-// | Date: 2017-12-19
+// | Date: 2017-12-22
 // +----------------------------------------------------------------------
 
-namespace app\admin\controller;
+namespace app\common\model;
+
+use app\common\model\Base;
 
 /**
- * 后台首页控制器
+ * 管理员模型
  */
-class Main extends Base
-{   
-    /**
-     * 首页
-     */
-    public function index()
-    {
-        return $this->fetch();
-    }
+class Role extends Base
+{
+    //设置数据表（不含前缀)
+    protected $name = 'admin_role';
+    // 数据表主键 复合主键使用数组定义 不设置则自动获取
+    protected $pk = 'role_id';
 }

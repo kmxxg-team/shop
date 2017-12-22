@@ -14,9 +14,9 @@ namespace app\common\model;
 use app\common\model\Base;
 
 /**
- * 管理员模型
+ * 权限模型
  */
-class Admin extends Base
+class Role extends Base
 {
     //设置数据表（不含前缀)
     protected $name = 'admin';

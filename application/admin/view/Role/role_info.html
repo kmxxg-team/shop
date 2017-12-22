@@ -1,0 +1,74 @@
+<extend name="public/base">
+
+<block name="body">
+
+<fieldset class="layui-elem-field layui-field-title">
+<legend>
+  <!-- 返回列表按钮 -->
+  <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'role/index\')}'"><i class="layui-icon">&#xe65c;</i></button>
+  <if condition="$act eq 'add'">
+    新增角色
+  <else />
+    角色编辑
+  </if>
+</legend>
+</fieldset>
+<form class="layui-form" action="{:url('')}">
+<!-- 操作类型 -->
+<input type="hidden" name="act" value="{$act}">
+<!-- ID -->
+<input type="hidden" name="role_id" value="{$info.role_id|default=''}">
+  <div class="layui-form-item">
+    <label class="layui-form-label">角色名称</label>
+    <div class="layui-input-block">
+      <input type="text" name="role_name" required lay-verify="required" placeholder="请输入角色名称" autocomplete="off" class="layui-input" value="{$info.role_name|default=''}">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">角色描述</label>
+    <div class="layui-input-block">
+      <textarea name="desc" placeholder="对该角色进行描述" required lay-verify="required" class="layui-textarea">{$info.role_desc|default=''}</textarea>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">权限分配</label>
+    <div class="layui-input-inline">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+ 
+<script>
+//Demo
+layui.use('form', function(){
+  var form = layui.form;
+  
+  //监听提交
+  form.on('submit(formDemo)', function(data){
+  	var $ = layui.jquery;
+  	// $.ajax({
+  	// 	url: "{:url('admin/adminHandle')}",
+  	// 	type: "post",
+  	// 	dataType: "json",
+  	// 	data: data.field,
+  	// 	success: function(data){
+  	// 		layer.msg(data.msg);
+   //      // 若执行成功 跳转回列表页
+   //      if(data.code == 1){
+   //        setTimeout('window.location = "{:url(\'admin/index\')}";', 1500);
+   //      }
+  	// 	}
+  	// });
+    return false;
+  });
+
+});
+</script>
+
+</block>
