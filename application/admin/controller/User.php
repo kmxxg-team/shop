@@ -79,6 +79,19 @@ class User extends Base
      */
     public function delete()
     {
-        return $this->success('删除失败');
+        // return $this->error('删除失败');
+        return $this->success('删除成功');
+    }
+
+    /**
+     * 编辑
+     */
+    public function edit() {
+        if ($this->request->isPost()) {
+            sleep(2);
+            // return $this->error('格式不正确');
+            return $this->success('编辑成功');
+        }
+        return $this->fetch();
     }
 }

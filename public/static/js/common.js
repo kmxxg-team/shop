@@ -35,8 +35,7 @@ layui.use(module, function(){
         $.get(server_url, o, function(result){
             layer.closeAll();
             if (!result.code){
-                element.css('text-align', 'center').html('~Oh!暂无数据');
-                return false;
+                element.css('text-align', 'center').html('<tr class="layui-bg-gray"><td>~Oh!暂无数据</td><tr>');
             }
 
             element.html(result.data.list);
@@ -51,7 +50,7 @@ layui.use(module, function(){
                 var laypage  = layui.laypage;
                 laypage.render({
                     elem: 'page' 
-                    ,count: result.data.count
+                    ,count: result.data.count || 0
                     ,curr: current
                     ,limit: result.data.limit || 15
                     ,jump:function(obj, first){
@@ -75,19 +74,48 @@ layui.use(module, function(){
                 var server_url = $(me).attr('data-url');
                 $.get(server_url, {}, function(result){
                     if (!result.code) {
-                        layer.msg(result.msg || '操作失败');
+                        error_msg(result.msg);
                         return false;
                     }
-
-                    layer.msg(result.msg || '操作成功');
-
-                    setTimeout(function(){get_list('', current, where);},2000);
+                    success_msg(result.msg);
+                    setTimeout(function(){get_list('', current, where);}, 2000);
                 });
             },
             function(){
                 return;
             },
         );
+    }
+
+    // 表单提交
+    var submit_form = function(){
+        form.on('submit(submitForm)', function(data){
+            var default_class = data.elem.classList.value;
+            var action_url    = data.form.action;
+            var default_value = data.elem.innerHTML;
+
+            data.elem.disabled        = true;
+            data.elem.innerHTML       = '<i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">&#xe63d;</i>';
+            data.elem.classList.value = default_class + ' layui-disabled';
+
+            $.post(action_url, data.field, function(result){
+                data.elem.innerHTML       = default_value;
+                data.elem.disabled        = false;
+                data.elem.classList.value = default_class
+
+                if (!result.code) {
+                    error_msg(result.msg);
+                    return false;
+                }
+
+                success_msg(result.msg);
+
+                if (result.url) {
+                    window.location.href = result.url;
+                }
+            });
+            return false;
+        });
     }
 
     // 序列化表单对象为json格式
@@ -107,7 +135,21 @@ layui.use(module, function(){
         return o;
     }
 
+    // success msg
+    var success_msg = function(msg){
+        layer.msg(msg || '操作成功', {icon:6});
+    }
+
+    // error msg
+    var error_msg = function(msg){
+        layer.msg(msg || '操作失败', {icon:5});
+    }
+
+
+
+
 // ----------------- 普通调用 ---------------------
+
     if ($('.layui-table').attr('data-url')) {
         get_list('', 1, {});
     }
@@ -116,4 +158,5 @@ layui.use(module, function(){
             get_list('', 1, $('.keyword').serializeObject());  
         });
     }
+    submit_form();
 });
