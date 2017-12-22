@@ -106,7 +106,7 @@ class Admin extends Base
         // 根据id查询管理员信息
         $info = array();
         if ($admin_id) {
-            $info = Db::name('admin')->find('admin_id');
+            $info = $this->modelAdmin->get($admin_id);
             $info['password'] = '';
             $this->assign('info', $info);
         }
@@ -128,8 +128,7 @@ class Admin extends Base
     public function adminHandle()
     {
         // 接收表单传值
-        $data = input('post.');
-
+        $data = input('param.');
 
         // 密码字段处理
         if(empty($data['password'])){
@@ -138,18 +137,22 @@ class Admin extends Base
             $data['password'] = encrypt($data['password']);
         }
 
+        // 操作反馈
+        $result = false;
+
         // 操作：新增
         if($data['act'] == 'add'){
             unset($data['admin_id']);           
             $data['add_time'] = time();
             if (Db::name('admin')->where("user_name", $data['user_name'])->count()) {
-                return "此用户名已被注册，请更换";
+                return $this->error('此用户名已被注册，请更换');
             } else {
                 $result = Db::name('admin')
                     ->strict(false)
                     ->insert($data)
                 ;
             }
+            $act_text = '新增';
         }
         
         // 操作：修改
@@ -159,19 +162,20 @@ class Admin extends Base
                 ->strict(false)
                 ->update($data)
             ;
+            $act_text = '修改';
         }
         
         // 操作：删除
         if ($data['act'] == 'del' && $data['admin_id'] > 1) {
             $result = Db::name('admin')->where('admin_id', $data['admin_id'])->delete();
-            exit(json_encode(1));
+            $act_text = '删除';
         }
         
         // 结果反馈
-        if($result) {
-            return '操作成功';
+        if ($result >= 0) {
+            return $this->success($act_text.'成功');
         } else {
-            return '操作失败';
+            return $this->error($act_text.'失败');
         }
     }
 
