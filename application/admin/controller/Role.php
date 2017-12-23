@@ -12,6 +12,7 @@
 namespace app\admin\controller;
 
 use app\admin\controller\Base;
+use think\Request;
 
 /**
  * 权限控制器
@@ -78,23 +79,71 @@ class Role extends Base
     }
 
     /**
-     * 角色信息页面
+     * 编辑角色
      */
-    public function roleInfo()
+    public function edit()
     {
-    	$role_id = input('role_id');
+        $id = input('role_id');
 
-    	// 根据ID查询角色信息
-    	$info = array();
-    	if ($role_id) {
-    		$info = $this->modelRole->get($role_id);
-    		$this->assign('info', $info);
-    	}
+        // 根据ID查询信息 给模板展示
+        $info = array();
+        if ($id) {
+            $info = $this->modelRole->get($id);
+            $this->assign('info', $info);
+        }
 
-    	// 根据是否有id 判断操作是新增或修改
-        $act = empty($role_id) ? 'add' : 'edit';
-        $this->assign('act', $act);
-     
+        // 接收到ajax请求
+        if (Request::instance()->isAjax()) {
+            $data = Request::instance()->param();
+            
+            // 更新查找到的记录
+            $result = $info->allowField(true)->save($data);
+
+            // 结果反馈
+            if ($result >= 0) {
+                $this->success('更新成功', 'index');
+            } else {
+                $this->error('更新失败');
+            }
+        }
+
         return $this->fetch('role_info');
+    }
+
+    /**
+     * 添加角色
+     */
+    public function add()
+    {
+        // 接收到ajax请求
+        if (Request::instance()->isAjax()) {
+            $data = Request::instance()->param();
+            
+            // 更新查找到的记录
+            $result = $this->modelRole->allowField(true)->save($data);
+
+            // 结果反馈
+            if ($result) {
+                $this->success('新增成功', 'index');
+            } else {
+                $this->error('新增失败');
+            }
+        }
+
+        return $this->fetch('role_info');
+    }
+
+    /**
+     * 删除角色
+     */
+    public function del()
+    {
+        $id = input('role_id');
+        $result = $this->modelRole->destroy($id);
+        if ($result) {
+            $this->success('删除成功', 'index');
+        } else {
+            $this->error('删除失败');
+        }
     }
 }

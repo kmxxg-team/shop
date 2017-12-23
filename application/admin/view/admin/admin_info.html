@@ -13,7 +13,7 @@
   </if>
 </legend>
 </fieldset>
-<form class="layui-form" action="{:url('')}">
+<form class="layui-form" action="{:url('admin/adminHandle')}">
 <!-- 操作类型 -->
 <input type="hidden" name="act" value="{$act}">
 <!-- ID -->
@@ -33,7 +33,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">登陆密码</label>
     <div class="layui-input-inline">
-      <input type="password" name="password" required placeholder="请输入密码" autocomplete="off" class="layui-input" value="{$info.password|default=''}">
+      <input type="password" name="password" placeholder="请输入密码" autocomplete="off" class="layui-input" value="{$info.password|default=''}">
     </div>
     <div class="layui-form-mid layui-word-aux">(非必填)</div>
   </div>
@@ -52,37 +52,12 @@
   </div>
   <div class="layui-form-item">
     <div class="layui-input-block">
-      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+      <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+      <notpresent name="info">
       <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      </notpresent>
     </div>
   </div>
 </form>
- 
-<script>
-//Demo
-layui.use('form', function(){
-  var form = layui.form;
-  
-  //监听提交
-  form.on('submit(formDemo)', function(data){
-  	var $ = layui.jquery;
-  	$.ajax({
-  		url: "{:url('admin/adminHandle')}",
-  		type: "post",
-  		dataType: "json",
-  		data: data.field,
-  		success: function(data){
-  			layer.msg(data.msg);
-        // 若执行成功 跳转回列表页
-        if(data.code == 1){
-          setTimeout('window.location = "{:url(\'admin/index\')}";', 1500);
-        }
-  		}
-  	});
-    return false;
-  });
-
-});
-</script>
 
 </block>

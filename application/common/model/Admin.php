@@ -16,7 +16,7 @@ use app\common\model\Base;
 /**
  * 权限模型
  */
-class Role extends Base
+class Admin extends Base
 {
     //设置数据表（不含前缀)
     protected $name = 'admin';

@@ -173,7 +173,7 @@ class Admin extends Base
         
         // 结果反馈
         if ($result >= 0) {
-            return $this->success($act_text.'成功');
+            return $this->success($act_text.'成功', 'index');
         } else {
             return $this->error($act_text.'失败');
         }
