@@ -236,8 +236,7 @@ class Admin extends Base
      * 修改当前管理员密码
      */
     public function modifyPwd()
-    {     
-        if ($this->request->isPost()) {
+    {     halt('ddd');
             $id = session('admin_id');
             // 获取密码 
             $data = $this->request->post();
@@ -279,6 +278,4 @@ class Admin extends Base
                 }
             }
         }     
-        return $this->fetch();
-    }
 }

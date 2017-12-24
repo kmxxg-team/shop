@@ -4,23 +4,22 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: 陈果 <yayuneko@163.com> 
+// | Author: 王怀礼 <576106898@qq.com>
 // +----------------------------------------------------------------------
-// | Date: 2017-12-19
+// | Date: 2017-12-22
 // +----------------------------------------------------------------------
 
-namespace app\admin\controller;
+namespace app\common\model;
+
+use app\common\model\Base;
 
 /**
- * 后台首页控制器
+ * 菜单模型
  */
-class Main extends Base
-{   
-    /**
-     * 首页
-     */
-    public function index()
-    {
-        return $this->fetch();
-    }
+class Menu extends Base
+{
+	 //设置数据表（不含前缀)
+    protected $name = 'menu_model';
+    // 数据表主键 复合主键使用数组定义 不设置则自动获取
+    protected $pk = 'menu_id';
 }
