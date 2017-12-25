@@ -25,22 +25,29 @@
   <div class="layui-form-item">
     <label class="layui-form-label">所属分组</label>
     <div class="layui-input-block">
-      
+      <select id="right_group" lay-verify="" lay-search>
+        <option value="">请选择分组</option>
+        <volist name="right_group" id="item" key='key'>
+          <option value="{$key}"
+            <present name="info"><if condition="$info.group eq $key">selected</if></present>
+          >{$item}</option>
+        </volist>
+      </select>
     </div>
   </div>
 
   <div class="layui-form-item">
     <label class="layui-form-label">添加权限码</label>
     <div class="layui-input-inline">
-      <select id="controller" lay-verify="" lay-search onchange="get_act_list(this)">
+      <select id="controller" lay-filter="controller_list" lay-verify="" lay-search>
         <option value="">请选择控制器</option>
-        <volist name="planList" id="item">
+        <volist name="plan_list" id="item">
           <option value="{$item}">{$item}</option>
         </volist>
       </select>
     </div>
-    <div class="layui-input-inline">
-      <select id="act_list" lay-filter="act_list" lay-verify="" lay-search>
+    <div class="layui-input-inline" lay-filter="act_list">
+      <select id="act_list"  lay-verify="" lay-search>
         <option value="">请选择方法</option>
       </select>
     </div>
@@ -64,24 +71,24 @@
  
 <script>
   layui.use('form', function(){
-  var form = layui.form;
-  
-  form.on('select(act_list)', function(data){
-      alert('nihaonihao');
-  });
-});
+    var form = layui.form;
+    var $ = layui.jquery;
 
-  function get_act_list(obj){
-    $.ajax({
-      url: "{:url('admin/SystemMenu/ajax_get_action')}",
-      type: 'post',
-      data: {'controller':$(obj).val()},
-      dataType:'html',
-      success:function(res){
-        $('#act_list').empty.append(res);
-      }
-    });
-  }
+    form.on('select(controller_list)', function(data){
+      $.ajax({
+        url: "{:url('admin/SystemMenu/ajax_get_action')}",
+        type: 'post',
+        data: {'controller':data.value},
+        dataType: 'html',
+        success:function(res){
+          console.log(res);
+          $('#act_list').empty().append(res);
+        }
+      });
+      form.render('select');
+    });   
+    
+  });
 
 </script>
 

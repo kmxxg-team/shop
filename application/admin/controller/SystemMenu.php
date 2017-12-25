@@ -78,7 +78,7 @@ class SystemMenu extends Base
     }
 
     /**
-     * 编辑角色
+     * 编辑权限
      */
     public function edit()
     {
@@ -91,14 +91,17 @@ class SystemMenu extends Base
             $this->assign('info', $info);
         }
 
+        // 获取配置文件里的right_group（权限分组）
+        $right_group = config('right_group');
+
         // 获取admin模块下的所有控制器名称
-        $planPath = APP_PATH.'admin/controller';
-        $planList = array();
-        $dirRes = opendir($planPath);
-        while ($dir = readdir($dirRes)) {
+        $plan_path = APP_PATH.'admin/controller';
+        $plan_list = array();
+        $dir_res = opendir($plan_path);
+        while ($dir = readdir($dir_res)) {
             // 过滤'.', '..', '.svn'
             if (!in_array($dir, ['.', '..', '.svn'])) {
-                $planList[] = basename($dir, '.php');
+                $plan_list[] = basename($dir, '.php');
             }
         }
 
@@ -117,7 +120,8 @@ class SystemMenu extends Base
             }
         }
 
-        $this->assign('planList', $planList);
+        $this->assign('right_group', $right_group);
+        $this->assign('plan_list', $plan_list);
         return $this->fetch('system_menu_info');
     }
 
@@ -166,10 +170,8 @@ class SystemMenu extends Base
         $control = input('controller');
         $advContrl = get_class_methods("app\admin\controller\\". str_replace('.php','',$control));
         $baseContrl = get_class_methods("app\admin\controller\Base");
-        dump("app\admin\controller\\". str_replace('.php','',$control));
-        dump($advContrl);
-        dump($baseContrl); die;
         $diffArray  = array_diff($advContrl,$baseContrl);
+
         $html = '';
         foreach ($diffArray as $val){
             $html .= "<option value='".$val."'>".$val."</option>";
