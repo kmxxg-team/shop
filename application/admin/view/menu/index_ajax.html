@@ -1,17 +1,17 @@
 <thead>
   <tr>
-    <th>会员昵称</th>
-    <th>邮件</th>
-    <th>手机号</th>
+    <th>标题</th>
+    <th>级别</th>
+    <th>状态</th>
     <th>操作</th>
   </tr> 
 </thead>
 <tbody>
   <volist name="list" id="item">
     <tr>
-      <td>{$item.nickname}</td>
-      <td>{$item.email}</td>
-      <td>{$item.mobile}</td>
+      <td>{$item.title}</td>
+      <td>{$item.level}</td>
+      <td>{$item.visible}</td>
       <td>
           <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-primary">
             查看
@@ -19,7 +19,7 @@
           <a href="{:url('edit')}" class="layui-btn layui-btn-xs">
             编辑
           </a>
-          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['user_id' => $item['user_id']])}"data-tips="您确定要删除？">
+          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['mod_id' => $item['mod_id']])}"data-tips="您确定要删除？">
             删除
           </a>
         <div class="layui-btn-group">

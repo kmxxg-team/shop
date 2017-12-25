@@ -3,12 +3,20 @@
 <block name="body">
 
 <fieldset class="layui-elem-field layui-field-title">
-<legend>管理员信息</legend>
+<legend>
+  <!-- 返回列表按钮 -->
+  <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'admin/index\')}'"><i class="layui-icon">&#xe65c;</i></button>
+  <if condition="$act eq 'add'">
+    管理员注册
+  <else />
+    管理员信息编辑
+  </if>
+</legend>
 </fieldset>
-<form class="layui-form" action="{:url('admin/adminHandle')}">
+<form class="layui-form" action="{:url('')}">
 <!-- 操作类型 -->
 <input type="hidden" name="act" value="{$act}">
-<!-- 管理员ID -->
+<!-- ID -->
 <input type="hidden" name="admin_id" value="{$info.admin_id|default=''}">
   <div class="layui-form-item">
     <label class="layui-form-label">用户名</label>
@@ -19,15 +27,15 @@
   <div class="layui-form-item">
     <label class="layui-form-label">email地址</label>
     <div class="layui-input-block">
-      <input type="text" name="email" required lay-verify="required" placeholder="请输入邮箱地址" autocomplete="off" class="layui-input" value="{$info.email|default=''}">
+      <input type="text" name="email" required lay-verify="required|email" placeholder="请输入邮箱地址" autocomplete="off" class="layui-input" value="{$info.email|default=''}">
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">登陆密码</label>
     <div class="layui-input-inline">
-      <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" value="{$info.password|default=''}">
+      <input type="password" name="password" required placeholder="请输入密码" autocomplete="off" class="layui-input" value="{$info.password|default=''}">
     </div>
-    <div class="layui-form-mid layui-word-aux">辅助文字</div>
+    <div class="layui-form-mid layui-word-aux">(非必填)</div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">所属角色</label>
@@ -35,7 +43,9 @@
       <select name="role_id" lay-verify="required">
         <option value=""></option>
       	<volist name="role" id="vo">
-			<option value="{$vo.role_id}" >{$vo.role_name}</option>
+    			<option value="{$vo.role_id}"
+            <present name="$info"><if condition="$vo['role_id'] eq $info['role_id']"> selected="selected"</if></present>
+          >{$vo.role_name}</option>
       	</volist>
       </select>
     </div>
@@ -55,18 +65,23 @@ layui.use('form', function(){
   
   //监听提交
   form.on('submit(formDemo)', function(data){
-	var $ = layui.jquery;
-	$.ajax({
-		url: "{:url('admin/adminHandle')}",
-		type: "post",
-		dataType: "json",
-		data: data.field,
-		success: function(data){
-			layer.msg(data);
-		}
-	});
+  	var $ = layui.jquery;
+  	$.ajax({
+  		url: "{:url('admin/adminHandle')}",
+  		type: "post",
+  		dataType: "json",
+  		data: data.field,
+  		success: function(data){
+  			layer.msg(data.msg);
+        // 若执行成功 跳转回列表页
+        if(data.code == 1){
+          setTimeout('window.location = "{:url(\'admin/index\')}";', 1500);
+        }
+  		}
+  	});
     return false;
   });
+
 });
 </script>
 

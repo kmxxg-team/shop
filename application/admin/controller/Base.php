@@ -35,13 +35,13 @@ class Base extends Controller
         if (in_array($request->action(), array('login', 'logout', 'vertify','index'))) {
 
         } else {
-            // 判断是否登录
-            if (session('admin_id') > 0) {
-                // 执行权限检测
-                $this->checkPriv();
-            } else {
-                $this->error('请先登录', url('Admin/login'));
-            }
+            // // 判断是否登录
+            // if (session('admin_id') > 0) {
+            //     // 执行权限检测
+            //     $this->checkPriv();
+            // } else {
+            //     $this->error('请先登录', url('Admin/login'));
+            // }
         }
 
         $this->publicAssign();
