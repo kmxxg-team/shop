@@ -18,4 +18,14 @@ return [
         'type' => 'layui',
         'list_rows' => 15,
     ],
+
+    // 系统权限分组
+    'right_group' => [
+        'system' => '系统设置',
+        'content' => '内容管理',
+        'goods' => '商品中心',
+        'member' => '会员中心',
+        'order' => '订单中心',
+        'count' => '统计报表',
+    ],
 ];

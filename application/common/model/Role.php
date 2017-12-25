@@ -6,7 +6,7 @@
 // +----------------------------------------------------------------------
 // | Author: 陈果 <yayuneko@163.com>
 // +----------------------------------------------------------------------
-// | Date: 2017-12-19
+// | Date: 2017-12-22
 // +----------------------------------------------------------------------
 
 namespace app\common\model;
@@ -14,12 +14,12 @@ namespace app\common\model;
 use app\common\model\Base;
 
 /**
- * 权限模型
+ * 管理员模型
  */
-class Admin extends Base
+class Role extends Base
 {
     //设置数据表（不含前缀)
-    protected $name = 'admin';
+    protected $name = 'admin_role';
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
-    protected $pk = 'admin_id';
+    protected $pk = 'role_id';
 }

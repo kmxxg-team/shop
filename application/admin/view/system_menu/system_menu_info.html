@@ -1,0 +1,96 @@
+<extend name="public/base">
+
+<block name="body">
+
+<fieldset class="layui-elem-field layui-field-title">
+<legend>
+  <!-- 返回列表按钮 -->
+  <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
+  <present name="info">
+    编辑权限
+  <else />
+    新增权限
+  </present>
+</legend>
+</fieldset>
+<form class="layui-form" action="{:url()}" method="post">
+<!-- ID -->
+<input type="hidden" name="id" value="{$info.role_id|default=''}">
+  <div class="layui-form-item">
+    <label class="layui-form-label">权限资源名称</label>
+    <div class="layui-input-block">
+      <input type="name" name="name" required lay-verify="required" placeholder="请输入权限资源" autocomplete="off" class="layui-input" value="{$info.name|default=''}">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">所属分组</label>
+    <div class="layui-input-block">
+      <select id="right_group" lay-verify="" lay-search>
+        <option value="">请选择分组</option>
+        <volist name="right_group" id="item" key='key'>
+          <option value="{$key}"
+            <present name="info"><if condition="$info.group eq $key">selected</if></present>
+          >{$item}</option>
+        </volist>
+      </select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">添加权限码</label>
+    <div class="layui-input-inline">
+      <select id="controller" lay-filter="controller_list" lay-verify="" lay-search>
+        <option value="">请选择控制器</option>
+        <volist name="plan_list" id="item">
+          <option value="{$item}">{$item}</option>
+        </volist>
+      </select>
+    </div>
+    <div class="layui-input-inline" lay-filter="act_list">
+      <select id="act_list"  lay-verify="" lay-search>
+        <option value="">请选择方法</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">权限码</label>
+    <div class="layui-input-inline">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+      <notpresent name="info">
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      </notpresent>
+    </div>
+  </div>
+</form>
+ 
+<script>
+  layui.use('form', function(){
+    var form = layui.form;
+    var $ = layui.jquery;
+
+    form.on('select(controller_list)', function(data){
+      $.ajax({
+        url: "{:url('admin/SystemMenu/ajax_get_action')}",
+        type: 'post',
+        data: {'controller':data.value},
+        dataType: 'html',
+        success:function(res){
+          console.log(res);
+          $('#act_list').empty().append(res);
+        }
+      });
+      form.render('select');
+    });   
+    
+  });
+
+</script>
+
+</block>
+

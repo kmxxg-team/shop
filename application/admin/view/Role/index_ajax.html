@@ -1,9 +1,8 @@
 <thead>
   <tr>
     <th><input type="checkbox" onclick="checkAll(this)"></th>
-    <th>用户名</th>
-    <th>邮件</th>
-    <th>所属角色</th>
+    <th>角色名称</th>
+    <th>描述</th>
     <th>操作</th>
   </tr> 
 </thead>
@@ -11,17 +10,16 @@
   <volist name="list" id="item">
     <tr>
       <td id="check_item"><input type="checkbox"></td>
-      <td>{$item.user_name}</td>
-      <td>{$item.email}</td>
-      <td>{$item.role}</td>
+      <td>{$item.role_name}</td>
+      <td>{$item.role_desc}</td>
       <td>
           <!-- <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-primary">
             查看
           </a> -->
-          <a href="{:url('admin/adminInfo', 'admin_id='.$item['admin_id'])}" class="layui-btn layui-btn-xs" >
+          <a href="{:url('edit', ['role_id'=>$item.role_id])}" class="layui-btn layui-btn-xs" >
             编辑
           </a>
-          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('admin/adminHandle',['admin_id' => $item['admin_id'], 'act' => 'del'])}" data-tips="您确定要删除？">
+          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('del', ['role_id'=>$item.role_id])}" data-tips="您确定要删除？">
             删除
           </a>
         <div class="layui-btn-group">
