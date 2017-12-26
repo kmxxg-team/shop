@@ -62,6 +62,10 @@ class SystemMenu extends Base
                 return $this->error('信息不存在');
             }
 
+            // 获取配置文件里的right_group（权限分组）
+            $right_group = config('right_group');
+
+            $this->assign('group', $right_group);
             $this->assign('list', $list);
             $html = $this->fetch('index_ajax');
 
@@ -78,9 +82,9 @@ class SystemMenu extends Base
     }
 
     /**
-     * 编辑权限
+     * 权限信息页面展示
      */
-    public function edit()
+    public function rightInfo()
     {
         $id = input('id');
 
@@ -88,6 +92,8 @@ class SystemMenu extends Base
         $info = array();
         if ($id) {
             $info = $this->modelSystemMenu->get($id);
+            // 将权限码拆分成数组
+            $info['right'] = explode(',', $info['right']);
             $this->assign('info', $info);
         }
 
@@ -104,25 +110,41 @@ class SystemMenu extends Base
                 $plan_list[] = basename($dir, '.php');
             }
         }
+        
+        $this->assign('right_group', $right_group);
+        $this->assign('plan_list', $plan_list);
+        return $this->fetch('system_menu_info');
+    }
 
+    /**
+     * 编辑权限
+     */
+    public function edit()
+    {
         // 接收到ajax请求
         if (Request::instance()->isAjax()) {
             $data = Request::instance()->param();
-            
+
+            // 若权限码不为空，将权限码数组粘合成字符串
+            if (!empty($data['right'])) {
+                $data['right'] = implode(',', $data['right']);
+            } else {
+                $data['right'] = '';
+            }
+
             // 更新查找到的记录
-            $result = $info->allowField(true)->save($data);
+            $result = $this->modelSystemMenu
+                ->allowField(true)
+                ->update($data)
+            ;
 
             // 结果反馈
-            if ($result >= 0) {
+            if ($result) {
                 $this->success('更新成功', 'index');
             } else {
                 $this->error('更新失败');
             }
         }
-
-        $this->assign('right_group', $right_group);
-        $this->assign('plan_list', $plan_list);
-        return $this->fetch('system_menu_info');
     }
 
     /**
@@ -133,9 +155,19 @@ class SystemMenu extends Base
         // 接收到ajax请求
         if (Request::instance()->isAjax()) {
             $data = Request::instance()->param();
-            
+
+            // 若权限码不为空，将权限码数组粘合成字符串
+            if (!empty($data['right'])) {
+                $data['right'] = implode(',', $data['right']);
+            } else {
+                $data['right'] = '';
+            }
+
             // 更新查找到的记录
-            $result = $this->modelSystemMenu->allowField(true)->save($data);
+            $result = $this->modelSystemMenu
+                ->allowField(true)
+                ->save($data)
+            ;
 
             // 结果反馈
             if ($result) {
@@ -144,8 +176,6 @@ class SystemMenu extends Base
                 $this->error('新增失败');
             }
         }
-
-        return $this->fetch('system_menu_info');
     }
 
     /**
