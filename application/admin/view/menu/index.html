@@ -1,0 +1,39 @@
+<extend name="public/base">
+
+<block name="body">
+<fieldset class="layui-elem-field layui-field-title">
+  <legend>菜单管理</legend>
+</fieldset>
+
+<form class="layui-form layui-form-pane keyword"> 
+  <div class="layui-form-item"> 
+    <div class="layui-inline"> 
+      <label class="layui-form-label">菜单名</label> 
+      <div class="layui-input-inline"> 
+        <input type="text" name="title" autocomplete="off" class="layui-input" placeholder="请输入菜单名" > 
+      </div> 
+    </div> 
+    <div class="layui-inline"> 
+      <label class="layui-form-label">等级</label> 
+      <div class="layui-input-inline"> 
+        <input type="text" name="level" autocomplete="off" class="layui-input" placeholder="请输入菜单等级">
+      </div> 
+    </div> 
+    <div class="layui-inline"> 
+      <type type="button" class="layui-btn" id="keyword">查询</button>
+    </div>
+  </div> 
+</form>
+<div class="layui-btn-group">
+  <a href="{:url('menuInfo')}">
+    <button class="layui-btn">
+      <i class="layui-icon">&#xe654;</i>新增
+    </button>
+  </a>
+  <button class="layui-btn">
+    <i class="layui-icon">&#xe640;</i>删除
+  </button>
+</div> 
+<table class="layui-table" data-url="{:url('')}"></table>
+<div id="page" style="text-align: center;"></div>
+</block>

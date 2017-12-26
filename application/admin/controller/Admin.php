@@ -261,49 +261,46 @@ class Admin extends Base
      * 修改当前管理员密码
      */
     public function modifyPwd()
-    {     
-        if ($this->request->isPost()) {
-            $id = session('admin_id');
-            // 获取密码 
-            $data = $this->request->post();
-            $oldPwd = $data['oldPwd'];
-            $newPwd = $data['newPwd'];
-            $newPwdCheck = $data['newPwdCheck']; 
+    {    
+        $id = session('admin_id');
+        // 获取密码 
+        $data = $this->request->post();
+        $oldPwd = $data['oldPwd'];
+        $newPwd = $data['newPwd'];
+        $newPwdCheck = $data['newPwdCheck']; 
 
-            if ($id) {
-                $info = db('admin')
-                    ->where("admin_id", $id)
-                    ->find()
-                ;
-                $info['password'] = '';
-                $this->assign('info',$info);
-            }
-
-            // 对新旧密码加密处理
-            $enOldPwd = encrypt($oldPwd);
-            $enNewPwd = encrypt($newPwd);
-            $admin = db('admin')
-                ->where('admin_id', $id)
+        if ($id) {
+            $info = db('admin')
+                ->where("admin_id", $id)
                 ->find()
             ;
-            // 验证密码格式
-            if (!$admin || $admin['password'] != $enOldPwd) {
-                $this->error('旧密码不正确');
-            } else if ($newPwd != $newPwdCheck) {
-                $this->error('两次密码不一致');
+            $info['password'] = '';
+            $this->assign('info',$info);
+        }
+
+        // 对新旧密码加密处理
+        $enOldPwd = encrypt($oldPwd);
+        $enNewPwd = encrypt($newPwd);
+        $admin = db('admin')
+            ->where('admin_id', $id)
+            ->find()
+        ;
+        // 验证密码格式
+        if (!$admin || $admin['password'] != $enOldPwd) {
+            $this->error('旧密码不正确');
+        } else if ($newPwd != $newPwdCheck) {
+            $this->error('两次密码不一致');
+        } else {
+            $row = db('admin')
+                ->where('admin_id', $id)
+                ->update(array('password' => $enNewPwd))
+            ;
+            //返回值判断修改状态
+            if ($row) {
+                $this->success('修改成功',url('Index/index'));
             } else {
-                $row = db('admin')
-                    ->where('admin_id', $id)
-                    ->update(array('password' => $enNewPwd))
-                ;
-                //返回值判断修改状态
-                if ($row) {
-                    $this->success('修改成功',url('Index/index'));
-                } else {
-                    $this->error('修改失败');
-                }
+                $this->error('修改失败');
             }
-        }     
-        return $this->fetch();
-    }
+        }
+    }     
 }

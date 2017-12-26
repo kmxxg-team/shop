@@ -1,10 +1,12 @@
 <div class="layui-header">
-  <div class="layui-logo">layui 后台布局</div>
+  <div class="layui-logo">B2C商城后台管理系统</div>
   <!-- 头部区域（可配合layui已有的水平导航） -->
   <ul class="layui-nav layui-layout-left">
-    <li class="layui-nav-item"><a href="">控制台</a></li>
-    <li class="layui-nav-item"><a href="">商品管理</a></li>
-    <li class="layui-nav-item"><a href="">用户</a></li>
+    <volist name="top" id="vo">
+      <li class="layui-nav-item">
+        <a href=""><i class="layui-icon">{$vo.icon}</i>{$vo.title}</a>
+      </li>
+    </volist>
     <li class="layui-nav-item">
       <a href="javascript:;">其它系统</a>
       <dl class="layui-nav-child">
@@ -17,13 +19,11 @@
   <ul class="layui-nav layui-layout-right">
     <li class="layui-nav-item">
       <a href="javascript:;">
-
-        贤心
-
+        {:session('user_name')}
       </a>
       <dl class="layui-nav-child">
-        <dd><a href="javascript:;" data-url="{:url('Admin/modifyPwd')}" id="pwd">修改密码</dd>
-        <dd><a href="{:url('System/cleanCache')}">清空缓存</a></dd>
+        <dd><a href="javascript:;" id="pwd">修改密码</dd>
+        <dd><a href="javascript:;" id="cache">清空缓存</a></dd>
       </dl>
     </li>
     <li class="layui-nav-item"><a href="javascript:;" id="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a></li>

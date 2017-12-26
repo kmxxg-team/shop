@@ -1,0 +1,44 @@
+<thead>
+  <tr>
+    <th>标题</th>
+    <th>级别</th>
+    <th> URL</th>
+    <th>状态</th>
+    <th>操作</th>
+  </tr> 
+</thead>
+<tbody>
+  <volist name="list" id="item">
+    <tr>
+      <td>{$item.title}</td>
+      <td>
+        <switch name="item.level">
+          <case value="1">一级</case>
+          <case value="2">二级</case>
+          <case value="3">三级</case>
+          <default /><i>未知</i>
+        </switch>
+      </td>
+      <td>{$item.module}/{$item.ctl}/{$item.act}</td>
+      <td>
+        <switch name="item.visible">
+          <case value="0">不可见</case>
+          <case value="1">可见</case>
+          <default /><i>未知</i>
+        </switch>
+      <td>
+          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-primary">
+            查看
+          </a>
+          <a href="{:url('menuInfo',array('mod_id'=>$item.mod_id))}" class="layui-btn layui-btn-xs">
+            编辑
+          </a>
+          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['mod_id' => $item['mod_id']])}"data-tips="您确定要删除？">
+            删除
+          </a>
+        <div class="layui-btn-group">
+        </div>
+      </td>
+    </tr>
+  </volist>
+</tbody>
