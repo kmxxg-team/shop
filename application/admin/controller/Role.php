@@ -55,6 +55,7 @@ class Role extends Base
             //查询管理员表
             $list = $this->modelRole
                 ->where($map)
+                ->order('role_id asc')
                 ->page($this->modelRole->getPageNow(), $this->modelRole->getPageLimit())
                 ->select()
             ;
@@ -79,9 +80,9 @@ class Role extends Base
     }
 
     /**
-     * 编辑角色
+     * 角色信息页面
      */
-    public function edit()
+    public function roleInfo()
     {
         $id = input('role_id');
 
@@ -91,22 +92,7 @@ class Role extends Base
             $info = $this->modelRole->get($id);
             $this->assign('info', $info);
         }
-
-        // 接收到ajax请求
-        if (Request::instance()->isAjax()) {
-            $data = Request::instance()->param();
-            
-            // 更新查找到的记录
-            $result = $info->allowField(true)->save($data);
-
-            // 结果反馈
-            if ($result >= 0) {
-                $this->success('更新成功', 'index');
-            } else {
-                $this->error('更新失败');
-            }
-        }
-
+        
         return $this->fetch('role_info');
     }
 
@@ -129,8 +115,27 @@ class Role extends Base
                 $this->error('新增失败');
             }
         }
+    }
 
-        return $this->fetch('role_info');
+    /**
+     * 编辑角色
+     */
+    public function edit()
+    {
+        // 接收到ajax请求
+        if (Request::instance()->isAjax()) {
+            $data = Request::instance()->param();
+            
+            // 更新查找到的记录
+            $result = $this->modelRole->allowField(true)->update($data);
+
+            // 结果反馈
+            if ($result) {
+                $this->success('更新成功', 'index');
+            } else {
+                $this->error('更新失败');
+            }
+        }
     }
 
     /**

@@ -65,6 +65,7 @@ class Admin extends Base
             //查询管理员表
             $res = $this->modelAdmin
                 ->where($map)
+                ->order('admin_id desc')
                 ->page($this->modelAdmin->getPageNow(), $this->modelAdmin->getPageLimit())
                 ->select()
             ;
@@ -123,9 +124,37 @@ class Admin extends Base
     }
 
     /**
-     * 管理员增删改
+     * 新增管理员
      */
-    public function adminHandle()
+    public function add()
+    {
+        // 接收表单传值
+        $data = input('param.');
+
+        unset($data['admin_id']);           
+        $data['add_time'] = time();
+
+        if (Db::name('admin')->where("user_name", $data['user_name'])->count()) {
+            return $this->error('此用户名已被注册，请更换');
+        } else {
+            $result = Db::name('admin')
+                ->strict(false)
+                ->insert($data)
+            ;
+        }
+
+        // 结果反馈
+        if ($result >= 0) {
+            return $this->success('新增成功', 'index');
+        } else {
+            return $this->error('新增失败');
+        }
+    }
+
+    /**
+     * 编辑管理员
+     */
+    public function edit()
     {
         // 接收表单传值
         $data = input('param.');
@@ -137,45 +166,37 @@ class Admin extends Base
             $data['password'] = encrypt($data['password']);
         }
 
-        // 操作反馈
-        $result = false;
+        $result = Db::name('admin')
+            ->where('admin_id', $data['admin_id'])
+            ->strict(false)
+            ->update($data)
+        ;
 
-        // 操作：新增
-        if($data['act'] == 'add'){
-            unset($data['admin_id']);           
-            $data['add_time'] = time();
-            if (Db::name('admin')->where("user_name", $data['user_name'])->count()) {
-                return $this->error('此用户名已被注册，请更换');
-            } else {
-                $result = Db::name('admin')
-                    ->strict(false)
-                    ->insert($data)
-                ;
-            }
-            $act_text = '新增';
-        }
-        
-        // 操作：修改
-        if($data['act'] == 'edit'){
-            $result = Db::name('admin')
-                ->where('admin_id', $data['admin_id'])
-                ->strict(false)
-                ->update($data)
-            ;
-            $act_text = '修改';
-        }
-        
-        // 操作：删除
-        if ($data['act'] == 'del' && $data['admin_id'] > 1) {
-            $result = Db::name('admin')->where('admin_id', $data['admin_id'])->delete();
-            $act_text = '删除';
-        }
-        
         // 结果反馈
         if ($result >= 0) {
-            return $this->success($act_text.'成功', 'index');
+            return $this->success('修改成功', 'index');
         } else {
-            return $this->error($act_text.'失败');
+            return $this->error('修改失败');
+        }
+    }
+
+    /**
+     * 删除管理员
+     */
+    public function del()
+    {
+        // 接收传值
+        $data = input('param.');
+
+        if ($data['admin_id'] > 1) {
+            $result = Db::name('admin')->where('admin_id', $data['admin_id'])->delete();
+        }
+
+        // 结果反馈
+        if ($result >= 0) {
+            return $this->success('删除成功', 'index');
+        } else {
+            return $this->error('删除失败');
         }
     }
 

@@ -54,6 +54,7 @@ class SystemMenu extends Base
             //查询表
             $list = $this->modelSystemMenu
                 ->where($map)
+                ->order('id desc')
                 ->page($this->modelSystemMenu->getPageNow(), $this->modelSystemMenu->getPageLimit())
                 ->select()
             ;
@@ -117,37 +118,6 @@ class SystemMenu extends Base
     }
 
     /**
-     * 编辑权限
-     */
-    public function edit()
-    {
-        // 接收到ajax请求
-        if (Request::instance()->isAjax()) {
-            $data = Request::instance()->param();
-
-            // 若权限码不为空，将权限码数组粘合成字符串
-            if (!empty($data['right'])) {
-                $data['right'] = implode(',', $data['right']);
-            } else {
-                $data['right'] = '';
-            }
-
-            // 更新查找到的记录
-            $result = $this->modelSystemMenu
-                ->allowField(true)
-                ->update($data)
-            ;
-
-            // 结果反馈
-            if ($result) {
-                $this->success('更新成功', 'index');
-            } else {
-                $this->error('更新失败');
-            }
-        }
-    }
-
-    /**
      * 添加角色
      */
     public function add()
@@ -179,11 +149,42 @@ class SystemMenu extends Base
     }
 
     /**
+     * 编辑权限
+     */
+    public function edit()
+    {
+        // 接收到ajax请求
+        if (Request::instance()->isAjax()) {
+            $data = Request::instance()->param();
+
+            // 若权限码不为空，将权限码数组粘合成字符串
+            if (!empty($data['right'])) {
+                $data['right'] = implode(',', $data['right']);
+            } else {
+                $data['right'] = '';
+            }
+
+            // 更新查找到的记录
+            $result = $this->modelSystemMenu
+                ->allowField(true)
+                ->update($data)
+            ;
+
+            // 结果反馈
+            if ($result) {
+                $this->success('更新成功', 'index');
+            } else {
+                $this->error('更新失败');
+            }
+        }
+    }
+
+    /**
      * 删除角色
      */
     public function del()
     {
-        $id = input('role_id');
+        $id = input('id');
         $result = $this->modelSystemMenu->destroy($id);
         if ($result) {
             $this->success('删除成功', 'index');
