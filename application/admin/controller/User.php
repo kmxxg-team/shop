@@ -79,7 +79,6 @@ class User extends Base
      */
     public function delete()
     {
-        $this->
         return $this->success('删除成功');
     }
 

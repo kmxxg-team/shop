@@ -2,9 +2,11 @@
   <div class="layui-logo">B2C商城后台管理系统</div>
   <!-- 头部区域（可配合layui已有的水平导航） -->
   <ul class="layui-nav layui-layout-left">
-    <li class="layui-nav-item"><a href="">控制台</a></li>
-    <li class="layui-nav-item"><a href="">商品管理</a></li>
-    <li class="layui-nav-item"><a href="">用户</a></li>
+    <volist name="top" id="vo">
+      <li class="layui-nav-item">
+        <a href=""><i class="layui-icon">{$vo.icon}</i>{$vo.title}</a>
+      </li>
+    </volist>
     <li class="layui-nav-item">
       <a href="javascript:;">其它系统</a>
       <dl class="layui-nav-child">

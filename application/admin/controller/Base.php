@@ -45,6 +45,12 @@ class Base extends Controller
         }
 
         $this->publicAssign();
+        $map = array(
+            'level'   => 1,
+            'visible' => 1,
+        );
+        $top  = db('system_module')->where($map)->select();
+        $this->assign('top',$top);
 
         $this->_initAdmin();
     }

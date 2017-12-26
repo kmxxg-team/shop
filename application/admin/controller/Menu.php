@@ -100,10 +100,44 @@ class Menu extends Base
 		if ($mod_id) {
 			$info = $this->modelMenu->get($mod_id);
 			$this->assign('info',$info);
-		} else {
-			
 		}
-
 		return $this->fetch('menu_info');
+	}
+
+	/**
+	 * 新增菜单
+	 */
+	public function add()
+	{	
+		// 判断请求
+		if ($this->request->isPost()) {
+			// 接受数据
+			$data = $this->request->param();
+
+			$result = $this->modelMenu->save($data);
+			if ($result) {
+				$this->success('新增成功','index');
+			}
+			$this->error('新增失败');
+		}
+		$this->error('新增失败');
+	}
+
+	/**
+	 * 编辑菜单
+	 */
+	public function edit()
+	{
+		if ($this->request->isPost()) {
+			// 接受数据
+			$data = $this->request->param();
+			
+			$result = $this->modelMenu->update($data);
+			if ($result) {
+				$this->success('编辑成功','index');
+			}
+			$this->error('编辑失败');
+		}
+		$this->error('编辑失败');
 	}
 }
