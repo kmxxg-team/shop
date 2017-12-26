@@ -37,7 +37,20 @@
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">权限分配</label>
-    <div class="layui-input-inline">
+    <div class="layui-input-block">
+      <!-- 按分组遍历权限列表 -->
+      <volist name="right_list" id="group">
+        <input type="checkbox" name="" title="{$group.title}" onclick="checkAll(this)">
+          <!-- 若该分组存在权限 则遍历每个分组下的权限 -->
+          <present name="group['right']">
+          <div class="check_item">
+          <volist name="group['right']" id="right">
+            <input type="checkbox" name="act_list[]" value="{$key}" title="{$right}" lay-skin="primary">
+          </volist>
+          </div>
+          </present>
+          <hr>
+      </volist>
     </div>
   </div>
 
@@ -51,4 +64,12 @@
   </div>
 </form>
  
+<script>
+  function checkAll(obj){
+    alert('nihaonihao');
+    var $ = layui.jquery;
+    $("heck_item input[type='checkbox']").prop('checked', $(obj).prop('checked'));
+  }
+</script>
+
 </block>

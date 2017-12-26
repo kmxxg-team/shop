@@ -13,6 +13,7 @@ namespace app\admin\controller;
 
 use app\admin\controller\Base;
 use think\Request;
+use think\Db;
 
 /**
  * 权限控制器
@@ -93,6 +94,29 @@ class Role extends Base
             $this->assign('info', $info);
         }
         
+        // 读取配置里的权限分组
+        $group = config('right_group');
+
+        // 读取权限
+        $right = Db::name('system_menu')->field('id, name, group')->select();
+
+        // 权限列表数组
+        $right_list = [];
+
+        // 拼装权限列表数组
+        foreach ($group as $key => $value) {
+            $right_list[$key] = ['title' => $value];
+        }
+
+        // 遍历权限 插入到列表中对于分组
+        foreach ($right as $value) {
+            $right_list[$value['group']]['right'] = [
+                $value['id'] => $value['name'],
+            ];
+        }
+        // halt($right_list);
+
+        $this->assign('right_list', $right_list);
         return $this->fetch('role_info');
     }
 
