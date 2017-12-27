@@ -13,13 +13,13 @@
       <td>{$item.email}</td>
       <td>{$item.mobile}</td>
       <td>
-          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-primary">
+          <!-- <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-primary">
             查看
-          </a>
-          <a href="{:url('edit')}" class="layui-btn layui-btn-xs">
+          </a> -->
+          <a href="{:url('edit', ['user_id' => $item['user_id']])}" class="layui-btn layui-btn-xs">
             编辑
           </a>
-          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['user_id' => $item['user_id']])}"data-tips="您确定要删除？">
+          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete', ['user_id' => $item['user_id']])}"data-tips="您确定要删除？">
             删除
           </a>
         <div class="layui-btn-group">

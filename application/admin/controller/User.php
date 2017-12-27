@@ -12,6 +12,7 @@
 namespace app\admin\controller;
 
 use app\admin\controller\Base;
+use app\common\logic\UserLogic;
 
 /**
  * 会员控制器
@@ -20,6 +21,7 @@ class User extends Base
 {
     // 用户模型
     protected $modelUser;
+    protected $logicUser;
 
     /**
      * 初始化
@@ -27,6 +29,8 @@ class User extends Base
     public function _initAdmin()
     {
         $this->modelUser = model('User');
+        $this->logicUser = new UserLogic();
+
     }
 
     /**
@@ -75,22 +79,64 @@ class User extends Base
     }
     
     /**
-     * 删除会员
-     */
-    public function delete()
+    * 新增会员
+    */
+    public function add()
     {
-        return $this->success('删除成功');
+        // 接收到ajax请求
+        if ($this->request->isAjax()) {
+            $data = $this->request->param();
+            $result = $this->logicUser->addUser($data);
+            if ($result['status'] == 1) {
+                $this->success('添加成功', 'index');
+            } else {
+                $this->error($result['msg']);
+            }
+        }
+
+        return $this->fetch();
     }
 
     /**
      * 编辑
      */
-    public function edit() {
-        if ($this->request->isPost()) {
-            sleep(2);
-            // return $this->error('格式不正确');
-            return $this->success('编辑成功');
+    public function edit()
+    {
+        $id = input('user_id');
+        $info = $this->logicUser->detail($id);
+
+        if ($this->request->isAjax()) {
+            // 接收数据
+            $data = $this->request->param();
+
+            // 若密码字段未设置 则不修改密码
+            if ('' == $data['password']) {
+                unset($data['password']);
+            }
+
+            $result = $this->logicUser->updateUser($id, $data);
+            if ($result['status'] == 1) {
+                $this->success('修改成功', 'index');
+            } else {
+                $this->error($result['msg']);
+            }
         }
+
+        $this->assign('info', $info);
         return $this->fetch();
+    }
+
+    /**
+     * 删除会员
+     */
+    public function delete()
+    {
+        $id = input('user_id');
+        $result = $this->modelUser->destroy($id);
+        if ($result) {
+            $this->success('删除成功', 'index');
+        } else {
+            $this->error('删除失败');
+        }
     }
 }

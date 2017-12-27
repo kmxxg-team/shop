@@ -114,7 +114,6 @@ class Role extends Base
                 $value['id'] => $value['name'],
             ];
         }
-        // halt($right_list);
 
         $this->assign('right_list', $right_list);
         return $this->fetch('role_info');
@@ -129,6 +128,9 @@ class Role extends Base
         if (Request::instance()->isAjax()) {
             $data = Request::instance()->param();
             
+            // 将权限数组转化为字符串
+            $data['act_list'] = implode(',', $data['act_list']);
+
             // 更新查找到的记录
             $result = $this->modelRole->allowField(true)->save($data);
 
@@ -149,6 +151,9 @@ class Role extends Base
         // 接收到ajax请求
         if (Request::instance()->isAjax()) {
             $data = Request::instance()->param();
+            
+            // 将权限数组转化为字符串
+            $data['act_list'] = implode(',', $data['act_list']);
             
             // 更新查找到的记录
             $result = $this->modelRole->allowField(true)->update($data);
