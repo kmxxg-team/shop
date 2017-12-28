@@ -22,6 +22,8 @@ class Admin extends Base
 {   
     // 管理员模型
     protected $modelAdmin;
+    // 管理员日志模型
+    protected $modelAdminLog;
 
     /**
      * 初始化
@@ -29,6 +31,7 @@ class Admin extends Base
     public function _initAdmin()
     {
         $this->modelAdmin = model('Admin');
+        $this->modelAdminLog = model('AdminLog');
     }
 
     /**
@@ -235,6 +238,8 @@ class Admin extends Base
                     updateSession($info);
                     //跳转路径
                     $url = session('from_url') ? session('from_url') : url('Index/index');
+                    // 记录管理员日志
+                    adminLog('后台登陆');
                     $this->success('登陆成功',$url);
                 } else {
                     $this->error('账号密码不正确！', '', $data);
@@ -302,5 +307,78 @@ class Admin extends Base
                 $this->error('修改失败');
             }
         }
-    }     
+    }
+
+    /**
+     * 管理员日志列表
+     */
+    public function log()
+    {
+        // 接收表单传值
+        $data = input('param.');
+
+        // 处理搜索条件
+        $map = [];
+
+        // 关键词：按照用户名和邮箱进行搜索
+        if (!empty($data['keyword'])) {
+            $map['log_info | log_url'] = array('like', '%'.$data['keyword'].'%');
+        }
+
+        // 若为AJAX
+        if ($this->request->isAjax()) {
+            $list = array();
+            $count = $this->modelAdminLog->where($map)->count();
+
+            // 查询管理员表
+            $admin = $this->modelAdmin->column('user_name', 'admin_id');
+
+            // 查询管理员日志表
+            $logs = $this->modelAdminLog
+                ->where($map)
+                ->order('log_time desc')
+                ->page($this->modelAdminLog->getPageNow(), $this->modelAdminLog->getPageLimit())
+                ->select()
+            ;
+
+            if ($logs && $admin) {
+                foreach ($logs as $log) {
+                    $log['admin_name'] = $admin[$log['admin_id']];
+                    $list[] = $log;
+                }
+            }
+
+            $this->assign('list', $logs);
+            $html = $this->fetch('log_ajax');
+
+            $data = [
+                'list'  => $html,
+                'count' => $count,
+                'limit' => $this->modelAdminLog->getPageLimit()
+            ];
+
+            $this->success('获取成功', '', $data);
+        }
+
+        return $this->fetch();
+    }
+
+    /**
+     * 删除一个月前的管理员日志
+     */
+    public function delLog()
+    {
+        $result = db('admin_log')
+            ->whereTime('log_time', '<', strtotime('last month'))
+            ->delete()
+        ;
+        
+        if ($result > 0) {
+            $this->success('删除成功', url('log'));
+        } elseif ($result == 0) {
+            $this->error('无一个月前的日志');
+        } else {
+            $this->error('删除失败');
+        }
+    }
 }
