@@ -24,13 +24,13 @@
 <!-- ID -->
 <input type="hidden" name="admin_id" value="{$info.admin_id|default=''}">
   <div class="layui-form-item">
-    <label class="layui-form-label">用户名</label>
+    <label class="layui-form-label"><span style="color:red;">* </span>用户名</label>
     <div class="layui-input-block">
       <input type="text" name="user_name" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" value="{$info.user_name|default=''}">
     </div>
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label">email地址</label>
+    <label class="layui-form-label"><span style="color:red;">* </span>email地址</label>
     <div class="layui-input-block">
       <input type="text" name="email" required lay-verify="required|email" placeholder="请输入邮箱地址" autocomplete="off" class="layui-input" value="{$info.email|default=''}">
     </div>
@@ -43,7 +43,7 @@
     <div class="layui-form-mid layui-word-aux">(非必填)</div>
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label">所属角色</label>
+    <label class="layui-form-label"><span style="color:red;">* </span>所属角色</label>
     <div class="layui-input-block">
       <select name="role_id" lay-verify="required">
         <option value=""></option>

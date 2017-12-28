@@ -24,13 +24,13 @@
 <!-- ID -->
 <input type="hidden" name="role_id" value="{$info.role_id|default=''}">
   <div class="layui-form-item">
-    <label class="layui-form-label">角色名称</label>
+    <label class="layui-form-label"><span style="color:red;">* </span>角色名称</label>
     <div class="layui-input-block">
       <input type="role_name" name="role_name" required lay-verify="required" placeholder="请输入角色名称" autocomplete="off" class="layui-input" value="{$info.role_name|default=''}">
     </div>
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label">角色描述</label>
+    <label class="layui-form-label"><span style="color:red;">* </span>角色描述</label>
     <div class="layui-input-block">
       <textarea name="role_desc" placeholder="对该角色进行描述" required lay-verify="required" class="layui-textarea">{$info.role_desc|default=''}</textarea>
     </div>

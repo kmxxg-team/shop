@@ -115,10 +115,6 @@ class Admin extends Base
             $this->assign('info', $info);
         }
 
-        // 根据是否有id 判断操作是新增或修改
-        $act = empty($admin_id) ? 'add' : 'edit';
-        $this->assign('act', $act);
-
         // 角色列表
         $role = Db::name('admin_role')->select();
         $this->assign('role', $role);
