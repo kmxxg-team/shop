@@ -2,22 +2,21 @@
 
 <block name="body">
 <fieldset class="layui-elem-field layui-field-title">
-  <legend>会员管理</legend>
+  <legend>菜单管理</legend>
 </fieldset>
 
 <form class="layui-form layui-form-pane keyword"> 
   <div class="layui-form-item"> 
     <div class="layui-inline"> 
-      <label class="layui-form-label">昵称</label> 
+      <label class="layui-form-label">菜单名</label> 
       <div class="layui-input-inline"> 
-        <input type="text" name="nickname" autocomplete="off" class="layui-input" placeholder="请输入昵称" > 
+        <input type="text" name="title" autocomplete="off" class="layui-input" placeholder="请输入菜单名" > 
       </div> 
     </div> 
     <div class="layui-inline"> 
-      <label class="layui-form-label">手机号</label> 
+      <label class="layui-form-label">等级</label> 
       <div class="layui-input-inline"> 
-        <input type="text" name="mobile" 
-          autocomplete="off" placeholder="请输入手机号" class="layui-input">
+        <input type="text" name="level" autocomplete="off" class="layui-input" placeholder="请输入菜单等级">
       </div> 
     </div> 
     <div class="layui-inline"> 
@@ -26,16 +25,15 @@
   </div> 
 </form>
 <div class="layui-btn-group">
-  <button class="layui-btn" onclick="javascript:window.location='{:url(\'add\')}'">
-    <i class="layui-icon">&#xe654;</i>新增
-  </button>
-  <!-- <button class="layui-btn">
+  <a href="{:url('menuInfo')}">
+    <button class="layui-btn">
+      <i class="layui-icon">&#xe654;</i>新增
+    </button>
+  </a>
+  <button class="layui-btn">
     <i class="layui-icon">&#xe640;</i>删除
-  </button> -->
+  </button>
 </div> 
-<table class="layui-table" data-url="{:url('')}">
-</table>
+<table class="layui-table" data-url="{:url('')}"></table>
 <div id="page" style="text-align: center;"></div>
-<block name='script'>
-</block>
 </block>

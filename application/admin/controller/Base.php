@@ -45,6 +45,12 @@ class Base extends Controller
         }
 
         $this->publicAssign();
+        $map = array(
+            'level'   => 1,
+            'visible' => 1,
+        );
+        $top  = db('system_module')->where($map)->select();
+        $this->assign('top',$top);
 
         $this->_initAdmin();
     }
@@ -114,13 +120,5 @@ class Base extends Controller
             $shop_config[$v['inc_type'].'_'.$v['name']] = $v['value'];
         }
         $this->assign('shop_config', $shop_config);
-    }
-
-    /**
-     * ajax请求修改密码页面
-     */
-    public function pwdAjax()
-    {
-        return $this->fetch('Admin/modifyPwd'); 
     }
 }

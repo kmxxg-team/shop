@@ -3,7 +3,7 @@
 <block name="body">
 <!-- 页面标题 -->
 <fieldset class="layui-elem-field layui-field-title">
-  <legend>管理员管理</legend>
+  <legend>角色管理</legend>
 </fieldset>
 
 <!-- 搜索表单 -->
@@ -12,18 +12,7 @@
     <div class="layui-inline"> 
       <label class="layui-form-label">搜索</label> 
       <div class="layui-input-inline"> 
-        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="可根据用户名/邮箱查询" > 
-      </div> 
-    </div>
-    <div class="layui-inline"> 
-      <label class="layui-form-label">所属角色</label> 
-      <div class="layui-input-inline"> 
-        <select name="role_id" lay-verify="">
-          <option value="">请选择角色</option>
-          <volist name="role" id="item">
-            <option value="{$i}">{$item}</option>
-          </volist>
-        </select>
+        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="可根据名称/描述查询" > 
       </div> 
     </div>
     <div class="layui-inline"> 
@@ -34,7 +23,7 @@
 
 <!-- 批量操作按钮 -->
 <div class="layui-btn-group">
-  <button class="layui-btn" onclick="javascript:window.location='{:url(\'adminInfo\')}'">
+  <button class="layui-btn" onclick="javascript:window.location='{:url(\'roleInfo\')}'">
     <i class="layui-icon">&#xe654;</i>新增
   </button>
 </div> 
