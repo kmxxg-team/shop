@@ -7,20 +7,31 @@
   <!-- 返回列表按钮 -->
   <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
   <present name="info">
-    编辑角色
+    编辑菜单
   <else />
-    新增角色
+    新增菜单
   </present>
 </legend> 
 </fieldset>
 
 <present name="info">
   <form class="layui-form" action="{:url('edit')}" method="post">
+    <input type="hidden" name="mod_id" value="{$info.mod_id|default=''}">
 <else />
   <form class="layui-form" action="{:url('add')}" method="post">
 </present>
 <!-- ID -->
-<input type="hidden" name="mod_id" value="{$info.mod_id|default=''}">
+  <div class="layui-form-item">
+    <label class="layui-form-label">父级菜单</label>
+    <div class="layui-input-block">
+      <select name="parent_id" lay-verify="required">
+        <option value="0">顶级</option>
+        <volist name='par' id='vo'>
+          <option value="vo.mod_id" <eq name="info.parent_id|default=''" value="$vo.mod_id">selected</eq>>{$vo.title}</option>
+        </volist>
+      </select>
+    </div>
+  </div>
   <div class="layui-form-item">
     <label class="layui-form-label">菜单名</label>
     <div class="layui-input-block">
@@ -31,25 +42,25 @@
   <div class="layui-form-item">
     <label class="layui-form-label">模块</label>
     <div class="layui-input-block">
-      <input type="text" name="module" required  lay-verify="required" placeholder="请输入模块" autocomplete="off" class="layui-input" value="{$info.module|default=''}">
+      <input type="text" name="module" placeholder="请输入模块" autocomplete="off" class="layui-input" value="{$info.module|default=''}">
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">控制器</label>
     <div class="layui-input-block">
-      <input type="text" name="ctl" required  lay-verify="required" placeholder="请输入控制器" autocomplete="off" class="layui-input" value="{$info.ctl|default=''}">
+      <input type="text" name="ctl" placeholder="请输入控制器" autocomplete="off" class="layui-input" value="{$info.ctl|default=''}">
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">方法</label>
     <div class="layui-input-block">
-      <input type="text" name="act" required  lay-verify="required" placeholder="请输入方法" autocomplete="off" class="layui-input" value="{$info.act|default=''}">
+      <input type="text" name="act" placeholder="请输入方法" autocomplete="off" class="layui-input" value="{$info.act|default=''}">
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">图标</label>
     <div class="layui-input-block">
-      <input type="text" name="icon" required  lay-verify="required" placeholder="请输入图标" autocomplete="off" class="layui-input" value="{$info.icon|default=''}">
+      <input type="text" name="icon" placeholder="请输入图标" autocomplete="off" class="layui-input" value="{$info.icon|default=''}">
     </div>
   </div>
   <div class="layui-form-item">

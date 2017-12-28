@@ -45,6 +45,7 @@ class Base extends Controller
         }
 
         $this->publicAssign();
+        // 顶栏菜单
         $map = array(
             'level'   => 1,
             'visible' => 1,

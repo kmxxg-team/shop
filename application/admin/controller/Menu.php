@@ -27,6 +27,12 @@ class Menu extends Base
 	public function _initAdmin()
 	{
 		$this->modelMenu = model('Menu');
+		// /*查询父类分类*/
+		// $list = db('system_module')->order('mod_id asc')->select();
+		// /*生成树状*/
+		// $tree_list = buildTreeList($list,'title','mod_id','parent_id');
+		// halt($tree_list);
+		// $this->assign('tree_list',$tree_list);
 	}
 
 	/**
@@ -94,6 +100,10 @@ class Menu extends Base
 	{
 		$mod_id = $this->request->param('mod_id');
 
+		// 查询所有父节点
+		$par = db('system_module')->field('title,mod_id')->select();
+		$this->assign('par',$par);
+
 		$info = array();
 
 		// 判断是否有id传入
@@ -113,7 +123,7 @@ class Menu extends Base
 		if ($this->request->isPost()) {
 			// 接受数据
 			$data = $this->request->param();
-
+			
 			$result = $this->modelMenu->save($data);
 			if ($result) {
 				$this->success('新增成功','index');

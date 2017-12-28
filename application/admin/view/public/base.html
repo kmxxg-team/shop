@@ -20,8 +20,7 @@
 
     <!-- body 内容主体区域 -->
     <div class="layui-body" id="container">
-      <div style="padding: 15px;">
-        <block name="body"></block>
+      <div style="padding: 15px;" id='content'>
       </div>
     </div>
     
@@ -32,7 +31,7 @@
 
   <!-- 隐藏域修改密码表单 -->
   <div style="display: none;" id="pwd_form">
-      <form method="post" class="layui-form" id="admin_form" style="margin-top: 36px">
+    <form class="layui-form" action="{:url('Admin/modifyPwd')}" style="margin-top: 25px">
       <div class="layui-form-item">
           <label class="layui-form-label">原密码：</label>
           <div class="layui-input-inline">
@@ -56,35 +55,11 @@
       </div>
         <div class="layui-form-item" style="margin-top: 30px">
           <div class="layui-input-block">
-              <a href="javascript:;" id="submitBtn" class="layui-btn" data-url="{:url('Admin/modifyPwd')}">立即提交</a>
+              <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
               <button type="reset" class="layui-btn layui-btn-primary">重置</button>
           </div>
       </div>
     </form>
-    <script>
-
-    layui.use(['jquery','form'], function(){
-      var form = layui.form
-      ,$ = layui.$;
-      $('#submitBtn').on('click', function(){
-        var info = $("#admin_form")[0];
-        var formdata = new FormData(info);
-        var url = $(this).attr('data-url');
-        $.ajax({
-            url:url,
-            data:formdata,
-            type:"POST",
-            cache: false,
-            processData: false,
-            contentType: false,
-            success:function(res){  
-                alert('ss');
-            }  
-        }); 
-        return false;
-      });
-    }); 
-    </script>
   </div>
 
 <script>
@@ -94,7 +69,7 @@
     ,layer =  layui.layer
     ,element = layui.element;
 
-     //修改密码
+     // 修改密码
     $('#pwd').click('on', function(){
       var html = $('#pwd_form').html();
           layer.open({
@@ -105,7 +80,7 @@
           });
     });
     
-    //清除缓存
+    // 清除缓存
     $('#cache').click('on',function(){
        $.ajax({
         url:"{:url('System/cleanCache')}",
@@ -113,15 +88,14 @@
          layer.msg(res.msg);
          window.location.href = res.url;
         } 
-       })
+       });
     });
     
-    //注销
+    // 注销
     $('#logout').click('on',function(){
       $.ajax({
           url:"{:url('Admin/logout')}",
-          type:"POST",
-          success:function(res){  
+          success:function(res){
             layer.confirm('确定要注销么？', {
               btn: ['是的','算了'] 
             }, function(){
@@ -132,8 +106,8 @@
       });
       return false; 
     });
+    
   });
-
 </script>
 
 </body>
