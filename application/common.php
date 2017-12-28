@@ -83,3 +83,17 @@ function delFile($path, $delDir = false)
 		}
 	}
 }
+
+/**
+ * 管理员操作记录
+ * @param $log_url 操作URL
+ * @param $log_info 记录信息
+ */
+function adminLog($log_info){
+    $add['log_time'] = time();
+    $add['admin_id'] = session('admin_id');
+    $add['log_info'] = $log_info;
+    $add['log_ip'] = request()->ip();
+    $add['log_url'] = request()->baseUrl() ;
+    db('admin_log')->insert($add);
+}

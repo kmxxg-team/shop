@@ -61,7 +61,6 @@ layui.use(module, function(){
                     }
                 });
             });
-
         });
     }
 
@@ -78,7 +77,9 @@ layui.use(module, function(){
                         return false;
                     }
                     success_msg(result.msg);
-                    setTimeout(function(){get_list('', current, where);}, 2000);
+                    if (current || where) {
+                        setTimeout(function(){get_list('', current, where);}, 2000);
+                    }
                 });
             },
             function(){
@@ -115,6 +116,25 @@ layui.use(module, function(){
                 }
             });
             return false;
+        });
+    }
+
+    // 弹框获取html页面
+    var tan_get_html = function(me){
+       $(me).bind('click', function(){
+            var html_url = $(this).attr('data-url');
+            $.get(html_url, {}, function(result){
+                // if (!result.code) {
+                //     return false;
+                // }
+
+                layer.open({
+                    type:1
+                    ,content: '<div>sdf</div>'
+                    ,area: ['500px', '300px']
+                    ,anim: 0
+                });
+            });
         });
     }
 
@@ -158,5 +178,8 @@ layui.use(module, function(){
             get_list('', 1, $('.keyword').serializeObject());  
         });
     }
+    // 表单提交
     submit_form();
+    // 弹框获取html
+    tan_get_html('.lay-get-html');
 });
