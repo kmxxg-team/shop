@@ -16,7 +16,7 @@
 
 <present name="info">
   <form class="layui-form" action="{:url('edit')}" method="post">
-    <input type="hidden" name="mod_id" value="{$info.mod_id|default=''}">
+    <input type="hidden" name="id" value="{$info.id|default=''}">
 <else />
   <form class="layui-form" action="{:url('add')}" method="post">
 </present>
@@ -24,10 +24,10 @@
   <div class="layui-form-item">
     <label class="layui-form-label">父级菜单</label>
     <div class="layui-input-block">
-      <select name="parent_id" lay-verify="required">
+      <select name="pid" lay-verify="required">
         <option value="0">顶级</option>
-        <volist name='par' id='vo'>
-          <option value="vo.mod_id" <eq name="info.parent_id|default=''" value="$vo.mod_id">selected</eq>>{$vo.title}</option>
+        <volist name='tree_list' id='vo'>
+          <option value="vo.id" <eq name="info.pid|default=''" value="vo.id">selected</eq>>{$vo.title_show}</option>
         </volist>
       </select>
     </div>

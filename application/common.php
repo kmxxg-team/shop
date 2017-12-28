@@ -83,17 +83,3 @@ function delFile($path, $delDir = false)
 		}
 	}
 }
-
-// /**
-//  * 数组转化为数状列表
-//  * @param array $list 表中信息
-//  * @param string $tablePrefix 表前缀
-//  * @param mixed $connection 数据库连接信息
-//  */
-// function buildTreeList($list, $title, $pk, $pid, $root = 0, $strict = true)
-// {
-// 	$tree = new app\common\org\TreeList();
-// 	dump($tree);
-// 	$data_list = $tree->toFormatTree($list, $title = $title, $pk=$pk, $pid = $pid, $root = 0, $strict = true);
-// 	return $data_list;
-// }

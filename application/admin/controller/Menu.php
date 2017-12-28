@@ -27,12 +27,12 @@ class Menu extends Base
 	public function _initAdmin()
 	{
 		$this->modelMenu = model('Menu');
-		// /*查询父类分类*/
-		// $list = db('system_module')->order('mod_id asc')->select();
-		// /*生成树状*/
-		// $tree_list = buildTreeList($list,'title','mod_id','parent_id');
-		// halt($tree_list);
-		// $this->assign('tree_list',$tree_list);
+		/*查询父类分类*/
+		$list = db('system_module')->order('id asc')->select();
+		/*生成树状*/
+		$tree = new \app\common\org\TreeList();
+		$tree_list = $tree->toFormatTree($list,'title','id','pid');
+		$this->assign('tree_list',$tree_list);
 	}
 
 	/**
@@ -86,8 +86,8 @@ class Menu extends Base
 	 */
 	public function delete()
 	{
-		if ($this->request->param('mod_id')) {
-			$this->modelMenu->destroy($this->request->param('mod_id'));
+		if ($this->request->param('id')) {
+			$this->modelMenu->destroy($this->request->param('id'));
 			$this->success('删除成功');
 		}
 		$this->error('删除失败');
@@ -98,17 +98,17 @@ class Menu extends Base
 	 */
 	public function menuInfo()
 	{
-		$mod_id = $this->request->param('mod_id');
+		$id = $this->request->param('id');
 
 		// 查询所有父节点
-		$par = db('system_module')->field('title,mod_id')->select();
+		$par = db('system_module')->field('title,id')->select();
 		$this->assign('par',$par);
 
 		$info = array();
 
 		// 判断是否有id传入
-		if ($mod_id) {
-			$info = $this->modelMenu->get($mod_id);
+		if ($id) {
+			$info = $this->modelMenu->get($id);
 			$this->assign('info',$info);
 		}
 		return $this->fetch('menu_info');

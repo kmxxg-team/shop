@@ -21,7 +21,7 @@ class Menu extends Base
 	// 设置数据表（不含前缀)
     protected $name = 'system_module';
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
-    protected $pk = 'mod_id';
+    protected $pk = 'id';
 	
 	
 }
