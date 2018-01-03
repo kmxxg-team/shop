@@ -129,7 +129,9 @@ class Role extends Base
             $data = Request::instance()->param();
             
             // 将权限数组转化为字符串
-            $data['act_list'] = implode(',', $data['act_list']);
+            if (!empty($data['act_list'])) {
+                $data['act_list'] = implode(',', $data['act_list']);
+            }
 
             // 更新查找到的记录
             $result = $this->modelRole->allowField(true)->save($data);
@@ -153,7 +155,9 @@ class Role extends Base
             $data = Request::instance()->param();
             
             // 将权限数组转化为字符串
-            $data['act_list'] = implode(',', $data['act_list']);
+            if (!empty($data['act_list'])) {
+                $data['act_list'] = implode(',', $data['act_list']);
+            }
             
             // 更新查找到的记录
             $result = $this->modelRole->allowField(true)->update($data);
