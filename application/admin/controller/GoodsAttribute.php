@@ -6,7 +6,7 @@
 // +----------------------------------------------------------------------
 // | Author: 王怀礼 <576106898@qq.com>
 // +----------------------------------------------------------------------
-// | Date: 2017-12-21
+// | Date: 2018-1-4
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -14,28 +14,19 @@ namespace app\admin\controller;
 use app\admin\controller\Base;
 
 /**
- * 后台菜单控制器
+ * 后台商品属性控制器
  */
-class Menu extends Base
+class GoodsAttribute extends Base
 {
-	// 菜单模型
-	protected $modelMenu;
+	// 商品类模型
+	protected $modelGoodsAttribute;
 
 	/**
 	 * 初始化
 	 */
 	public function _initAdmin()
 	{
-		$this->modelMenu = model('Menu');
-		$menu_gorup = config('menu_gorup');
-		
-		/*查询父类分类*/
-		$list = db('menu')->order('id asc')->select();
-		/*生成树状*/
-		$tree = new \app\common\org\TreeList();
-		$tree_list = $tree->toFormatTree($list,'title','id','pid');
-		$this->assign('tree_list',$tree_list);
-		$this->assign('menu_gorup', $menu_gorup);
+		$this->modelGoodsAttribute = model('GoodsAttribute');
 	}
 
 	/**
@@ -47,15 +38,15 @@ class Menu extends Base
 
 		// 按昵称搜索
         if ($this->request->param('keyword')) {
-            $map['title'] = ['like', '%'. $this->request->param('keyword') . '%'];
+            $map['attr_name'] = ['like', '%'. $this->request->param('keyword') . '%'];
         }
 
 		if ($this->request->isAjax()) {
-			$count = $this->modelMenu->where($map)->count();
+			$count = $this->modelGoodsAttribute->where($map)->count();
 
-			$list  = $this->modelMenu
+			$list  = $this->modelGoodsAttribute
 				->where($map)
-				->page($this->modelMenu->getPageNow(), $this->modelMenu->getPageLimit())
+				->page($this->modelGoodsAttribute->getPageNow(), $this->modelGoodsAttribute->getPageLimit())
 				->select()
 			;
 
@@ -70,7 +61,7 @@ class Menu extends Base
 			$data = [
 				'list'  => $html,
 				'count' => $count,
-				'limit' => $this->modelMenu->getPageLimit(),
+				'limit' => $this->modelGoodsAttribute->getPageLimit(),
 			];
 
 			return $this->success('获取成功', '', $data);
@@ -80,40 +71,28 @@ class Menu extends Base
 	}
 
 	/**
-	 * 删除菜单
-	 */
-	public function delete()
-	{
-		if ($this->request->param('id')) {
-			$this->modelMenu->destroy($this->request->param('id'));
-			$this->success('删除成功');
-		}
-		$this->error('删除失败');
-	}
-
-	/**
-	 * 菜单信息页面
+	 * 商品属性信息页面
 	 */
 	public function menuInfo()
 	{
 		$id = $this->request->param('id');
 
-		// 查询所有父节点
-		$par = db('menu')->field('title, id')->select();
-		$this->assign('par', $par);
+		// 查询模型信息
+		$type = db('goods_type')->select();
+		$this->assign('type', $type);
 
 		$info = array();
 
 		// 判断是否有id传入
 		if ($id) {
-			$info = $this->modelMenu->get($id);
+			$info = $this->modelGoodsAttribute->get($id);
 			$this->assign('info',$info);
 		}
-		return $this->fetch('menu_info');
+		return $this->fetch('goods_attribute_info');
 	}
 
 	/**
-	 * 新增菜单
+	 * 新增商品属性
 	 */
 	public function add()
 	{	
@@ -122,7 +101,7 @@ class Menu extends Base
 			// 接受数据
 			$data = $this->request->param();
 			
-			$result = $this->modelMenu->save($data);
+			$result = $this->modelGoodsAttribute->save($data);
 			if ($result) {
 				$this->success('新增成功','index');
 			}
@@ -132,7 +111,7 @@ class Menu extends Base
 	}
 
 	/**
-	 * 编辑菜单
+	 * 编辑商品属性
 	 */
 	public function edit()
 	{
@@ -140,12 +119,24 @@ class Menu extends Base
 			// 接受数据
 			$data = $this->request->param();
 			
-			$result = $this->modelMenu->update($data);
+			$result = $this->modelGoodsAttribute->update($data);
 			if ($result) {
 				$this->success('编辑成功','index');
 			}
 			$this->error('编辑失败');
 		}
 		$this->error('编辑失败');
+	}
+
+	/**
+	 * 删除商品属性
+	 */
+	public function delete()
+	{
+		if ($this->request->param('id')) {
+			$this->modelGoodsAttribute->destroy($this->request->param('id'));
+			$this->success('删除成功');
+		}
+		$this->error('删除失败');
 	}
 }

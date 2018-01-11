@@ -97,3 +97,13 @@ function adminLog($log_info){
     $add['log_url'] = request()->baseUrl() ;
     db('admin_log')->insert($add);
 }
+
+/**
+ * 是否为超级管理员
+ */
+function isRoot(){
+	if(session('admin_id') == 1){
+		return true;
+	}
+	return false;
+}

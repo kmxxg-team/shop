@@ -24,12 +24,18 @@ use think\Url;
  */
 class Base extends Controller 
 {
+    // 不需要验证权限的节点
+    protected $noaccessUrlArr = [
+        'admin/admin/login', 
+        'admin/admin/logout', 
+        'admin/index/index',
+    ];
+
     /**
      * 系统初始化
      */
     protected function _initialize()
     {
-
         $request= \think\Request::instance();
         // 过滤不需要登录验证的行为
         if (in_array($request->action(), array('login', 'logout', 'vertify','index'))) {
@@ -43,17 +49,15 @@ class Base extends Controller
             //     $this->error('请先登录', url('Admin/login'));
             // }
         }
-
+        
         $this->publicAssign();
-        // 顶栏菜单
-        $map = array(
-            'level'   => 1,
-            'visible' => 1,
-        );
-        $top  = db('system_module')->where($map)->select();
-        $this->assign('top',$top);
 
-        $this->_initAdmin();
+         //菜单设置
+        if (!$this->request->isAjax()) {
+            $this->assign("__MENU__", $this->getMenus());
+        }
+
+        $this->_initAdmin(); 
     }
 
     /**
@@ -104,7 +108,7 @@ class Base extends Controller
 
             // 检查匹配权限
             if (!in_array($ctl.'@'.$act, $role_right)) {
-                $this->error('您没有操作权限['.($ctl.'@'.$act).'],请联系超管分配');
+                $this->error('您没有操作权限['.($ctl.'@'.$act).'],请联系超管分配', url('admin/login'));
             }
          }
     }
@@ -121,5 +125,96 @@ class Base extends Controller
             $shop_config[$v['inc_type'].'_'.$v['name']] = $v['value'];
         }
         $this->assign('shop_config', $shop_config);
+    }
+
+    /**
+     * 获取菜单
+     *
+     * @return array 菜单列表
+     */
+    public function getMenus()
+    {
+        // 获取当前访问地址
+        $current_url = strtolower($this->request->module() . '/' . $this->request->controller() . '/' . $this->request->action());
+
+        // 获取顶级主菜单
+        $main_map['pid'] = 0;
+        $main_map['module'] = 'admin';
+        $main_map['status'] = 1;
+        $main_map['type'] = 1;
+
+        $menus = [];
+
+        $main_list = db('menu')->where($main_map)->order('sort asc,id asc')->select();
+        foreach ($main_list as $key => $item) {
+            // 获取子菜单标识
+            $sub_tag = db('menu')->where(['pid' => $item['id']])->value('id');
+            
+            // 没有子菜单 并且 不在公开节点内
+            if (!in_array($item['name'], $this->noaccessUrlArr)) {
+                // 不是超级管理员进行权限验证
+                if (!isRoot()) {
+                    $this->checkPriv();
+                }
+            }
+
+            if ($current_url == $item['name']) {
+                $item['class'] = 'layui-this';
+            } else {
+                $item['class'] = '';
+            }
+
+            $menus['main'][$item['id']] = $item;
+        }
+
+        //查询当前的父菜单id和菜单id
+        $node = explode('/', $current_url);
+        $hover_url = $node[0].'/'.$node[1];
+
+        
+        $pid = db('menu')->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")->value('pid');
+        $id  = db('menu')->where("pid = 0 AND name like '{$hover_url}%' AND status = 1")->value('id');
+        $pid = $pid ? $pid : $id;
+
+        if (!$pid) {
+            return $menus;
+        }
+
+        $sub_map['pid']  = $pid;
+        $sub_map['type'] = 2;
+        $sub_map['status'] = 1;
+
+        $sub_row = db('menu')->where($sub_map)->order('sort asc,id asc')->column('*', 'id');
+
+        if (!$sub_row) {
+            return $menus; //如果没有子菜单直接返回
+        }
+        $current_id  = db('menu')->where(array('status'=>1,'name'=>$current_url))->value('pid');
+
+        $sub_pid = db('menu')->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")->value('id');
+        // 给当前左侧子菜单激活属性
+        $sub_row[$sub_pid]['class'] = 'layui-this';
+
+        // 给主菜单激活属性
+        foreach ($sub_row as $key => $item) {
+            // 不在公开节点内
+            if (!in_array($item['name'], $this->noaccessUrlArr)) {
+                // 不是超级管理员进行权限验证
+                if (!isRoot()) {
+                    $this->checkPriv();
+                }
+
+            }
+
+            $menus['_child'][$item['group']]['item'][$key] = $item;
+        }
+
+        // 给当前左侧菜单组激活属性
+        $menus['_child'][$sub_row[$sub_pid]['group']]['class'] = 'layui-nav-itemed';
+        if (!empty($menus['main'][$sub_row[$sub_pid]['pid']])) {
+            $menus['main'][$sub_row[$sub_pid]['pid']]['class'] = 'layui-this';
+        }
+
+        return $menus;
     }
 }

@@ -2,19 +2,11 @@
   <div class="layui-logo">B2C商城后台管理系统</div>
   <!-- 头部区域（可配合layui已有的水平导航） -->
   <ul class="layui-nav layui-layout-left">
-    <volist name="top" id="vo">
-      <li class="layui-nav-item">
-        <a href="javascript:;"><i class="layui-icon">{$vo.icon}</i>{$vo.title}</a>
-      </li>
-    </volist>
-    <li class="layui-nav-item">
-      <a href="javascript:;">其它系统</a>
-      <dl class="layui-nav-child">
-        <dd><a href="">邮件管理</a></dd>
-        <dd><a href="">消息管理</a></dd>
-        <dd><a href="">授权管理</a></dd>
-      </dl>
-    </li>
+    <notempty name="__MENU__.main">
+      <volist name="__MENU__.main" id="menu_item">
+        <li class="layui-nav-item {$menu_item.class|default=''}"><a href="{:url($menu_item['name'])}">{$menu_item.title}</a></li>
+      </volist>
+    </notempty>
   </ul>
   <ul class="layui-nav layui-layout-right">
     <li class="layui-nav-item">

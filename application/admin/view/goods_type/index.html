@@ -1,23 +1,27 @@
 <extend name="public/base">
 
 <block name="body">
+<!-- 页面标题 -->
 <fieldset class="layui-elem-field layui-field-title">
-  <legend>菜单管理</legend>
+  <legend>商品模型</legend>
 </fieldset>
 
+<!-- 搜索表单 -->
 <form class="layui-form layui-form-pane keyword"> 
   <div class="layui-form-item"> 
     <div class="layui-inline"> 
       <label class="layui-form-label">搜索</label> 
       <div class="layui-input-inline"> 
-        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="请输入菜单名" > 
+        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="可根据名称查询" > 
       </div> 
-    </div> 
+    </div>
     <div class="layui-inline"> 
       <type type="button" class="layui-btn" id="keyword">查询</button>
     </div>
   </div> 
 </form>
+
+<!-- 批量操作按钮 -->
 <div class="layui-btn-group">
   <a href="{:url('menuInfo')}">
     <button class="layui-btn">
@@ -25,6 +29,9 @@
     </button>
   </a>
 </div> 
-<table class="layui-table" data-url="{:url('')}"></table>
+
+<!-- 数据表格 -->
+<table class="layui-table" data-url="{:url('')}" style="word-wrap:break-word; word-break:break-all;"></table>
+<!-- 分页 -->
 <div id="page" style="text-align: center;"></div>
 </block>

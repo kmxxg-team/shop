@@ -6,7 +6,7 @@
 // +----------------------------------------------------------------------
 // | Author: 王怀礼 <576106898@qq.com>
 // +----------------------------------------------------------------------
-// | Date: 2017-12-22
+// | Date: 2018-1-4
 // +----------------------------------------------------------------------
 
 namespace app\common\model;
@@ -14,14 +14,18 @@ namespace app\common\model;
 use app\common\model\Base;
 
 /**
- * 菜单模型
+ * 商品属性模型
  */
-class Menu extends Base
+class GoodsAttribute extends Base
 {
 	// 设置数据表（不含前缀)
-    protected $name = 'menu';
+    protected $name = 'goods_attribute';
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
     protected $pk = 'id';
-	
-	
+
+    // 定义关联方法
+    public function goodsType()
+    {
+        return $this->belongsTo('goodsType', 'type_id', 'id')->field('name');
+    }
 }

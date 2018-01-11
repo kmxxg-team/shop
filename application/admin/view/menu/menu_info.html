@@ -22,14 +22,32 @@
 </present>
 <!-- ID -->
   <div class="layui-form-item">
-    <label class="layui-form-label">父级菜单</label>
+    <label class="layui-form-label">上级菜单</label>
     <div class="layui-input-block">
       <select name="pid" lay-verify="required">
-        <option value="0">顶级</option>
-        <volist name='tree_list' id='vo'>
-          <option value="vo.id" <eq name="info.pid|default=''" value="vo.id">selected</eq>>{$vo.title_show}</option>
+        <option value="0" <notempty name="info"><eq name="info.pid" value="0">selected</eq></notempty>>顶级菜单</option>
+        <volist name="tree_list" id="vo">
+          <option value="{$vo.id}" <notempty name="info"><eq name="vo.id" value="$info['pid']">selected</eq></notempty>>{$vo.title_show}</option>
         </volist>
       </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">所属分组</label>
+    <div class="layui-input-block">
+      <select name="group" lay-verify="required">
+        <option value="">请选择</option>
+        <volist name="menu_gorup" id="vo">
+          <option value="{$vo}" <notempty name="info.group"><eq name="vo" value="$info['group']">selected</eq></notempty>>{$vo}</option>
+        </volist>
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">菜单类型</label>
+    <div class="layui-input-block">
+      <input type="radio" name="type" value="1" title="主菜单" <notempty name="info.type"><eq name="info.type" value="1">checked</eq></notempty>>
+      <input type="radio" name="type" value="2" title="节点菜单" <notempty name="info.type"><eq name="info.type" value="2">checked</eq></notempty>>
     </div>
   </div>
   <div class="layui-form-item">
@@ -46,15 +64,10 @@
     </div>
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label"><span style="color:red;">* </span>控制器</label>
+    <label class="layui-form-label"><span style="color:red;">* </span>名称</label>
     <div class="layui-input-block">
-      <input type="text" name="ctl" placeholder="请输入控制器" autocomplete="off" class="layui-input" value="{$info.ctl|default=''}">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label"><span style="color:red;">* </span>方法</label>
-    <div class="layui-input-block">
-      <input type="text" name="act" placeholder="请输入方法" autocomplete="off" class="layui-input" value="{$info.act|default=''}">
+      <input type="text" name="name" placeholder="请输入名称" autocomplete="off" class="layui-input" value="{$info.name|default=''}">
+      <div class="layui-form-mid layui-word-aux">模块+控制器+方法</div>
     </div>
   </div>
   <div class="layui-form-item">
@@ -64,21 +77,17 @@
     </div>
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label"><span style="color:red;">* </span>等级</label>
+    <label class="layui-form-label">排序</label>
     <div class="layui-input-block">
-      <select name="level" lay-verify="required">
-        <option value="">请选择</option>
-        <option value="1" <eq name="info.level|default=''" value="1">selected</eq>>一级</option>
-        <option value="2" <eq name="info.level|default=''" value="2">selected</eq>>二级</option>
-        <option value="3" <eq name="info.level|default=''" value="3">selected</eq>>三级</option>
-      </select>
+      <input type="text" name="sort" required  lay-verify="required" placeholder="请输入排序序号" value="{$info.sort|default="100"}" autocomplete="off" class="layui-input">
+      <div class="layui-form-mid layui-word-aux">菜单按照升序排序</div>
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">可见</label>
     <div class="layui-input-block">
-      <input type="radio" name="visible" value="1" title="是" <eq name="info.visible|default=''" value="1">checked</eq>>
-      <input type="radio" name="visible" value="0" title="否" <eq name="info.visible|default=''" value="0">checked</eq>>
+      <input type="radio" name="status" value="1" title="是" <eq name="info.status|default=''" value="1">checked</eq>>
+      <input type="radio" name="status" value="0" title="否" <eq name="info.status|default=''" value="0">checked</eq>>
     </div>
   </div>
   <div class="layui-form-item">
@@ -90,5 +99,4 @@
     </div>
   </div>
 </form>
- 
 </block>
