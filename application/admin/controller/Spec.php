@@ -148,7 +148,7 @@ class Spec extends Base
 			// 接受数据
 			$data = $this->request->param();
 
-			// 开启事务新增数据
+			// 开启事务修改数据
 			Db::startTrans(); 
 
 			// 抽取规格项数据和id
@@ -187,8 +187,23 @@ class Spec extends Base
 	public function delete()
 	{
 		if ($this->request->param('id')) {
-			$this->modelSpec->destroy($this->request->param('id'));
-			$this->success('删除成功');
+			// 开启事务删除数据
+			Db::startTrans(); 
+			
+			$spec = $this->modelSpec->get($this->request->param('id'));
+			
+			$result  = $spec->delete();
+			$resItem = $spec->specItem()->delete();  
+
+			if ((false !== $result) && $resItem) {
+				//提交事务
+				Db::commit();
+				$this->success('删除成功');
+			} else {
+				//回滚事务
+				Db::rollback();
+				$this->error('删除失败');
+			}
 		}
 		$this->error('删除失败');
 	}
@@ -199,17 +214,17 @@ class Spec extends Base
     */
     private function updateData($id,$new_data,$old_data=array())
     {
-        /*求新标签和旧的之间公共部分*/
+        // 求新标签和旧的之间公共部分
         $com_data = array_intersect($new_data,$old_data);
-        /*求需要增加的部分*/
+        // 求需要增加的部分
         $insert_data = array_diff($new_data, $com_data);
-        /*求需要删除的部分*/
+        // 求需要删除的部分
         $delete_data = array_diff($old_data, $com_data);
 
 		$add_result = 0;
         $drop_result = 0;
  
-        /*关联表增加操作*/
+        // 关联表增加操作
         if (!empty($insert_data) && is_array($insert_data)) {
             foreach ($insert_data as $item) {
                 $add_data[] = array(
@@ -220,7 +235,7 @@ class Spec extends Base
             $add_result = $this->modelSpecItem->saveAll($add_data);
         }
 
-        /*关联表删除操作*/
+        // 关联表删除操作
         if (!empty($delete_data) && is_array($delete_data)) {
             foreach ($delete_data as $item) {
                 $drop_data = array(
