@@ -13,6 +13,7 @@ namespace app\admin\controller;
 
 use app\admin\controller\Base;
 use think\Db;
+
 /**
  * 后台商品规格控制器
  */
@@ -40,7 +41,7 @@ class Spec extends Base
 
 		// 按昵称搜索
         if ($this->request->param('keyword')) {
-            $map['name'] = ['like', '%'. $this->request->param('keyword') . '%'];
+            $map['spec_name'] = ['like', '%'. $this->request->param('keyword') . '%'];
         }
 
 		if ($this->request->isAjax()) {
@@ -207,7 +208,6 @@ class Spec extends Base
 		}
 		$this->error('删除失败');
 	}
-
 
 	/**
     *更新规格表和规格项表数据

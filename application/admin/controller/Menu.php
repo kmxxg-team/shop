@@ -28,14 +28,18 @@ class Menu extends Base
 	{
 		$this->modelMenu = model('Menu');
 		$menu_gorup = config('menu_gorup');
-		
-		/*查询父类分类*/
-		$list = db('menu')->order('id asc')->select();
-		/*生成树状*/
+
+		$list  = $this->modelMenu
+			->field(true)
+			->column('*')
+		;
+
 		$tree = new \app\common\org\TreeList();
-		$tree_list = $tree->toFormatTree($list,'title','id','pid');
-		$this->assign('tree_list',$tree_list);
+		$tree_list = $tree->toFormatTree($list);
+
 		$this->assign('menu_gorup', $menu_gorup);
+		$this->assign('tree_list', $tree_list);
+
 	}
 
 	/**
@@ -55,13 +59,25 @@ class Menu extends Base
 
 			$list  = $this->modelMenu
 				->where($map)
+				->field(true)
 				->page($this->modelMenu->getPageNow(), $this->modelMenu->getPageLimit())
-				->select()
+				->column('*')
 			;
 
 			if (!$list) {
 				return $this->error('信息不存在');
 			}
+
+			foreach ($list as $key => $val) {
+	            $list[$key]['parentid_node'] = ($val['pid']) ? 'class = "child-of-node-' . $val['pid'] . '"' : '';
+	        }
+
+	        if (!empty($list)) {
+	            $tree = new \app\common\org\TreeList();
+	             
+	            $list = $tree->toFormatTree($list);
+	        }
+
 
 			$this->assign('list', $list);
 
