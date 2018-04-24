@@ -119,6 +119,8 @@ layui.use(module, function(){
         });
     }
 
+
+
     // 弹框获取html页面
     var tan_get_html = function(me){
        $(me).bind('click', function(){
@@ -167,7 +169,7 @@ layui.use(module, function(){
 
     //全选/反选/单选的实现
     $(document).on('click', '.check-all', function() {
-        $(".ids").prop("checked", this.checked);
+        $(".ids").prop("checked", this.checked);        
     });
 
     $(document).on('click', '.ids', function() {
@@ -183,8 +185,6 @@ layui.use(module, function(){
     });
 
 
-
-
 // ----------------- 普通调用 ---------------------
 
     if ($('.layui-table').attr('data-url')) {
@@ -197,6 +197,7 @@ layui.use(module, function(){
     }
     // 表单提交
     submit_form();
+
     // 弹框获取html
     tan_get_html('.lay-get-html');
 });

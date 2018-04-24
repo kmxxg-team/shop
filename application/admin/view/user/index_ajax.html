@@ -10,7 +10,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
-      <td><input type="checkbox" class="ids" name="ids[]"></td>
+      <td><input type="checkbox" class="ids" name="ids[]" value="{$item.user_id}"></td>
       <td>{$item.nickname}</td>
       <td>{$item.email}</td>
       <td>{$item.mobile}</td>
@@ -21,7 +21,7 @@
           <a href="{:url('edit', ['user_id' => $item['user_id']])}" class="layui-btn layui-btn-xs">
             编辑
           </a>
-          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('del', ['user_id' => $item['user_id']])}"data-tips="您确定要删除？">
+          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue " data-url="{:url('setStatus', array('status'=>'delete','ids'=>$item['user_id']))}" data-tips="您确定要删除？">
             删除
           </a>
         <div class="layui-btn-group">
