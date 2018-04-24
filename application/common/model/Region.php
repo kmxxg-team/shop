@@ -21,5 +21,25 @@ class Region extends Base
 	// 设置数据表（不含前缀)
     protected $name = 'region';
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
-    protected $pk = 'id';
+    protected $pk   = 'id';
+
+    // ------------------------ 读取器 ----------------------------
+
+    /**
+     * 等级
+     */
+    public function getLevelAttr($value)
+    {
+        $status = [
+            0  => '顶级',
+            1  => '一级',
+            2  => '二级',
+            3  => '三级',
+        ];
+
+        if (isset($status[$value])) {
+            return $status[$value];
+        }
+        return '未知';
+    }
 }
