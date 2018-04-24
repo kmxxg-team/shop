@@ -1,5 +1,6 @@
 <thead>
   <tr>
+    <th><input type="checkbox" class="check-all"></th>
     <th>名称</th>
     <th>等级</th>
     <th>操作</th>
@@ -8,6 +9,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.title_show}</td>
       <td>
         <switch name="item.level">

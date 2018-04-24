@@ -1,5 +1,6 @@
 <thead>
   <tr>
+    <th><input type="checkbox" class="check-all"></th>
     <th>订单编号</th>
     <th>商品名称</th>
     <th>类型</th>
@@ -11,6 +12,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.order_sn}</td>
       <td>{$item.goods.goods_name}</td>
       <td>{$item.type}</td>

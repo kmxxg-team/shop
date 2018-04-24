@@ -1,6 +1,6 @@
 <thead>
   <tr>
-    <th><input type="checkbox" onclick="checkAll(this)"></th>
+    <th><input type="checkbox" class="check-all"></th>
     <th>角色名称</th>
     <th>描述</th>
     <th>操作</th>
@@ -9,7 +9,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
-      <td id="check_item"><input type="checkbox"></td>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.role_name}</td>
       <td>{$item.role_desc}</td>
       <td>

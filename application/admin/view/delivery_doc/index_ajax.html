@@ -1,5 +1,6 @@
 <thead>
   <tr>
+    <th><input type="checkbox" class="check-all"></th>
     <th>订单编号</th>
     <th>下单时间</th>
     <th>收货人</th>
@@ -14,6 +15,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.order_sn}</td>
       <td>{$item.order.add_time}</td>
       <td>{$item.consignee}</td>

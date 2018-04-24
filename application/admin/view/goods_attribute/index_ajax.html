@@ -1,5 +1,6 @@
 <thead>
   <tr>
+    <th><input type="checkbox" class="check-all"></th>
     <th>属性名称</th>
     <th>所属模型</th>
     <th>属性值输入方式</th>
@@ -12,6 +13,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.attr_name}</td>
       <td>{$item.goods_type.name}</td>
       <td>

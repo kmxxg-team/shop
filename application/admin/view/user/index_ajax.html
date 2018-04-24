@@ -1,5 +1,6 @@
 <thead>
   <tr>
+    <th><input type="checkbox" class="check-all"></th>
     <th>会员昵称</th>
     <th>邮件</th>
     <th>手机号</th>
@@ -9,6 +10,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.nickname}</td>
       <td>{$item.email}</td>
       <td>{$item.mobile}</td>
