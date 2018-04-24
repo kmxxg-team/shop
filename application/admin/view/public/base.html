@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>后台管理系统</title>
+  <link rel="stylesheet" href="__ROOT__/plugins/layui/css/layui.css" media="all">
+  <script src="__ROOT__/plugins/layui/layui.js"></script>
+  <script src="__ROOT__/static/js/common.js"></script>
+  <block name="style"></block>
+</head>
+
+<body class="layui-layout-body">
+  <div class="layui-layout layui-layout-admin">
+    <!-- header 顶栏 -->
+    <include file="public/header">
+
+    <!-- side 侧栏 -->
+    <include file="public/side">
+
+    <!-- body 内容主体区域 -->
+    <div class="layui-body" id="container">
+      <div style="padding: 15px;" id='content'>
+        <block name="body"></block>
+      </div>
+    </div>
+    
+    <!-- footer 底栏 -->
+    <include file="public/footer">
+
+  </div>
+
+  <!-- 隐藏域修改密码表单 -->
+  <div style="display: none;" id="pwd_form">
+    <form class="layui-form" action="{:url('Admin/modifyPwd')}" style="margin-top: 25px">
+      <div class="layui-form-item">
+          <label class="layui-form-label">原密码：</label>
+          <div class="layui-input-inline">
+              <input type="password" name="oldPwd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-form-mid layui-word-aux"></div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">新密码：</label>
+          <div class="layui-input-inline">
+              <input type="password" name="newPwd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-form-mid layui-word-aux"></div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">确认密码：</label>
+          <div class="layui-input-inline">
+              <input type="password" name="newPwdCheck" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-form-mid layui-word-aux"></div>
+      </div>
+        <div class="layui-form-item" style="margin-top: 30px">
+          <div class="layui-input-block">
+              <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+          </div>
+      </div>
+    </form>
+  </div>
+
+<script>
+  
+  layui.use(['jquery','layer','element'], function(){
+    var $ = layui.$
+    ,layer =  layui.layer
+    ,element = layui.element;
+
+     // 修改密码
+    $('#pwd').click('on', function(){
+      var html = $('#pwd_form').html();
+          layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', 
+            area: ['420px', '320px'], 
+            content: html,
+          });
+    });
+    
+    // 清除缓存
+    $('#cache').click('on',function(){
+       $.ajax({
+        url:"{:url('System/cleanCache')}",
+        success: function(res){  
+         layer.msg(res.msg);
+         window.location.href = res.url;
+        } 
+       });
+    });
+    
+    // 注销
+    $('#logout').click('on',function(){
+      $.ajax({
+          url:"{:url('Admin/logout')}",
+          success:function(res){
+            layer.confirm('确定要注销么？', {
+              btn: ['是的','算了'] 
+            }, function(){
+              layer.msg(res.msg, {icon: 1});
+              window.location.href = res.url;
+            });
+          }  
+      });
+      return false; 
+    });
+    
+  });
+</script>
+
+</body>
+
+<block name="script">
+</block>
+
+</html>

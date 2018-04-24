@@ -1,0 +1,82 @@
+<extend name="public/base">
+
+<block name="body">
+
+<fieldset class="layui-elem-field layui-field-title">
+<legend>
+  <!-- 返回列表按钮 -->
+  <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
+  编辑会员
+</legend>
+</fieldset>
+
+<form class="layui-form" action="{:url('edit')}" method="post">
+  <!-- ID -->
+  <input type="hidden" name="user_id" value="{$info.user_id|default=''}">
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span style="color:red;">* </span>会员昵称</label>
+    <div class="layui-input-block">
+      <input type="nickname" name="nickname" required lay-verify="required" placeholder="请输入用户昵称" autocomplete="off" class="layui-input" value="{$info.nickname|default=''}">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span style="color:red;">* </span>邮箱地址</label>
+    <div class="layui-input-block">
+      <!-- <input type="nickname" name="email" required lay-verify="required|email" placeholder="请输入邮箱" autocomplete="off" class="layui-input" value="{$info.email|default=''}"> -->
+      <div class="layui-form-mid layui-word-aux">{$info.email|default=''}</div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span style="color:red;">* </span>手机号码</label>
+    <div class="layui-input-block">
+      <!-- <input type="nickname" name="mobile" required lay-verify="required|phone" placeholder="请输入手机号码" autocomplete="off" class="layui-input" value="{$info.mobile|default=''}" > -->
+      <div class="layui-form-mid layui-word-aux">{$info.mobile|default=''}</div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span style="color:red;">* </span>新密码</label>
+    <div class="layui-input-block">
+      <input type="password" name="password" placeholder="留空表示不修改密码" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span style="color:red;">* </span>确认密码</label>
+    <div class="layui-input-block">
+      <input type="password" name="repassword" placeholder="留空表示不修改密码" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span style="color:red;">* </span>QQ</label>
+    <div class="layui-input-block">
+      <input type="nickname" name="qq" required lay-verify="required|number" placeholder="请输入qq号" autocomplete="off" class="layui-input" value="{$info.qq|default=''}">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">性别</label>
+    <div class="layui-input-block">
+      <input type="radio" name="sex" value="0" title="保密" <if condition="$info['sex'] eq 0">checked</if> >
+      <input type="radio" name="sex" value="1" title="男" <if condition="$info['sex'] eq 1">checked</if> >
+      <input type="radio" name="sex" value="2" title="女" <if condition="$info['sex'] eq 2">checked</if> >
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">注册时间</label>
+    <div class="layui-input-block">
+      <present name="info">
+        <div class="layui-form-mid layui-word-aux">{$info.reg_time|date="Y-m-d H:i:s",###}</div>
+      </present>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+      <notpresent name="info">
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      </notpresent>
+    </div>
+  </div>
+</form>
+
+</block>

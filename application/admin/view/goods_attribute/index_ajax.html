@@ -1,0 +1,43 @@
+<thead>
+  <tr>
+    <th>属性名称</th>
+    <th>所属模型</th>
+    <th>属性值输入方式</th>
+    <th>可选值</th>
+    <th>筛选</th>
+    <th>排序</th>
+    <th>操作</th>
+  </tr> 
+</thead>
+<tbody>
+  <volist name="list" id="item">
+    <tr>
+      <td>{$item.attr_name}</td>
+      <td>{$item.goods_type.name}</td>
+      <td>
+        <switch name="$item.attr_input_type">
+          <case value="0">手工录入</case>
+          <case value="1">从列表中选择</case>
+          <case value="2">多行文本框</case>
+          <default /><i>未知</i>
+        </switch>
+      </td>
+      <td>{$item.attr_values}</td>
+      <td></td>
+      <td></td>
+      <td>
+        <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-primary">
+          查看
+        </a>
+        <a href="{:url('menuInfo',array('id'=>$item.id))}" class="layui-btn layui-btn-xs">
+          编辑
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['id' => $item['id']])}" data-tips="您确定要删除？">
+          删除
+        </a>
+        <div class="layui-btn-group">
+        </div>
+      </td>
+    </tr>
+  </volist>
+</tbody>

@@ -1,0 +1,21 @@
+<div class="layui-side layui-bg-black">
+  <div class="layui-side-scroll">
+    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+    <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+      <notempty name="__MENU__._child">
+        <volist name="__MENU__._child" id="menu_group">
+          <li class="layui-nav-item {$menu_group.class|default=''}">
+            <a class="" href="javascript:;">{$key}</a>
+            <dl class="layui-nav-child">
+              <notempty name="menu_group.item">
+              <volist name="menu_group.item" id="menu_column">
+                <dd class="{$menu_column.class|default=""}"><a href="{:url($menu_column['name'])}">{$menu_column.title}</a></dd>
+              </volist>
+              </notempty>
+            </dl>
+          </li>
+        </volist>
+      </notempty>
+    </ul>
+  </div>
+</div>

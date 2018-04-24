@@ -11,18 +11,18 @@
 
 namespace app\admin\controller;
 
-use think\Controller;
+use app\admin\controller\Base;
 
 /**
- * 后台首页控制器
+ * 后台入口控制器
  */
-class Index extends Controller
+class Index extends Base 
 {   
     /**
      * 首页
      */
     public function index()
     {
-        echo 'admin';
+        return $this->fetch();
     }
 }

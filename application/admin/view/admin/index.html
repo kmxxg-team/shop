@@ -1,0 +1,47 @@
+<extend name="public/base">
+
+<block name="body">
+<!-- 页面标题 -->
+<fieldset class="layui-elem-field layui-field-title">
+  <legend>管理员管理</legend>
+</fieldset>
+
+<!-- 搜索表单 -->
+<form class="layui-form layui-form-pane keyword"> 
+  <div class="layui-form-item"> 
+    <div class="layui-inline"> 
+      <label class="layui-form-label">搜索</label> 
+      <div class="layui-input-inline"> 
+        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="可根据用户名/邮箱查询" > 
+      </div> 
+    </div>
+    <div class="layui-inline"> 
+      <label class="layui-form-label">所属角色</label> 
+      <div class="layui-input-inline"> 
+        <select name="role_id" lay-verify="">
+          <option value="">请选择角色</option>
+          <volist name="role" id="item">
+            <option value="{$i}">{$item}</option>
+          </volist>
+        </select>
+      </div> 
+    </div>
+    <div class="layui-inline"> 
+      <type type="button" class="layui-btn" id="keyword">查询</button>
+    </div>
+  </div> 
+</form>
+
+<!-- 批量操作按钮 -->
+<div class="layui-btn-group">
+  <button class="layui-btn" onclick="javascript:window.location='{:url(\'adminInfo\')}'">
+    <i class="layui-icon">&#xe654;</i>新增
+  </button>
+</div> 
+
+<!-- 数据表格 -->
+<table class="layui-table" data-url="{:url('')}"></table>
+<!-- 分页 -->
+<div id="page" style="text-align: center;"></div>
+</block>
+

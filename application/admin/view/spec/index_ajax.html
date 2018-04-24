@@ -1,0 +1,36 @@
+<thead>
+  <tr>
+    <th>规格名称</th>
+    <th>所属模型</th>
+    <th>规格项</th>
+    <th>筛选</th>
+    <th>排序</th>
+    <th>操作</th>
+  </tr> 
+</thead>
+<tbody>
+  <volist name="list" id="item">
+    <tr>
+      <td>{$item.spec_name}</td>
+      <td>{$item.goods_type.name}</td>
+      <td>
+        <volist name='item.spec_item' id='vo'>{$vo.item}/</volist>
+      </td>
+      <td></td>
+      <td></td>
+      <td>
+        <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-primary">
+          查看
+        </a>
+        <a href="{:url('menuInfo',array('id'=>$item.id))}" class="layui-btn layui-btn-xs">
+          编辑
+        </a>
+        <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['id' => $item['id']])}" data-tips="您确定要删除？">
+          删除
+        </a>
+        <div class="layui-btn-group">
+        </div>
+      </td>
+    </tr>
+  </volist>
+</tbody>

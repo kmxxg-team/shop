@@ -1,0 +1,47 @@
+<extend name="public/base">
+
+<block name="style">
+<link rel="stylesheet" href="__ROOT__/static/js/treeTable/treeTable.css"/>
+
+</block>
+
+<block name="body">
+<fieldset class="layui-elem-field layui-field-title">
+  <legend>配送地区列表</legend>
+</fieldset>
+
+<form class="layui-form layui-form-pane keyword"> 
+  <div class="layui-form-item"> 
+    <div class="layui-inline"> 
+      <label class="layui-form-label">搜索</label> 
+      <div class="layui-input-inline"> 
+        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="请输入菜单名" > 
+      </div> 
+    </div> 
+    <div class="layui-inline"> 
+      <type type="button" class="layui-btn" id="keyword">查询</button>
+    </div>
+  </div> 
+</form>
+<div class="layui-btn-group">
+  <a href="{:url('regionInfo')}">
+    <button class="layui-btn">
+      <i class="layui-icon">&#xe654;</i>新增
+    </button>
+  </a>
+</div> 
+<table class="layui-table" data-url="{:url('')}" id="treeTable"></table>
+<div id="page" style="text-align: center;"></div>
+</block>
+
+<block name="script">
+<script type="text/javascript" src="__ROOT__/static/js/treeTable/treeTable.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $("#treeTable").treeTable({
+        indent : 20
+    });
+});
+</script>
+</block>

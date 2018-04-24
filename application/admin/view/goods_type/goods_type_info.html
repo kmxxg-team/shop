@@ -1,0 +1,42 @@
+<extend name="public/base">
+
+<block name="body">
+
+<fieldset class="layui-elem-field layui-field-title">
+<legend>
+  <!-- 返回列表按钮 -->
+  <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
+  <present name="info">
+    编辑模型
+  <else />
+    新增模型
+  </present>
+</legend> 
+</fieldset>
+
+<present name="info">
+  <form class="layui-form" action="{:url('edit')}" method="post">
+    <input type="hidden" name="id" value="{$info.id|default=''}">
+<else />
+  <form class="layui-form" action="{:url('add')}" method="post">
+</present>
+<!-- ID -->
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span style="color:red;">* </span>商品模型</label>
+    <div class="layui-input-block">
+      <input type="text" name="name" required lay-verify="required" placeholder="请输入模型名" autocomplete="off" class="layui-input" value="{$info.name|default=''}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+      <notpresent name="info">
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      </notpresent>
+    </div>
+  </div>
+</form>
+ 
+</block>
