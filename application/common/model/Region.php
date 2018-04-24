@@ -24,17 +24,17 @@ class Region extends Base
     protected $pk   = 'id';
 
     // ------------------------ 读取器 ----------------------------
-
+    
     /**
      * 等级
      */
     public function getLevelAttr($value)
     {
         $status = [
-            0  => '顶级',
-            1  => '一级',
-            2  => '二级',
-            3  => '三级',
+            0  => '省层级',
+            1  => '市层级',
+            2  => '区县层级',
+            3  => '乡镇层级',
         ];
 
         if (isset($status[$value])) {

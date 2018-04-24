@@ -152,6 +152,6 @@ class Order extends Base
 			
 		}
 
-		return $this->fetch(); 
+		return $this->fetch('order_detail'); 
 	}
 }
