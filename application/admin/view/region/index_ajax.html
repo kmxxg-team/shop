@@ -9,7 +9,14 @@
   <volist name="list" id="item">
     <tr>
       <td>{$item.title_show}</td>
-      <td>{$item.level}</td>
+      <td>
+        <switch name="item.level">
+            <case value="0">顶级</case>
+            <case value="1">一级</case>
+            <case value="2">二级</case>
+            <case value="3">三级</case>
+        </switch>
+      </td>
       <td>
         <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-primary">
           查看
