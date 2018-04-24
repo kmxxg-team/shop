@@ -1,5 +1,6 @@
 <thead>
   <tr>
+    <th><input type="checkbox" class="check-all"></th>
     <th>标题</th>
     <th> URL</th>
     <th>状态</th>
@@ -9,6 +10,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.title_show}</td>
       <td>{$item.name}</td>
       <td>

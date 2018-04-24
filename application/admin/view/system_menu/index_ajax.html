@@ -1,13 +1,6 @@
 <thead>
-  <colgroup>
-    <col width="">
-    <col width="100px">
-    <col width="100px">
-    <col width="">
-    <col width="150px">
-  </colgroup>
   <tr>
-    <th><input type="checkbox" onclick="checkAll(this)"></th>
+    <th><input type="checkbox" class="check-all"></th>
     <th>名称</th>
     <th>所属分组</th>
     <th>权限码</th>
@@ -17,7 +10,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
-      <td id="check_item"><input type="checkbox"></td>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.name}</td>
       <td>{$item['group']}</td>
       <td>{$item.right}</td>

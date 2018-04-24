@@ -1,5 +1,6 @@
 <thead>
   <tr>
+    <th><input type="checkbox" class="check-all"></th>
     <th>头衔名称</th>
     <th>等级必要金额</th>
     <th>折扣</th>
@@ -10,6 +11,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.level_name}</td>
       <td>{$item.amount}</td>
       <td>{$item.discount}</td>

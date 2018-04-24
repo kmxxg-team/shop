@@ -1,5 +1,6 @@
 <thead>
   <tr>
+    <th><input type="checkbox" class="check-all"></th>
     <th>订单编号</th>
     <th>收货人</th>
     <th>总金额</th>
@@ -16,6 +17,7 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.order_sn}</td>
       <td>{$item.consignee}<br />{$item.mobile}</td>
       <td>{$item.total_amount}</td>
