@@ -3,7 +3,7 @@
 <block name="body">
 <!-- 页面标题 -->
 <fieldset class="layui-elem-field layui-field-title">
-  <legend>商品规格</legend>
+  <legend>订单列表</legend>
 </fieldset>
 
 <!-- 搜索表单 -->
@@ -12,7 +12,7 @@
     <div class="layui-inline"> 
       <label class="layui-form-label">搜索</label> 
       <div class="layui-input-inline"> 
-        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="可根据规格名称查询" > 
+        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="可根据名称查询" > 
       </div> 
     </div>
     <div class="layui-inline"> 
@@ -22,10 +22,17 @@
 </form>
 
 <!-- 批量操作按钮 -->
-<div class="layui-btn-group">
-  <a href="{:url('menuInfo')}">
+<!-- <div class="layui-btn-group">
+  <a href="{:url('orderInfo')}">
     <button class="layui-btn">
       <i class="layui-icon">&#xe654;</i>新增
+    </button>
+  </a>
+</div>  -->
+<div class="layui-btn-group">
+  <a href="{:url('derive')}">
+    <button class="layui-btn">
+      <i class="layui-icon">&#xe61e;</i>导出报表
     </button>
   </a>
 </div> 

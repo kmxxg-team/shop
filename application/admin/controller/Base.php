@@ -41,13 +41,15 @@ class Base extends Controller
         if (in_array($request->action(), array('login', 'logout', 'vertify','index'))) {
 
         } else {
-            // // 判断是否登录
-            // if (session('admin_id') > 0) {
-            //     // 执行权限检测
-            //     $this->checkPriv();
-            // } else {
-            //     $this->error('请先登录', url('Admin/login'));
-            // }
+            // 判断是否登录
+            if (session('admin_id') > 0) {
+                // 是否为超级管理员
+                if (!isRoot()) {
+                    $this->checkPriv();
+                }
+            } else {
+                $this->error('请先登录', url('Admin/login'));
+            }
         }
         
         $this->publicAssign();
@@ -169,7 +171,7 @@ class Base extends Controller
 
         //查询当前的父菜单id和菜单id
         $node = explode('/', $current_url);
-        $hover_url = $node[0].'/'.$node[1];
+        $hover_url = $node[0].'/'.$node[1].'/';
 
         
         $pid = db('menu')->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")->value('pid');
@@ -189,7 +191,7 @@ class Base extends Controller
         if (!$sub_row) {
             return $menus; //如果没有子菜单直接返回
         }
-        $current_id  = db('menu')->where(array('status'=>1,'name'=>$current_url))->value('pid');
+        // $current_id  = db('menu')->where(array('status'=>1,'name'=>$current_url,'type'=>2))->value('pid');
 
         $sub_pid = db('menu')->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")->value('id');
         // 给当前左侧子菜单激活属性
@@ -217,4 +219,106 @@ class Base extends Controller
 
         return $menus;
     }
+
+    // /**
+    //  * 设置一条或者多条数据的状态
+    //  * @param $strict 严格模式要求处理的纪录的uid等于当前登陆用户UID
+    //  */
+    // public function setstatus($model = '', $strict = false){
+    //     if ($model =='') {
+    //         $model = request()->controller();
+    //     }
+    //     $ids    = array_unique((array) input('ids/a', 0));
+    //     $status = input('status');
+    //     $setfield = input('setfield','status');
+        
+    //     if (empty($ids)) {
+    //         $this->error('请选择要操作的数据');
+    //     }
+    //     // 获取主键
+    //     $status_model      = model($model);
+    //     $model_primary_key = $status_model->getPk();
+
+    //     // 获取id
+    //     $ids                     = is_array($ids) ? implode(',', $ids) : $ids;
+    //     if (empty($ids)) {
+    //         $this->error('请选择要操作的数据');
+    //     }
+    //     $map[$model_primary_key] = array('in', $ids);
+    //     // 严格模式
+    //     if ($strict) {
+    //         $map['id'] = array('eq', is_login());
+    //     }
+    //     switch ($status) {
+    //         case 'forbid': // 禁用条目
+    //             $data = array($setfield => 0);
+    //             $this->editRow(
+    //                 $model,
+    //                 $data,
+    //                 $map,
+    //                 array('success' => '禁用成功', 'error' => '禁用失败')
+    //             );
+    //             break;
+    //         case 'resume': // 启用条目
+    //             $data = array($setfield => 1);
+    //             //$map  = array_merge(array($setfield => 0), $map);
+    //             $this->editRow(
+    //                 $model,
+    //                 $data,
+    //                 $map,
+    //                 array('success' => '启用成功', 'error' => '启用失败')
+    //             );
+    //             break;
+    //         // case 'recycle': // 移动至回收站
+    //         //     // 查询当前删除的项目是否有子代
+    //         //     if (in_array('pid', $status_model->getTableFields())) {
+    //         //         $count = $status_model->where(array('pid' => array('in', $ids)))->count();
+    //         //         if ($count > 0) {
+    //         //             $this->error('无法删除，存在子项目！');
+    //         //         }
+    //         //     }
+
+    //         //     // 标记删除
+    //         //     $data[$setfield] = -1;
+    //         //     $this->editRow(
+    //         //         $model,
+    //         //         $data,
+    //         //         $map,
+    //         //         array('success' => '成功移至回收站', 'error' => '回收失败')
+    //         //     );
+    //         //     break;
+    //         // case 'restore': // 从回收站还原
+    //         //     $data = array($setfield => 1);
+    //         //     $map  = array_merge(array($setfield => -1), $map);
+    //         //     $this->editRow(
+    //         //         $model,
+    //         //         $data,
+    //         //         $map,
+    //         //         array('success' => '恢复成功', 'error' => '恢复失败')
+    //         //     );
+    //         //     break;
+    //         case 'delete': 
+    //             // 删除记录
+    //             // 查询当前删除的项目是否有子代
+    //             // 查询当前删除的项目是否有子代
+    //             if (in_array('pid', $status_model->getTableFields())) {
+    //                 $count = $status_model->where(array('pid' => array('in', $ids)))->count();
+    //                 if ($count > 0) {
+    //                     $this->error('无法删除，存在子项目！');
+    //                 }
+    //             }
+
+    //             // 删除记录
+    //             $result = $status_model->where($map)->delete();
+    //             if ($result) {
+    //                 $this->success('删除成功，不可恢复！');
+    //             } else {
+    //                 $this->error('删除失败');
+    //             }
+    //             break;
+    //         default:
+    //             $this->error('参数错误');
+    //             break;
+    //     }
+    // }
 }

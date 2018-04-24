@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="__ROOT__/plugins/layui/css/layui.css" media="all">
   <script src="__ROOT__/plugins/layui/layui.js"></script>
   <script src="__ROOT__/static/js/common.js"></script>
+  <block name="style"></block>
 </head>
 
 <body class="layui-layout-body">
@@ -62,7 +63,8 @@
       </div>
     </form>
   </div>
-
+<block name="script">
+</block>
 <script>
   
   layui.use(['jquery','layer','element'], function(){
