@@ -64,7 +64,7 @@ class Region extends Base
 	             
 	            $list = $tree->toFormatTree($list);
 	        }
-// halt($list);
+
 			$this->assign('list', $list);
 
 			$html = $this->fetch('index_ajax');

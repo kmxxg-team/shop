@@ -144,18 +144,4 @@ class Goods extends Base
     		}
     	}
     }
-
-    /**
-     * 删除商品
-     */
-    public function del()
-    {
-    	$id = $this->request->param('goods_id');
-    	$result = $this->modelGoods->destroy($id);
-    	if ($result) {
-    		$this->success('删除成功', 'index');
-    	} else {
-    		$this->error('删除失败');
-    	}
-    }
 }

@@ -123,16 +123,4 @@ class GoodsType extends Base
 		}
 		$this->error('编辑失败');
 	}
-
-	/**
-	 * 删除商品模型
-	 */
-	public function delete()
-	{
-		if ($this->request->param('id')) {
-			$this->modelGoodsType->destroy($this->request->param('id'));
-			$this->success('删除成功');
-		}
-		$this->error('删除失败');
-	}
 }

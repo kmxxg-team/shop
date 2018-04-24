@@ -144,16 +144,14 @@ class Order extends Base
 	}
 
 	/**
-	 * 删除订单
+	 * 订单详情页
 	 */
-	public function delete()
+	public function orderDetail()
 	{
 		if ($this->request->param('order_id')) {
-			$this->modelOrder->destroy($this->request->param('order_id'));
-			$this->success('删除成功');
+			
 		}
-		$this->error('删除失败');
+
+		return $this->fetch(); 
 	}
-
-
 }
