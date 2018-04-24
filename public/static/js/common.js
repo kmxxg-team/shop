@@ -165,6 +165,23 @@ layui.use(module, function(){
         layer.msg(msg || '操作失败', {icon:5});
     }
 
+    //全选/反选/单选的实现
+    $(document).on('click', '.check-all', function() {
+        $(".ids").prop("checked", this.checked);
+    });
+
+    $(document).on('click', '.ids', function() {
+        var option = $(".ids");
+        option.each(function() {
+            if (!this.checked) {
+                $(".check-all").prop("checked", false);
+                return false;
+            } else {
+                $(".check-all").prop("checked", true);
+            }
+        });
+    });
+
 
 
 
