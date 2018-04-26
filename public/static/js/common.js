@@ -184,7 +184,6 @@ layui.use(module, function(){
         });
     });
 
-
 // ----------------- 普通调用 ---------------------
 
     if ($('.layui-table').attr('data-url')) {
