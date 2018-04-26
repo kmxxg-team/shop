@@ -129,20 +129,6 @@ class User extends Base
     }
 
     /**
-     * 删除会员
-     */
-    public function del()
-    {
-        $id = input('user_id');
-        $result = $this->modelUser->destroy($id);
-        if ($result) {
-            $this->success('删除成功', 'index');
-        } else {
-            $this->error('删除失败');
-        }
-    }
-
-    /**
      * 会员等级列表
      */
     public function level()
@@ -252,24 +238,6 @@ class User extends Base
             return $this->success('修改成功', url('level'));
         } else {
             return $this->error('修改失败');
-        }
-    }
-
-    /**
-     * 删除会员等级
-     */
-    public function delLevel()
-    {
-        // 接收传值
-        $data = input('param.');
-
-        $result = $this->modelLevel->where('level_id', $data['level_id'])->delete();
-
-        // 结果反馈
-        if ($result) {
-            return $this->success('删除成功', 'index');
-        } else {
-            return $this->error('删除失败');
         }
     }
 }

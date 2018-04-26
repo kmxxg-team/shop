@@ -21,7 +21,7 @@
           <a href="{:url('admin/adminInfo', 'admin_id='.$item['admin_id'])}" class="layui-btn layui-btn-xs" >
             编辑
           </a>
-          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('del',['admin_id' => $item['admin_id']])}" data-tips="您确定要删除？">
+          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('setStatus',array('status'=>'delete','model'=>'Admin','ids'=>$item['admin_id']))}" data-tips="您确定要删除？">
             删除
           </a>
         <div class="layui-btn-group">

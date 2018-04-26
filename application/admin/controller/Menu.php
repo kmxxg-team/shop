@@ -96,18 +96,6 @@ class Menu extends Base
 	}
 
 	/**
-	 * 删除菜单
-	 */
-	public function delete()
-	{
-		if ($this->request->param('id')) {
-			$this->modelMenu->destroy($this->request->param('id'));
-			$this->success('删除成功');
-		}
-		$this->error('删除失败');
-	}
-
-	/**
 	 * 菜单信息页面
 	 */
 	public function menuInfo()

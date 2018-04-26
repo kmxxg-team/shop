@@ -127,16 +127,4 @@ class GoodsAttribute extends Base
 		}
 		$this->error('编辑失败');
 	}
-
-	/**
-	 * 删除商品属性
-	 */
-	public function delete()
-	{
-		if ($this->request->param('id')) {
-			$this->modelGoodsAttribute->destroy($this->request->param('id'));
-			$this->success('删除成功');
-		}
-		$this->error('删除失败');
-	}
 }

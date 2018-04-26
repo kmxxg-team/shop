@@ -30,7 +30,7 @@
         <a href="{:url('')}" class="layui-btn layui-btn-xs">
           查看
         </a>
-        <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['order_id' => $item['order_id']])}" data-tips="您确定要删除？">
+        <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('setStatus',array('status'=>'delete','model'=>'DeliveryDoc','ids'=>$item['id']))}" data-tips="您确定要删除？">
           删除
         </a>
         <div class="layui-btn-group">

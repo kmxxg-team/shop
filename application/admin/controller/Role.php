@@ -170,18 +170,4 @@ class Role extends Base
             }
         }
     }
-
-    /**
-     * 删除角色
-     */
-    public function del()
-    {
-        $id = input('role_id');
-        $result = $this->modelRole->destroy($id);
-        if ($result) {
-            $this->success('删除成功', 'index');
-        } else {
-            $this->error('删除失败');
-        }
-    }
 }

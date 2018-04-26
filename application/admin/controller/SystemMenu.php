@@ -180,20 +180,6 @@ class SystemMenu extends Base
     }
 
     /**
-     * 删除角色
-     */
-    public function del()
-    {
-        $id = input('id');
-        $result = $this->modelSystemMenu->destroy($id);
-        if ($result) {
-            $this->success('删除成功', 'index');
-        } else {
-            $this->error('删除失败');
-        }
-    }
-
-    /**
      * ajax获取:某controller所特有的方法,用于下拉菜单
      */
     function ajax_get_action()
