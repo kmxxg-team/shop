@@ -40,15 +40,19 @@
     <div class="layui-input-block">
       <!-- 按分组遍历权限列表 -->
       <volist name="right_list" id="group">
-        <input type="checkbox" name="" title="{$group.title|default=''}" class="check-all">
           <!-- 若该分组存在权限 则遍历每个分组下的权限 -->
-          <present name="group['right']">
-          <div class="check_item">
-          <volist name="group['right']" id="right">
-            <input type="checkbox" name="act_list[]" value="{$key}" title="{$right}" lay-skin="primary" class="ids">
-          </volist>
-          </div>
-          </present>
+          <fieldset class="layui-elem-field">
+            <legend class="layui-bg-green" style="font-size: 15px;">{$group.title|default=''}</legend>
+            <div class="layui-field-box">
+              <present name="group['right']">
+              <div class="check_item">
+              <volist name="group['right']" id="right">
+                <input type="checkbox" name="act_list[]" value="{$key}" title="{$right}" lay-skin="primary" class="ids">
+              </volist>
+              </div>
+              </present>
+            </div>
+          </fieldset>
           <hr>
       </volist>
     </div>
