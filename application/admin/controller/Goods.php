@@ -137,7 +137,7 @@ class Goods extends Base
     		$result = $this->modelGoods->allowField(true)->update($data);
 
     		// 结果反馈
-    		if ($result) {
+    		if ($result !== false) {
     			$this->success('修改成功', 'index');
     		} else {
     			$this->error('修改失败');

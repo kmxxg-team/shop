@@ -76,7 +76,6 @@ class GoodsType extends Base
 	public function menuInfo()
 	{
 		$id = $this->request->param('id');
-
 		$info = array();
 
 		// 判断是否有id传入
@@ -96,14 +95,14 @@ class GoodsType extends Base
 		if ($this->request->isPost()) {
 			// 接受数据
 			$data = $this->request->param();
-			
 			$result = $this->modelGoodsType->save($data);
-			if ($result) {
+
+			if ($result !== false) {
 				$this->success('新增成功','index');
+			} else {
+				$this->error('新增失败');
 			}
-			$this->error('新增失败');
 		}
-		$this->error('新增失败');
 	}
 
 	/**
@@ -114,13 +113,13 @@ class GoodsType extends Base
 		if ($this->request->isPost()) {
 			// 接受数据
 			$data = $this->request->param();
-			
 			$result = $this->modelGoodsType->update($data);
-			if ($result) {
+
+			if ($result !== false) {
 				$this->success('编辑成功','index');
+			} else {
+				$this->error('编辑失败');
 			}
-			$this->error('编辑失败');
 		}
-		$this->error('编辑失败');
 	}
 }

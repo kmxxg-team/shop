@@ -100,14 +100,14 @@ class GoodsAttribute extends Base
 		if ($this->request->isPost()) {
 			// 接受数据
 			$data = $this->request->param();
-			
 			$result = $this->modelGoodsAttribute->save($data);
-			if ($result) {
+
+			if ($result !== false) {
 				$this->success('新增成功','index');
+			} else {
+				$this->error('新增失败');
 			}
-			$this->error('新增失败');
 		}
-		$this->error('新增失败');
 	}
 
 	/**
@@ -118,13 +118,13 @@ class GoodsAttribute extends Base
 		if ($this->request->isPost()) {
 			// 接受数据
 			$data = $this->request->param();
-			
 			$result = $this->modelGoodsAttribute->update($data);
-			if ($result) {
+			
+			if ($result !== false) {
 				$this->success('编辑成功','index');
+			} else {
+				$this->error('编辑失败');
 			}
-			$this->error('编辑失败');
 		}
-		$this->error('编辑失败');
 	}
 }

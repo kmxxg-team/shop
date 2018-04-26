@@ -14,7 +14,7 @@ namespace app\common\model;
 use app\common\model\Base;
 
 /**
- * 权限模型
+ * 商品模型
  */
 class Goods extends Base
 {
@@ -23,5 +23,18 @@ class Goods extends Base
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
     protected $pk = 'goods_id';
 
-    
+
+/*----------------------------------- 获取器 ------------------------------------*/
+
+
+
+/*----------------------------------- 修改器 ------------------------------------*/
+	/**
+	 * 商品关键词修改器
+	 */
+	public function setKeywordsAttr($value)
+	{
+		return stringUnique(' ', $value);
+	}
 }
+

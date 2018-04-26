@@ -183,35 +183,66 @@ class Spec extends Base
 	}
 
 	/**
-	 * 删除商品属性
-	 */
-	public function delete()
-	{
-		if ($this->request->param('id')) {
-			// 开启事务删除数据
-			Db::startTrans(); 
-			
-			$spec = $this->modelSpec->get($this->request->param('id'));
-			
-			$result  = $spec->delete();
-			$resItem = $spec->specItem()->delete();  
+     * 设置一条或者多条数据的状态
+     * @param $strict 严格模式要求处理的纪录的uid等于当前登陆用户UID
+     */
+    public function setStatus($model = '', $strict = false){
+        if ($model =='') {
+            $model = request()->controller();
+        }
+        $ids    = array_unique((array) input('ids/a', 0));
+        $status = input('status');
+        $setfield = input('setfield','status');
+        if (empty($ids)) {
+            $this->error('请选择要操作的数据');
+        }
+        // 获取主键
+        $status_model      = model($model);
+        $model_primary_key = $status_model->getPk();
 
-			if ((false !== $result) && $resItem) {
-				//提交事务
-				Db::commit();
-				$this->success('删除成功');
-			} else {
-				//回滚事务
-				Db::rollback();
-				$this->error('删除失败');
-			}
-		}
-		$this->error('删除失败');
-	}
+        // 获取id
+        $ids                     = is_array($ids) ? implode(',', $ids) : $ids;
+        if (empty($ids)) {
+            $this->error('请选择要操作的数据');
+        }
+        $map[$model_primary_key] = array('in', $ids);
+        // 严格模式
+        if ($strict) {
+            $map['id'] = array('eq', is_login());
+        }
+        switch ($status) {
+            case 'delete': 
+                // 删除记录
+                // 查询当前删除的项目是否有子代
+                if (in_array('pid', $status_model->getTableFields())) {
+                    $son_count = $status_model->where(array('pid' => array('in', $ids)))->count();
+                    if ($son_count > 0) {
+                        $this->error('无法删除，存在子项目！');
+                    }
+                }
+
+                $status_model->startTrans();
+                // 删除记录
+                $spec_result = $status_model->where($map)->delete();
+                // 删除规格项
+                $item_result = $this->modelSpecItem->where(array('spec_id' => array('in', $ids)))->delete();
+                if ($spec_result && $item_result) {
+                	$status_model->commit();
+                    $this->success('删除成功，不可恢复！');
+                } else {
+                	$status_model->rollback();
+                    $this->error('删除失败');
+                }
+                break;
+            default:
+                $this->error('参数错误');
+                break;
+        }
+    }
 
 	/**
-    *更新规格表和规格项表数据
-    */
+     * 更新规格表和规格项表数据
+     */
     private function updateData($id,$new_data,$old_data=array())
     {
         // 求新标签和旧的之间公共部分
