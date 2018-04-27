@@ -37,20 +37,20 @@ class Spec extends Base
 	 */
 	public function index()
 	{
-		$map = [];
-		$keyword = input('keyword/s', '');
-		$type_id = input('type_id/s', '');
-        // 按昵称搜索
-        if (empty($keyword) != true) {
-            $map['spec_name'] = ['like', '%'. $keyword . '%'];
-        }
-
-        //按照所属模型搜索
-        if (empty($type_id) != true) {
-        	$map['type_id'] = ['eq', $type_id];
-        }
-
 		if ($this->request->isAjax()) {
+			$map = [];
+			$keyword = input('keyword/s', '');
+			$type_id = input('type_id/s', '');
+	        // 按昵称搜索
+	        if (empty($keyword) != true) {
+	            $map['spec_name'] = ['like', '%'. $keyword . '%'];
+	        }
+
+	        //按照所属模型搜索
+	        if (empty($type_id) != true) {
+	        	$map['type_id'] = ['eq', $type_id];
+	        }
+
 			$count = $this->modelSpec->where($map)->count();
 
 			$list  = $this->modelSpec
