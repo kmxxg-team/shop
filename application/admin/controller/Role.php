@@ -83,7 +83,7 @@ class Role extends Base
     /**
      * 角色信息页面
      */
-    public function roleInfo()
+    public function info()
     {
         $id = input('role_id');
 
@@ -116,7 +116,7 @@ class Role extends Base
         }
 
         $this->assign('right_list', $right_list);
-        return $this->fetch('role_info');
+        return $this->fetch('info');
     }
 
     /**

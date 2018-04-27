@@ -85,7 +85,7 @@ class SystemMenu extends Base
     /**
      * 权限信息页面展示
      */
-    public function rightInfo()
+    public function info()
     {
         $id = input('id');
 
@@ -114,7 +114,7 @@ class SystemMenu extends Base
         
         $this->assign('right_group', $right_group);
         $this->assign('plan_list', $plan_list);
-        return $this->fetch('system_menu_info');
+        return $this->fetch('info');
     }
 
     /**
