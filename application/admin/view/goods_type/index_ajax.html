@@ -17,7 +17,7 @@
         <a href="{:url('Spec/index', ['type_id'=>$item.id])}" class="layui-btn layui-btn-xs layui-btn-primary">
           规格列表
         </a>
-        <a href="{:url('menuInfo',array('id'=>$item.id))}" class="layui-btn layui-btn-xs">
+        <a href="{:url('info',array('id'=>$item.id))}" class="layui-btn layui-btn-xs">
           编辑
         </a>
         <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('setStatus',array('status'=>'delete','model'=>'GoodsType','ids'=>$item['id']))}" data-tips="您确定要删除？">

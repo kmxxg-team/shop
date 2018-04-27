@@ -85,7 +85,7 @@ class Spec extends Base
 	/**
 	 * 商品属性信息页面
 	 */
-	public function menuInfo()
+	public function info()
 	{
 		$id = $this->request->param('id');
 
@@ -100,7 +100,7 @@ class Spec extends Base
 			$info = $this->modelSpec->get($id);
 			$this->assign('info',$info);
 		}
-		return $this->fetch('spec_info');
+		return $this->fetch();
 	}
 
 	/**

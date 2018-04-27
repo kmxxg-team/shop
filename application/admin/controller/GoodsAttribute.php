@@ -61,7 +61,6 @@ class GoodsAttribute extends Base
 			}
 
 			$this->assign('list', $list);
-
 			$html = $this->fetch('index_ajax');
 
 			$data = [
@@ -82,7 +81,7 @@ class GoodsAttribute extends Base
 	/**
 	 * 商品属性信息页面
 	 */
-	public function menuInfo()
+	public function info()
 	{
 		$id = $this->request->param('id');
 
@@ -97,7 +96,7 @@ class GoodsAttribute extends Base
 			$this->assign('info',$info);
 		}
 
-		return $this->fetch('goods_attribute_info');
+		return $this->fetch();
 	}
 
 	/**

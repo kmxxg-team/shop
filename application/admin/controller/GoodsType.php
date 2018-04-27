@@ -73,7 +73,7 @@ class GoodsType extends Base
 	/**
 	 * 商品模型信息页面
 	 */
-	public function menuInfo()
+	public function info()
 	{
 		$id = $this->request->param('id');
 		$info = array();
@@ -83,7 +83,7 @@ class GoodsType extends Base
 			$info = $this->modelGoodsType->get($id);
 			$this->assign('info',$info);
 		}
-		return $this->fetch('goods_type_info');
+		return $this->fetch();
 	}
 
 	/**

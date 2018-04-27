@@ -4,7 +4,7 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: dorisnzy <dorisnzy@163.com>
+// | Author: 陈果 <yayuneko@163.com>
 // +----------------------------------------------------------------------
 // | Date: 2017-1-1
 // +----------------------------------------------------------------------
@@ -79,7 +79,7 @@ class Goods extends Base
     /**
      * 商品信息页面
      */
-    public function goodsInfo()
+    public function info()
     {
     	$id = input('goods_id');
 
@@ -90,7 +90,7 @@ class Goods extends Base
             $this->assign('info', $info);
         }
 
-    	return $this->fetch('goods_info');
+    	return $this->fetch();
     }
 
     /**
