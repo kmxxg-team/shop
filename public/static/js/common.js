@@ -19,9 +19,13 @@ layui.use(module, function(){
 
     // 分页获取数据 
     var get_list = function(element, current, where){
+        // 表格
         var element = element ? element : $('.layui-table');
+
+        // 页数
         var current = current ? current : 1;
 
+        // 请求地址
         var server_url = element.attr('data-url');
         if (!server_url) return false;
 
@@ -184,10 +188,13 @@ layui.use(module, function(){
         });
     });
 
+
+
 // ----------------- 普通调用 ---------------------
 
     if ($('.layui-table').attr('data-url')) {
-        get_list('', 1, {});
+        $data = GetRequest();
+        get_list('', 1, $data);
     }
     if ($('#keyword')) {        
         $('#keyword').on('click', function(){
@@ -200,3 +207,19 @@ layui.use(module, function(){
     // 弹框获取html
     tan_get_html('.lay-get-html');
 });
+
+/**
+ * 获取get传参
+ */
+function GetRequest() {  
+   var url = location.search; //获取url中"?"符后的字串  
+   var theRequest = new Object();  
+   if (url.indexOf("?") != -1) {  
+      var str = url.substr(1);  
+      strs = str.split("&");  
+      for(var i = 0; i < strs.length; i ++) {  
+         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);  
+      }  
+   }  
+   return theRequest;  
+}   

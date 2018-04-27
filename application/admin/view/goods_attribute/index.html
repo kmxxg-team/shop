@@ -5,14 +5,25 @@
   <legend>商品属性</legend>
 </fieldset>
 
-<form class="layui-form layui-form-pane keyword"> 
+<form class="layui-form layui-form-pane keyword" method="get"> 
   <div class="layui-form-item"> 
     <div class="layui-inline"> 
       <label class="layui-form-label">搜索</label> 
       <div class="layui-input-inline"> 
         <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="请输入属性名称查询" > 
-      </div> 
+      </div>
     </div> 
+    <div class="layui-inline"> 
+      <label class="layui-form-label">所属模型</label> 
+      <div class="layui-input-inline"> 
+        <select name="type_id" lay-verify="">
+          <option value="">请选择商品模型</option>
+          <volist name="types" id="item">
+            <option value="{$item.id}">{$item.name}</option>
+          </volist>
+        </select>
+      </div> 
+    </div>
     <div class="layui-inline"> 
       <type type="button" class="layui-btn" id="keyword">查询</button>
     </div>

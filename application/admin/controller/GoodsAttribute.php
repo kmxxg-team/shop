@@ -34,14 +34,20 @@ class GoodsAttribute extends Base
 	 */
 	public function index()
 	{
-		$map = [];
-
-		// 按昵称搜索
-        if ($this->request->param('keyword')) {
-            $map['attr_name'] = ['like', '%'. $this->request->param('keyword') . '%'];
-        }
-
 		if ($this->request->isAjax()) {
+			$map = [];
+			$keyword = input('keyword/s', '');
+			$type_id = input('type_id/s', '');
+			// 按昵称搜索
+	        if (empty($keyword) != true) {
+	            $map['attr_name'] = ['like', '%'. $keyword . '%'];
+	        }
+
+	        //按照所属模型搜索
+	        if (empty($type_id) != true) {
+	        	$map['type_id'] = ['eq', $type_id];
+	        }
+	        
 			$count = $this->modelGoodsAttribute->where($map)->count();
 
 			$list  = $this->modelGoodsAttribute
@@ -66,7 +72,10 @@ class GoodsAttribute extends Base
 
 			return $this->success('获取成功', '', $data);
 		}
-		
+
+		// 获取商品模型
+		$types = model('goods_type')->select();
+		$this->assign('types', $types);
 		return $this->fetch(); 
 	}
 
@@ -80,7 +89,6 @@ class GoodsAttribute extends Base
 		// 查询模型信息
 		$type = db('goods_type')->select();
 		$this->assign('type', $type);
-
 		$info = array();
 
 		// 判断是否有id传入
@@ -88,6 +96,7 @@ class GoodsAttribute extends Base
 			$info = $this->modelGoodsAttribute->get($id);
 			$this->assign('info',$info);
 		}
+
 		return $this->fetch('goods_attribute_info');
 	}
 
@@ -119,7 +128,7 @@ class GoodsAttribute extends Base
 			// 接受数据
 			$data = $this->request->param();
 			$result = $this->modelGoodsAttribute->update($data);
-			
+
 			if ($result !== false) {
 				$this->success('编辑成功','index');
 			} else {

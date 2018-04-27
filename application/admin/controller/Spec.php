@@ -38,10 +38,16 @@ class Spec extends Base
 	public function index()
 	{
 		$map = [];
+		$keyword = input('keyword/s', '');
+		$type_id = input('type_id/s', '');
+        // 按昵称搜索
+        if (empty($keyword) != true) {
+            $map['spec_name'] = ['like', '%'. $keyword . '%'];
+        }
 
-		// 按昵称搜索
-        if ($this->request->param('keyword')) {
-            $map['spec_name'] = ['like', '%'. $this->request->param('keyword') . '%'];
+        //按照所属模型搜索
+        if (empty($type_id) != true) {
+        	$map['type_id'] = ['eq', $type_id];
         }
 
 		if ($this->request->isAjax()) {
@@ -70,6 +76,9 @@ class Spec extends Base
 			return $this->success('获取成功', '', $data);
 		}
 		
+		// 获取商品模型
+		$types = model('goods_type')->select();
+		$this->assign('types', $types);
 		return $this->fetch(); 
 	}
 
