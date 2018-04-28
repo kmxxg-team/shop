@@ -95,7 +95,6 @@ class SystemMenu extends Base
             $info = $this->modelSystemMenu->get($id);
             // 将权限码拆分成数组
             $info['right'] = explode(',', $info['right']);
-            $this->assign('info', $info);
         }
 
         // 获取配置文件里的right_group（权限分组）
@@ -112,6 +111,7 @@ class SystemMenu extends Base
             }
         }
         
+        $this->assign('info', $info);
         $this->assign('right_group', $right_group);
         $this->assign('plan_list', $plan_list);
         return $this->fetch('info');

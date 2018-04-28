@@ -1,21 +1,21 @@
 <?php
-namespace app\index\validate;
+namespace app\common\validate;
 
 use think\Validate;
 
-class User extends Validate
+class Goods extends Validate
 {
 	// 验证规则
     protected $rule = [
-        'goods_name'            => 'require|min:3|max:150|unique:goods',
-        'cat_id'                => 'number|gt:0',
-        'goods_sn'              => 'unique:goods|max:20',
-        'shop_price'            => ['require','regex'=>'([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])'],
-        'market_price'          => 'require|regex:\d{1,10}(\.\d{1,2})?$|checkMarketPrice',
-        'weight'                => 'regex:\d{1,10}(\.\d{1,2})?$',
-        'give_integral'         => 'regex:^\d+$',
-        'is_virtual'            => 'checkVirtualIndate',
-        'exchange_integral'     => 'checkExchangeIntegral',
+        'goods_name'            => ['require', 'min:3', 'max:150', 'unique:goods'],
+        'cat_id'                => ['number', 'gt:0'],
+        'goods_sn'              => ['unique:goods', 'max:20'],
+        'shop_price'            => ['require', 'regex'=>'([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])'],
+        'market_price'          => ['require', 'regex'=>'\d{1,10}(\.\d{1,2})?$', 'checkMarketPrice'],
+        'weight'                => ['regex'=>'\d{1,10}(\.\d{1,2})?$'],
+        'give_integral'         => ['regex'=>'^\d+$'],
+        // 'exchange_integral'     => ['checkExchangeIntegral'],
+        // 'is_virtual'            => ['checkVirtualIndate'],
     ];
     
     //错误信息
@@ -36,8 +36,8 @@ class User extends Validate
         'market_price.checkMarketPrice'                 => '市场价不得小于本店价',
         'weight.regex'                                  => '重量格式不对',
         'give_integral.regex'                           => '赠送积分必须是正整数',
-        'exchange_integral.checkExchangeIntegral'       => '积分抵扣金额不能超过商品总额',
-        'is_virtual.checkVirtualIndate'                 => '虚拟商品有效期不得小于当前时间',
+        // 'exchange_integral.checkExchangeIntegral'       => '积分抵扣金额不能超过商品总额',
+        // 'is_virtual.checkVirtualIndate'                 => '虚拟商品有效期不得小于当前时间',
     ];
 
     /**

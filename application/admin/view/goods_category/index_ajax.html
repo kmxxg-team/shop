@@ -1,5 +1,6 @@
 <thead>
   <tr>
+    <th></th>
     <th><input type="checkbox" class="check-all"></th>
     <th>分类名称</th>
     <th>移动端名称</th>
@@ -14,8 +15,9 @@
 <tbody>
   <volist name="list" id="item">
     <tr>
+      <td><a class="plus" href="javascript:void(0)" style="cursor:pointer;" level="{$item.level}">[-]</a></td>
       <td><input type="checkbox" class="ids" name="ids[]"></td>
-      <td>{$item.name}</td>
+      <td>{$item.title_show}</td>
       <td>{$item.mobile_name}</td>
       <td>{$item.level}</td>
       <td>{$item['is_show']==1 ? '<i class="layui-icon is_right">&#xe616;</i>是' : '<i class="layui-icon is_error">&#x1007;</i>否'}</td>

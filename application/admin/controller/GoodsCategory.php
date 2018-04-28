@@ -52,12 +52,23 @@ class GoodsCategory extends Base
                 ->where($map)
                 ->order('id desc')
                 ->page($this->modelCategory->getPageNow(), $this->modelCategory->getPageLimit())
-                ->select()
+                ->column('*')
             ;
 
             if (!$list) {
                 return $this->error('信息不存在');
             }
+
+            foreach ($list as $key => $val) {
+                $list[$key]['parentid_node'] = ($val['pid']) ? 'class = "child-of-node-' . $val['pid'] . '"' : '';
+            }
+
+            if (!empty($list)) {
+                $tree = new \app\common\org\TreeList();
+                $list = $tree->toFormatTree($list, 'name');
+            }
+
+            $list = $this->getTreeLevel($list, 0, $deep = 0);
 
             $this->assign('list', $list);
             $html = $this->fetch('index_ajax');
@@ -67,9 +78,10 @@ class GoodsCategory extends Base
                 'count' => $count,
                 'limit' => $this->modelCategory->getPageLimit()
             ];
-
+            
             $this->success('获取成功', '', $data);
         }
+
         return $this->fetch();
     }
 
@@ -84,11 +96,17 @@ class GoodsCategory extends Base
         $info = array();
         if ($id) {
             $info = $this->modelCategory->get($id);
-            $this->assign('info', $info);
         }
+
+        // 树状结构 供下拉菜单
+        $list = $this->getTreeArray();
+
+        $this->assign('info', $info);
+        $this->assign('list', $list);
 
         return $this->fetch();
     }
+
 
     /**
      * 新增商品分类
@@ -104,6 +122,12 @@ class GoodsCategory extends Base
 
             // 转换 ”是否包邮“
             $data['is_hot'] = isset($data['is_hot']) ? 1 : 0;
+
+            // 数据验证
+            $validate = validate('GoodsCategory');
+            if (!$validate->check($data)) {
+                $this->error($validate->getError());
+            }
 
             $result = $this->modelCategory->allowField(true)->save($data);
 
@@ -131,6 +155,12 @@ class GoodsCategory extends Base
             // 转换 ”是否包邮“
             $data['is_hot'] = isset($data['is_hot']) ? 1 : 0;
 
+            // 数据验证
+            $validate = validate('GoodsCategory');
+            if (!$validate->check($data)) {
+                $this->error($validate->getError());
+            }
+
             $result = $this->modelCategory->allowField(true)->update($data);
 
             // 结果反馈
@@ -141,4 +171,49 @@ class GoodsCategory extends Base
             }
         }
     }
+
+    /**
+     * 获取分类树状数组
+     *
+     * @param array $map 查询条件
+     *
+     * @return array 树状数组
+     */
+    public function getTreeArray($map = [])
+    {
+        //查询管理员表
+        $list = $this->modelCategory->where($map)->column('*');
+
+        if (!$list) {
+            return $this->error('信息不存在');
+        }
+
+        foreach ($list as $key => $val) {
+            $list[$key]['parentid_node'] = ($val['pid']) ? 'class = "child-of-node-' . $val['pid'] . '"' : '';
+        }
+
+        if (!empty($list)) {
+            $tree = new \app\common\org\TreeList();
+            $list = $tree->toFormatTree($list, 'name');
+        }
+
+        return $list;
+    }
+
+    /**
+     * 获取当前树深度
+     */
+    public function getTreeLevel($data, $pid, $deep = 0)
+    {
+        static $tree = array();
+        foreach ($data as $row) {
+            if ($row['pid'] == $pid) {
+                $row['lever'] = $deep;
+                $tree[] = $row;
+                $this->getTreeLevel($data, $row ['id'], $deep + 1);
+            }
+        }
+        return $tree;
+    }
+
 }

@@ -87,9 +87,9 @@ class Goods extends Base
         $info = array();
         if ($id) {
             $info = $this->modelGoods->get($id);
-            $this->assign('info', $info);
         }
 
+        $this->assign('info', $info);
     	return $this->fetch();
     }
 
@@ -107,6 +107,11 @@ class Goods extends Base
 
     		// 转换 ”是否包邮“
     		$data['is_free_shipping'] = isset($data['is_free_shipping']) ? 1 : 0;
+
+            $validate = validate('Goods');
+            if (!$validate->check($data)) {
+                $this->error($validate->getError());
+            }
 
     		$result = $this->modelGoods->allowField(true)->save($data);
 
@@ -133,6 +138,11 @@ class Goods extends Base
 
     		// 转换 ”是否包邮“
     		$data['is_free_shipping'] = isset($data['is_free_shipping']) ? 1 : 0;
+            
+            $validate = validate('Goods');
+            if (!$validate->check($data)) {
+                $this->error($validate->getError());
+            }
 
     		$result = $this->modelGoods->allowField(true)->update($data);
 

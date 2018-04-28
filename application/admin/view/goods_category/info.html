@@ -6,20 +6,20 @@
 <legend>
   <!-- 返回列表按钮 -->
   <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
-  <present name="info">
-    编辑商品分类
-  <else />
+  <empty name="$Request.get.id">
     新增商品分类
-  </present>
+  <else/>
+    编辑商品分类
+  </empty>
 </legend> 
 </fieldset>
 
-<present name="info">
+<empty name="$Request.get.id">
+  <form class="layui-form" action="{:url('add')}" method="post">
+<else />
   <form class="layui-form" action="{:url('edit')}" method="post">
     <input type="hidden" name="id" value="{$info.id|default=''}">
-<else />
-  <form class="layui-form" action="{:url('add')}" method="post">
-</present>
+</empty>
 <!-- ID -->
 
   <div class="layui-form-item">
@@ -32,7 +32,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">移动端分类名称</label>
     <div class="layui-input-block">
-      <input type="text" name="mobile_name" required lay-verify="required" placeholder="请输入移动端分类名称" autocomplete="off" class="layui-input" value="{$info.mobile_name|default=''}">
+      <input type="text" name="mobile_name" placeholder="请输入移动端分类名称" autocomplete="off" class="layui-input" value="{$info.mobile_name|default=''}">
     </div>
   </div>
 
@@ -41,19 +41,22 @@
     <div class="layui-input-block">
       <select name="pid" lay-verify="required">
         <option value="0">顶级分类</option>
+        <volist name="list" id="vo">
+            <!-- 若父Id等于选项 则选中 -->
+            <!-- 若本Id等于选项 则禁用（不能选自己做为父节点） -->
+            <option value="{$vo.id}"
+              <present name="$info.pid"><eq name="$vo.id" value="$info.pid">selected</eq></present> 
+              <present name="$info.id" ><eq name="$vo.id" value="$info.id" >disabled</eq></present> 
+            >
+              {$vo.title_show}
+            </option>
+        </volist>
       </select>
     </div>
   </div>
 
   <div class="layui-form-item">
-    <label class="layui-form-label">等级</label>
-    <div class="layui-input-block">
-      <input type="text" name="level" required lay-verify="required" placeholder="请输入等级" autocomplete="off" class="layui-input" value="{$info.level|default=''}">
-    </div>
-  </div>
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">是否显示</label>
+    <label class="layui-form-label"><span style="color:red;">* </span>是否显示</label>
     <div class="layui-input-block">
       <input type="checkbox" name="is_show" lay-skin="switch" lay-text="是|否"
         <present name="info.is_show">
@@ -61,10 +64,11 @@
         </present>
       >
     </div>
+    <div class="layui-form-mid layui-word-aux">是否在导航栏显示</div>
   </div>
 
   <div class="layui-form-item">
-    <label class="layui-form-label">是否热门</label>
+    <label class="layui-form-label"><span style="color:red;">* </span>是否热门</label>
     <div class="layui-input-block">
       <input type="checkbox" name="is_hot" lay-skin="switch" lay-text="是|否"
         <present name="info.is_hot">
@@ -77,9 +81,7 @@
   <div class="layui-form-item">
     <div class="layui-input-block">
       <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
-      <notpresent name="info">
       <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-      </notpresent>
     </div>
   </div>
 </form>

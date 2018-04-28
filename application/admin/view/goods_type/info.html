@@ -6,20 +6,20 @@
 <legend>
   <!-- 返回列表按钮 -->
   <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
-  <present name="info">
-    编辑模型
+  <empty name="$Request.get.id">
+    新增商品模型
   <else />
-    新增模型
-  </present>
+    编辑商品模型
+  </empty>
 </legend> 
 </fieldset>
 
-<present name="info">
+<empty name="$Request.get.id">
+  <form class="layui-form" action="{:url('add')}" method="post">
+<else />
   <form class="layui-form" action="{:url('edit')}" method="post">
     <input type="hidden" name="id" value="{$info.id|default=''}">
-<else />
-  <form class="layui-form" action="{:url('add')}" method="post">
-</present>
+</empty>
 <!-- ID -->
 
   <div class="layui-form-item">
@@ -32,9 +32,7 @@
   <div class="layui-form-item">
     <div class="layui-input-block">
       <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
-      <notpresent name="info">
       <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-      </notpresent>
     </div>
   </div>
 </form>

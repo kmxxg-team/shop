@@ -91,7 +91,6 @@ class Role extends Base
         $info = array();
         if ($id) {
             $info = $this->modelRole->get($id);
-            $this->assign('info', $info);
         }
         
         // 读取配置里的权限分组
@@ -115,6 +114,7 @@ class Role extends Base
             ];
         }
 
+        $this->assign('info', $info);
         $this->assign('right_list', $right_list);
         return $this->fetch('info');
     }

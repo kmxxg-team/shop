@@ -91,15 +91,16 @@ class Spec extends Base
 
 		// 查询模型信息
 		$type = db('goods_type')->select();
-		$this->assign('type', $type);
 
 		$info = array();
 
 		// 判断是否有id传入
 		if ($id) {
 			$info = $this->modelSpec->get($id);
-			$this->assign('info',$info);
 		}
+		
+		$this->assign('type', $type);
+		$this->assign('info',$info);
 		return $this->fetch();
 	}
 
