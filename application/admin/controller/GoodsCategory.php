@@ -69,7 +69,7 @@ class GoodsCategory extends Base
             }
 
             $list = $this->getTreeLevel($list, 0, $deep = 0);
-
+            
             $this->assign('list', $list);
             $html = $this->fetch('index_ajax');
 

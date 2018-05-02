@@ -1,7 +1,6 @@
 <thead>
   <tr>
-    <th></th>
-    <th><input type="checkbox" class="check-all"></th>
+    <th style="padding-left:50px;"><input type="checkbox" class="check-all"></th>
     <th>分类名称</th>
     <th>移动端名称</th>
     <th>等级</th>
@@ -14,9 +13,8 @@
 </thead>
 <tbody>
   <volist name="list" id="item">
-    <tr>
-      <td><a class="plus" href="javascript:void(0)" style="cursor:pointer;" level="{$item.level}">[-]</a></td>
-      <td><input type="checkbox" class="ids" name="ids[]"></td>
+    <tr id="node-{$item.id}" {$item.parentid_node}>
+      <td style="padding-left:50px;"><input type="checkbox" class="ids" name="ids[]"></td>
       <td>{$item.title_show}</td>
       <td>{$item.mobile_name}</td>
       <td>{$item.level}</td>
