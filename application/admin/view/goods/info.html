@@ -6,28 +6,28 @@
 <legend>
   <!-- 返回列表按钮 -->
   <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
-  <empty name="$Request.get.goods_id">
-    添加商品
-  <else />
-    商品设置
-  </empty>
+  <notempty name="$Request.get.goods_id">
+    商品设置 - 通用信息
+  </notempty>
 </legend>
 </fieldset>
 
 <!-- 判断是更新还是新增 -->
 <empty name="$Request.get.goods_id">
-  <form class="layui-form" action="{:url('add')}">
+<form class="layui-form" action="{:url('add')}">
 <else />
-  <form class="layui-form" action="{:url('edit')}">
+<form class="layui-form" action="{:url('edit')}">
 </empty>
 
 <div class="layui-tab">
   <ul class="layui-tab-title">
     <li class="layui-this">通用信息</li>
-    <li>商品相册</li>
-    <li>商品模型</li>
-    <li>商品物流</li>
-    <li>积分折扣</li>
+  	<notempty name="$Request.get.goods_id">
+	    <li class="jump-tab" page-url="{:url('imgInfo', ['goods_id'=>$Request.get.goods_id])}">商品相册</li>
+	    <li>商品模型</li>
+	    <li>商品物流</li>
+	    <li>积分折扣</li>
+  	</notempty>
   </ul>
 
   <div class="layui-tab-content">
@@ -157,15 +157,13 @@
 		    </div>
 		  </div>
     </div>
-    <div class="layui-tab-item">内容2</div>
-    <div class="layui-tab-item">内容3</div>
-    <div class="layui-tab-item">内容4</div>
-    <div class="layui-tab-item">内容5</div>
   </div>
 </div>
 
 </form>
+</block>
 
+<block name="script">
 <!-- <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script> -->
 <script type="text/javascript" src="__ROOT__/plugins/wangEditor/release/wangEditor.min.js"></script>
 <script>
@@ -185,6 +183,14 @@ layui.use('element', function(){
 	editor.create();
 	// 初始化 textarea 的值
 	$text.val(editor.txt.html());
+});
+
+/**
+ * 设置tab标签跳转
+ */
+$('.layui-tab-title .jump-tab').on('click', function(){
+	var url = $(this).attr('page-url');
+	window.location.href = url;
 });
 
 

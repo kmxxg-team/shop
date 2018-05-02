@@ -154,4 +154,18 @@ class Goods extends Base
     		}
     	}
     }
+
+    /**
+     * 编辑商品详情页
+     */
+    public function imgInfo()
+    {
+        $id = input('goods_id');
+        
+        if (empty($id)) {
+            $this->error('未获取到商品ID');
+        }
+
+        return $this->fetch('img_info');
+    }
 }
