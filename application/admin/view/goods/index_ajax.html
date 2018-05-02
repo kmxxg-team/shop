@@ -35,7 +35,7 @@
       <td>{$item['goods_id']}</td>
       <td>{$item['goods_name']}</td>
       <td>{$item['goods_sn']}</td>
-      <td>{$item['cat_id']}</td>
+      <td>{$item.goodsCategory.name|default="未知"}</td>
       <td>{$item['shop_price']}</td>
       <td>{$item['is_recommend']==1 ? '<i class="layui-icon is_right">&#xe616;</i>是' : '<i class="layui-icon is_error">&#x1007;</i>否'}</td>
       <td>{$item['is_new']==1 ? '<i class="layui-icon is_right">&#xe616;</i>是' : '<i class="layui-icon is_error">&#x1007;</i>否'}</td>

@@ -89,7 +89,11 @@ class Goods extends Base
             $info = $this->modelGoods->get($id);
         }
 
+        // 获取商品分类信息树状数组
+        $cat_list = controller('GoodsCategory')->getTreeArray();
+
         $this->assign('info', $info);
+        $this->assign('cat_list', $cat_list);
     	return $this->fetch();
     }
 

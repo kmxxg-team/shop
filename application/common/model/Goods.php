@@ -23,12 +23,31 @@ class Goods extends Base
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
     protected $pk = 'goods_id';
 
+/*---------------------------------- 关联模型 -----------------------------------*/
+	/**
+	 * 商品分类关联模型
+	 */
+	public function goodsCategory()
+	{
+		return $this->belongsTo('goodsCategory', 'cat_id', 'id');
+	}
 
 /*----------------------------------- 获取器 ------------------------------------*/
 
 
 
 /*----------------------------------- 修改器 ------------------------------------*/
+	/**
+	 * 商品货号修改器
+	 */
+	public function setGoodsSnAttr($value)
+	{
+		if (!empty($value)) {
+			return $value;
+		}
+		return uniqid();
+	}
+
 	/**
 	 * 商品关键词修改器
 	 */
