@@ -45,14 +45,15 @@ class Menu extends Base
 	 */
 	public function index()
 	{
-		$map = [];
-
-		// 按昵称搜索
-        if ($this->request->param('keyword')) {
-            $map['title'] = ['like', '%'. $this->request->param('keyword') . '%'];
-        }
-
 		if ($this->request->isAjax()) {
+
+			$map = [];
+
+			// 按昵称搜索
+	        if ($this->request->param('keyword')) {
+	            $map['title'] = ['like', '%'. $this->request->param('keyword') . '%'];
+	        }
+	        
 			$count = $this->modelMenu->where($map)->count();
 
 			$list  = $this->modelMenu
@@ -72,13 +73,10 @@ class Menu extends Base
 
 	        if (!empty($list)) {
 	            $tree = new \app\common\org\TreeList();
-	             
 	            $list = $tree->toFormatTree($list);
 	        }
 
-
 			$this->assign('list', $list);
-
 			$html = $this->fetch('index_ajax');
 
 			$data = [

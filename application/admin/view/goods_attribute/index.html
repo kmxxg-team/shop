@@ -5,21 +5,36 @@
   <legend>商品属性</legend>
 </fieldset>
 
-<form class="layui-form layui-form-pane keyword"> 
+<form class="layui-form layui-form-pane keyword" method="get"> 
   <div class="layui-form-item"> 
     <div class="layui-inline"> 
       <label class="layui-form-label">搜索</label> 
       <div class="layui-input-inline"> 
-        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="请输入属性名称查询" > 
-      </div> 
+        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="请输入属性名称查询" value="{$Request.get.keyword}"> 
+      </div>
     </div> 
+    <div class="layui-inline"> 
+      <label class="layui-form-label">所属模型</label> 
+      <div class="layui-input-inline"> 
+        <select name="type_id" lay-verify="">
+          <option value="">请选择商品模型</option>
+          <volist name="types" id="item">
+            <if condition="$Request.get.type_id eq $item.id">
+              <option value="{$item.id}" selected="selected">{$item.name}</option>
+            <else/>
+              <option value="{$item.id}">{$item.name}</option>
+            </if>
+          </volist>
+        </select>
+      </div> 
+    </div>
     <div class="layui-inline"> 
       <type type="button" class="layui-btn" id="keyword">查询</button>
     </div>
   </div> 
 </form>
 <div class="layui-btn-group">
-  <a href="{:url('menuInfo')}">
+  <a href="{:url('info')}">
     <button class="layui-btn">
       <i class="layui-icon">&#xe654;</i>新增
     </button>

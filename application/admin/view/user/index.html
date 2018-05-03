@@ -26,12 +26,13 @@
   </div> 
 </form>
 <div class="layui-btn-group">
-  <button class="layui-btn" onclick="javascript:window.location='{:url(\'add\')}'">
-    <i class="layui-icon">&#xe654;</i>新增
-  </button>
-  <!-- <button class="layui-btn">
-    <i class="layui-icon">&#xe640;</i>删除
-  </button> -->
+    <input name="ids" type="hidden" value="" id="hidden-ids">
+    <button class="layui-btn" onclick="javascript:window.location='{:url(\'add\')}'">
+      <i class="layui-icon">&#xe654;</i>新增
+    </button>
+    <button class="layui-btn target-form">
+      <i class="layui-icon">&#xe640;</i>删除
+    </button>
 </div> 
 <table class="layui-table" data-url="{:url('')}">
 </table>

@@ -4,7 +4,7 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: dorisnzy <dorisnzy@163.com>
+// | Author: 陈果 <yayuneko@163.com>
 // +----------------------------------------------------------------------
 // | Date: 2017-1-1
 // +----------------------------------------------------------------------
@@ -79,7 +79,7 @@ class Goods extends Base
     /**
      * 商品信息页面
      */
-    public function goodsInfo()
+    public function info()
     {
     	$id = input('goods_id');
 
@@ -87,10 +87,10 @@ class Goods extends Base
         $info = array();
         if ($id) {
             $info = $this->modelGoods->get($id);
-            $this->assign('info', $info);
         }
 
-    	return $this->fetch('goods_info');
+        $this->assign('info', $info);
+    	return $this->fetch();
     }
 
     /**
@@ -107,6 +107,11 @@ class Goods extends Base
 
     		// 转换 ”是否包邮“
     		$data['is_free_shipping'] = isset($data['is_free_shipping']) ? 1 : 0;
+
+            $validate = validate('Goods');
+            if (!$validate->check($data)) {
+                $this->error($validate->getError());
+            }
 
     		$result = $this->modelGoods->allowField(true)->save($data);
 
@@ -133,11 +138,16 @@ class Goods extends Base
 
     		// 转换 ”是否包邮“
     		$data['is_free_shipping'] = isset($data['is_free_shipping']) ? 1 : 0;
+            
+            $validate = validate('Goods');
+            if (!$validate->check($data)) {
+                $this->error($validate->getError());
+            }
 
     		$result = $this->modelGoods->allowField(true)->update($data);
 
     		// 结果反馈
-    		if ($result) {
+    		if ($result !== false) {
     			$this->success('修改成功', 'index');
     		} else {
     			$this->error('修改失败');

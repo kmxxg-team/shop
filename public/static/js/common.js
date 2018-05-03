@@ -19,9 +19,13 @@ layui.use(module, function(){
 
     // 分页获取数据 
     var get_list = function(element, current, where){
+        // 表格
         var element = element ? element : $('.layui-table');
+
+        // 页数
         var current = current ? current : 1;
 
+        // 请求地址
         var server_url = element.attr('data-url');
         if (!server_url) return false;
 
@@ -119,6 +123,8 @@ layui.use(module, function(){
         });
     }
 
+
+
     // 弹框获取html页面
     var tan_get_html = function(me){
        $(me).bind('click', function(){
@@ -135,29 +141,6 @@ layui.use(module, function(){
                     ,anim: 0
                 });
             });
-        });
-    }
-
-    // ajax提交方法
-    var ajax_action = function(){
-        $('#ajax-action').bind('click', function(){
-            var tips = $('#ajax-action').attr('data-tips');
-            tips = tips || '您确定要操作？';
-            layer.confirm(tips, {btn:['确定', '取消']},
-                function(){
-                    var server_url = $('#ajax-action').attr('data-url');
-                    var jump_url   = $('#ajax-action').attr('jump-url');
-
-                    $.get(server_url, {}, function(result){
-                        if (!result.code) {
-                            error_msg(result.msg);
-                            return false;
-                        }
-                        success_msg(result.msg);
-                        window.location.href = jump_url;
-                    });
-                },
-            );
         });
     }
 
@@ -190,7 +173,7 @@ layui.use(module, function(){
 
     //全选/反选/单选的实现
     $(document).on('click', '.check-all', function() {
-        $(".ids").prop("checked", this.checked);
+        $(".ids").prop("checked", this.checked);        
     });
 
     $(document).on('click', '.ids', function() {
@@ -205,13 +188,36 @@ layui.use(module, function(){
         });
     });
 
+    // ajax提交方法
+    var ajax_action = function(){
+        $('#ajax-action').bind('click', function(){
+            var tips = $('#ajax-action').attr('data-tips');
+            tips = tips || '您确定要操作？';
+            layer.confirm(tips, {btn:['确定', '取消']},
+                function(){
+                    var server_url = $('#ajax-action').attr('data-url');
+                    var jump_url   = $('#ajax-action').attr('jump-url');
+
+                    $.get(server_url, {}, function(result){
+                        if (!result.code) {
+                            error_msg(result.msg);
+                            return false;
+                        }
+                        success_msg(result.msg);
+                        window.location.href = jump_url;
+                    });
+                },
+            );
+        });
+    }
 
 
 
 // ----------------- 普通调用 ---------------------
 
     if ($('.layui-table').attr('data-url')) {
-        get_list('', 1, {});
+        $data = GetRequest();
+        get_list('', 1, $data);
     }
     if ($('#keyword')) {        
         $('#keyword').on('click', function(){
@@ -220,9 +226,28 @@ layui.use(module, function(){
     }
     // 表单提交
     submit_form();
+
     // 弹框获取html
     tan_get_html('.lay-get-html');
 
+
     //单个方法ajax提交
     ajax_action();
+
 });
+
+/**
+ * 获取get传参
+ */
+function GetRequest() {  
+   var url = location.search; //获取url中"?"符后的字串  
+   var theRequest = new Object();  
+   if (url.indexOf("?") != -1) {  
+      var str = url.substr(1);  
+      strs = str.split("&");  
+      for(var i = 0; i < strs.length; i ++) {  
+         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);  
+      }  
+   }  
+   return theRequest;  
+} 

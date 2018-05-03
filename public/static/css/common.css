@@ -1,2 +1,4 @@
 .layui-btn-sm{height: 30px;line-height: 30px; padding: 0 10px; font-size:12px;}
 .layui-btn-xs{height: 22px;line-height: 22px; padding: 0 5px; font-size:12px;}
+.is_error{color : #FF5722;}
+.is_right{color : #009688;}

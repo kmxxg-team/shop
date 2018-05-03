@@ -15,7 +15,8 @@
  * 检测管理员是否登录
  * @return 存在 返回管理员id 不存在 返回false
  */
-function isLogin(){
+function isLogin()
+{
 	if (session('admin_id') && session('admin_id')>0) {
 		return session('admin_id');
 	} else {
@@ -28,7 +29,8 @@ function isLogin(){
  * @param str 需要加密数据
  * @return 加密密码串
  */
-function encrypt($str){
+function encrypt($str)
+{
 	return md5('encrypt'.$str);
 }
 
@@ -37,7 +39,8 @@ function encrypt($str){
  * @param info 需要更新的数组
  * @return bool
  */
-function updateSession($info){
+function updateSession($info)
+{
 	if ($info) {
 		session('admin_id', $info['admin_id']);
 		session('user_name', $info['user_name']);
@@ -89,7 +92,8 @@ function delFile($path, $delDir = false)
  * @param $log_url 操作URL
  * @param $log_info 记录信息
  */
-function adminLog($log_info){
+function adminLog($log_info)
+{
     $add['log_time'] = time();
     $add['admin_id'] = session('admin_id');
     $add['log_info'] = $log_info;
@@ -101,9 +105,27 @@ function adminLog($log_info){
 /**
  * 是否为超级管理员
  */
-function isRoot(){
+function isRoot()
+{
 	if(session('admin_id') == 1){
 		return true;
 	}
 	return false;
+}
+
+/**
+ * 字符串去重
+ *
+ * @param string $separator 字符串分隔符
+ * @param string $str       待处理字符串
+ *
+ * @return string 去重后的字符串
+ */
+function stringUnique($separator, $str)
+{
+	$str = explode($separator, $str);
+    $str = array_unique($str);
+    $str = implode($separator, $str);
+
+    return $str;
 }

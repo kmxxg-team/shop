@@ -1,0 +1,69 @@
+<extend name="public/base">
+
+<block name="body">
+
+<fieldset class="layui-elem-field layui-field-title">
+<legend>
+  <!-- 返回列表按钮 -->
+  <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
+  <empty name="$Request.get.id">
+    新增角色
+  <else />
+    编辑角色
+  </empty>
+</legend>
+</fieldset>
+
+<!-- 判断是新增操作还是修改操作 -->
+<empty name="$Request.get.id">
+  <form class="layui-form" action="{:url('add')}" method="post">
+<else />
+  <form class="layui-form" action="{:url('edit')}" method="post">
+</empty>
+
+<!-- ID -->
+<input type="hidden" name="role_id" value="{$info.role_id|default=''}">
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span style="color:red;">* </span>角色名称</label>
+    <div class="layui-input-block">
+      <input type="role_name" name="role_name" required lay-verify="required" placeholder="请输入角色名称" autocomplete="off" class="layui-input" value="{$info.role_name|default=''}">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span style="color:red;">* </span>角色描述</label>
+    <div class="layui-input-block">
+      <textarea name="role_desc" placeholder="对该角色进行描述" required lay-verify="required" class="layui-textarea">{$info.role_desc|default=''}</textarea>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">权限分配</label>
+    <div class="layui-input-block">
+      <!-- 按分组遍历权限列表 -->
+      <volist name="right_list" id="group">
+          <!-- 若该分组存在权限 则遍历每个分组下的权限 -->
+          <fieldset class="layui-elem-field">
+            <legend class="layui-bg-green" style="font-size: 15px;">{$group.title|default=''}</legend>
+            <div class="layui-field-box">
+              <present name="group['right']">
+              <div class="check_item">
+              <volist name="group['right']" id="right">
+                <input type="checkbox" name="act_list[]" value="{$key}" title="{$right}" lay-skin="primary" class="ids">
+              </volist>
+              </div>
+              </present>
+            </div>
+          </fieldset>
+          <hr>
+      </volist>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+
+</block>

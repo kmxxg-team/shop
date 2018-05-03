@@ -231,7 +231,6 @@ class Base extends Controller
         $ids    = array_unique((array) input('ids/a', 0));
         $status = input('status');
         $setfield = input('setfield','status');
-        
         if (empty($ids)) {
             $this->error('请选择要操作的数据');
         }

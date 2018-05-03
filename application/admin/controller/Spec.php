@@ -37,14 +37,20 @@ class Spec extends Base
 	 */
 	public function index()
 	{
-		$map = [];
-
-		// 按昵称搜索
-        if ($this->request->param('keyword')) {
-            $map['spec_name'] = ['like', '%'. $this->request->param('keyword') . '%'];
-        }
-
 		if ($this->request->isAjax()) {
+			$map = [];
+			$keyword = input('keyword/s', '');
+			$type_id = input('type_id/s', '');
+	        // 按昵称搜索
+	        if (empty($keyword) != true) {
+	            $map['spec_name'] = ['like', '%'. $keyword . '%'];
+	        }
+
+	        //按照所属模型搜索
+	        if (empty($type_id) != true) {
+	        	$map['type_id'] = ['eq', $type_id];
+	        }
+
 			$count = $this->modelSpec->where($map)->count();
 
 			$list  = $this->modelSpec
@@ -70,28 +76,32 @@ class Spec extends Base
 			return $this->success('获取成功', '', $data);
 		}
 		
+		// 获取商品模型
+		$types = model('goods_type')->select();
+		$this->assign('types', $types);
 		return $this->fetch(); 
 	}
 
 	/**
 	 * 商品属性信息页面
 	 */
-	public function menuInfo()
+	public function info()
 	{
 		$id = $this->request->param('id');
 
 		// 查询模型信息
 		$type = db('goods_type')->select();
-		$this->assign('type', $type);
 
 		$info = array();
 
 		// 判断是否有id传入
 		if ($id) {
 			$info = $this->modelSpec->get($id);
-			$this->assign('info',$info);
 		}
-		return $this->fetch('spec_info');
+		
+		$this->assign('type', $type);
+		$this->assign('info',$info);
+		return $this->fetch();
 	}
 
 	/**
@@ -183,35 +193,66 @@ class Spec extends Base
 	}
 
 	/**
-	 * 删除商品属性
-	 */
-	public function delete()
-	{
-		if ($this->request->param('id')) {
-			// 开启事务删除数据
-			Db::startTrans(); 
-			
-			$spec = $this->modelSpec->get($this->request->param('id'));
-			
-			$result  = $spec->delete();
-			$resItem = $spec->specItem()->delete();  
+     * 设置一条或者多条数据的状态
+     * @param $strict 严格模式要求处理的纪录的uid等于当前登陆用户UID
+     */
+    public function setStatus($model = '', $strict = false){
+        if ($model =='') {
+            $model = request()->controller();
+        }
+        $ids    = array_unique((array) input('ids/a', 0));
+        $status = input('status');
+        $setfield = input('setfield','status');
+        if (empty($ids)) {
+            $this->error('请选择要操作的数据');
+        }
+        // 获取主键
+        $status_model      = model($model);
+        $model_primary_key = $status_model->getPk();
 
-			if ((false !== $result) && $resItem) {
-				//提交事务
-				Db::commit();
-				$this->success('删除成功');
-			} else {
-				//回滚事务
-				Db::rollback();
-				$this->error('删除失败');
-			}
-		}
-		$this->error('删除失败');
-	}
+        // 获取id
+        $ids                     = is_array($ids) ? implode(',', $ids) : $ids;
+        if (empty($ids)) {
+            $this->error('请选择要操作的数据');
+        }
+        $map[$model_primary_key] = array('in', $ids);
+        // 严格模式
+        if ($strict) {
+            $map['id'] = array('eq', is_login());
+        }
+        switch ($status) {
+            case 'delete': 
+                // 删除记录
+                // 查询当前删除的项目是否有子代
+                if (in_array('pid', $status_model->getTableFields())) {
+                    $son_count = $status_model->where(array('pid' => array('in', $ids)))->count();
+                    if ($son_count > 0) {
+                        $this->error('无法删除，存在子项目！');
+                    }
+                }
+
+                $status_model->startTrans();
+                // 删除记录
+                $spec_result = $status_model->where($map)->delete();
+                // 删除规格项
+                $item_result = $this->modelSpecItem->where(array('spec_id' => array('in', $ids)))->delete();
+                if ($spec_result && $item_result) {
+                	$status_model->commit();
+                    $this->success('删除成功，不可恢复！');
+                } else {
+                	$status_model->rollback();
+                    $this->error('删除失败');
+                }
+                break;
+            default:
+                $this->error('参数错误');
+                break;
+        }
+    }
 
 	/**
-    *更新规格表和规格项表数据
-    */
+     * 更新规格表和规格项表数据
+     */
     private function updateData($id,$new_data,$old_data=array())
     {
         // 求新标签和旧的之间公共部分
