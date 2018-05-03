@@ -20,6 +20,7 @@ class Goods extends Base
 {   
 	// 商品模型
 	protected $modelGoods;
+    protected $modelImages;
 
 	/**
 	 * 初始化
@@ -27,6 +28,7 @@ class Goods extends Base
 	public function _initAdmin()
 	{
 		$this->modelGoods = model('Goods');
+        $this->modelImages = model('GoodsImages');
 	}
 
     /**
@@ -170,6 +172,84 @@ class Goods extends Base
             $this->error('未获取到商品ID');
         }
 
+        $images = $this->modelImages->where('goods_id', $id)->select();
+
+        $this->assign('images', $images);
         return $this->fetch('img_info');
     }
+
+    /**
+     * 商品相册图片上传
+     */
+    public function updateImg()
+    {
+        $id = input('goods_id', '');
+        if (empty($id)) {
+        // 未获取到商品ID
+            $response = [
+                'code' => 1,
+                'msg'  => '未获取到商品ID',
+            ];
+            return $response;
+        }
+
+        // 上传图片
+        $file = $this->request->file();
+        $file = $file['file'];
+        $info = $file->move(ROOT_PATH . 'public\uploads\goods_images');
+
+        if ($info) {
+            $response = [
+                'code' => 0,
+                'msg'  => '上传成功',
+                'data' => ['src' => ROOT_PATH . 'public\uploads\goods_images\\' . $info->getSaveName()],
+            ];
+        } else {
+            $response = [
+                'code' => 1,
+                'msg'  => $info->getError(),
+            ];
+        }
+        
+        // 添加图片表数据
+        if ($response['code'] === 0) {
+            $data['goods_id'] = $id;
+            $data['image_url'] = '\public\uploads\goods_images\\' . $info->getSaveName();
+            $result = $this->modelImages->save($data);
+            if ($result === false) {
+                $response = [
+                    'code' => 1,
+                    'msg'  => '保存失败',
+                ];
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * 商品图片删除
+     *
+     * @param intger $id 商品图片ID
+     */
+    public function deleteImg($id = '')
+    {
+        if (empty($id)) {
+            return $this->error('未获取到图片ID');
+        }
+
+        $path = $this->modelImages->where('img_id', $id)->value('image_url');
+        $path = ROOT_PATH . $path;
+        $result = $this->modelImages->where('img_id', $id)->delete();
+        
+        if ($result === false) {
+            return $this->error('删除失败');
+        }
+
+        // 删除对应文件
+        if (file_exists($path)) unlink($path);
+
+        return $this->success('删除成功');
+    }
+
 }

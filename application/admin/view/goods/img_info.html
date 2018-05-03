@@ -1,5 +1,34 @@
 <extend name="public/base">
 
+<block name="style">
+<style type="text/css">
+.layui-elem-field{
+	padding:10px;
+}
+.img-box{
+	float:left;
+	height:auto;
+	border:1px solid #ddd;
+	border-radius: 4px;
+	padding:10px;
+	overflow:hidden;
+}
+.img-box img{
+	max-width:100%;
+	height:auto;
+	cursor:pointer;
+}
+.btn-box{
+	text-align:center;
+	width: 100%;
+	margin-top: 10px;
+}
+.btn-box .layui-btn{
+	width: 100%;
+}
+</style>
+</block>
+
 <block name="body">
 
 <fieldset class="layui-elem-field layui-field-title">
@@ -14,13 +43,6 @@
 </legend>
 </fieldset>
 
-<!-- 判断是更新还是新增 -->
-<empty name="$Request.get.goods_id">
-  <form class="layui-form" action="{:url('add')}">
-<else />
-  <form class="layui-form" action="{:url('edit')}">
-</empty>
-
 <div class="layui-tab">
   <ul class="layui-tab-title">
     <li class="jump-tab" page-url="{:url('info', ['goods_id'=>$Request.get.goods_id])}">通用信息</li>
@@ -31,7 +53,21 @@
   </ul>
 
   <div class="layui-tab-content">
-    <div class="layui-tab-item layui-show">
+    <div class="layui-tab-item layui-show" >
+    	<fieldset class="layui-elem-field">
+		  	<legend>图片</legend>
+		  	<empty name="images">
+		  		<span class="layui-badge-dot layui-bg-green"></span>&nbsp;暂无图片
+		  	<else/>
+			  	<volist name="images" id="image">
+				  	<div class="img-box layui-col-md2">
+			 			<img src="{$image.image_url}" />
+			 			<div class="btn-box"><button class="layui-btn layui-btn-xs layui-btn-normal img-del-btn" data-url="{:url('deleteImg', ['id'=>$image.img_id])}">删除</button></div>
+				  	</div>
+			  	</volist>					
+		  	</empty>
+		</fieldset>
+		<br>
 		<div class="layui-upload">
 		  <button type="button" class="layui-btn layui-btn-normal" id="img-select">选择多文件</button> 
 		  <div class="layui-upload-list">
@@ -46,12 +82,11 @@
 		    </table>
 		  </div>
 		  <button type="button" class="layui-btn" id="upload-action">开始上传</button>
+		  <button type="button" class="layui-btn" onclick="javascript:location.reload();">刷新</button>
 		</div> 
     </div>
   </div>
 </div>
-
-</form>
 
 <!-- <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script> -->
 <script type="text/javascript" src="__ROOT__/plugins/wangEditor/release/wangEditor.min.js"></script>
@@ -91,7 +126,7 @@ layui.use('upload', function(){
 	var demoListView = $('#img-list')
 	,uploadListIns = upload.render({
 	elem: '#img-select'
-	,url: "{:url('imgInfo')}"
+	,url: "{:url('updateImg', ['goods_id' => $Request.get.goods_id])}"
 	,accept: 'images'
 	,multiple: true
 	,auto: false
@@ -129,7 +164,7 @@ layui.use('upload', function(){
 	  if(res.code == 0){ //上传成功
 	    var tr = demoListView.find('tr#upload-'+ index)
 	    ,tds = tr.children();
-	    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+	    tds.eq(2).html('<span style="color: #5FB878;">上传成功 请刷新页面查看</span>');
 	    tds.eq(3).html(''); //清空操作
 	    return delete this.files[index]; //删除文件队列已经上传成功的文件
 	  }
@@ -144,6 +179,45 @@ layui.use('upload', function(){
 	});
 });
 
+
+/**
+ * 单个图片删除按钮
+ */
+layui.use('layer', function(){
+  var layer = layui.layer;
+	$('.img-del-btn').on('click', function(){
+  		var tips = '您确定要删除图片？';
+        var server_url = $(this).attr('data-url');
+  		layer.confirm(tips, {btn:['确定', '取消']},
+            function(){
+                $.get(server_url, {}, function(result){
+                    if (!result.code) {
+                        layer.msg(result.msg || '操作失败', {icon:5});
+                        return false;
+                    }
+                    layer.msg(result.msg || '操作成功', {icon:6});
+                    // 刷新当前页
+                    setTimeout(function(){location.reload();}, 2000);
+                });
+            },
+            function(){
+                return;
+            },
+        );
+	});
+});              
+
+/**
+ * 图片预览
+ */
+ //调用示例
+layui.use('layer', function(){
+ 	var layer = layui.layer;
+	layer.photos({
+	  photos: '.img-box'
+	  ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+	}); 
+});
 </script>
 
 </block>

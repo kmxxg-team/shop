@@ -26,7 +26,7 @@ class Goods extends Validate
         'goods_name.unique'                             => '商品名称重复',
         'cat_id.number'                                 => '商品分类必须填写',
         'cat_id.gt'                                     => '商品分类必须选择',
-        'goods_sn.unique'                               => '商品货号重复',
+        'goods_sn.unique'                               => '商品货号重复 请重试',
         'goods_sn.max'                                  => '商品货号超过长度限制',
         // 'goods_num.checkGoodsNum'                       => '抢购数量不能大于库存数量',
         'shop_price.require'                            => '本店售价必须',
