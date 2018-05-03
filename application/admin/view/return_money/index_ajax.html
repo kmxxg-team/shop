@@ -1,0 +1,49 @@
+<thead>
+  <tr>
+    <th><input type="checkbox" class="check-all"></th>
+    <th>订单编号</th>
+    <th>下单时间</th>
+    <th>收货人</th>
+    <th>联系电话</th>
+    <th>所选物流</th>
+    <th>物流费用</th>
+    <th>支付时间</th>
+    <th>订单总价</th>
+    <th>处理状态</th>
+    <th>操作</th>
+  </tr> 
+</thead>
+<tbody>
+  <volist name="list" id="item">
+    <tr>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
+      <td>{$item.order_sn}</td>
+      <td>{$item.add_time}</td>
+      <td>{$item.consignee}</td>
+      <td>{$item.mobile}</td>
+      <td>{$item.shipping_name}</td>
+      <td>{$item.shipping_price}</td>
+      <td>{$item.pay_time}</td>
+      <td>{$item.total_amount}</td>
+      <td>
+      	<switch name="item.pay_status">
+            <case value="已支付">待处理</case>
+            <case value="部分付款">待处理</case>
+            <case value="已退款">已退款</case>
+            <case value="拒绝退款">已拒绝</case>
+        </switch>
+      </td>
+
+      <td>
+        <a href="{:url('info', array('order_id' => $item['order_id']))}" class="layui-btn layui-btn-xs">
+          详情
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('setStatus',array('status'=>'delete','model'=>'ReturnGoods','ids'=>$item['order_id']))}" data-tips="您确定要删除？">
+          删除
+        </a>
+        <div class="layui-btn-group">
+        </div>
+      </td>
+    </tr>
+  </volist>
+</tbody>

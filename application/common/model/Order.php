@@ -24,12 +24,65 @@ class Order extends Base
     protected $pk   = 'order_id';
 
 
+    // ----------------------- 关联模型 ---------------------------
+
+    /**
+     * 关联用户
+     */ 
+    public function user()
+    {
+        return $this->hasOne('User', 'user_id', 'user_id')->field('nickname');
+    }
+
+    /**
+     * 关联用户
+     */ 
+    public function admin()
+    {
+        return $this->hasOne('Admin', 'admin_id', 'user_id')->field('user_name');
+    }
+
+    /**
+     * 发货单
+     */ 
+    public function deliveryDoc()
+    {
+        return $this->hasOne('DeliveryDoc', 'order_id', 'order_id');
+    }
+
+    /**
+     * 订单商品
+     */ 
+    public function orderGoods()
+    {
+        return $this->hasMany('OrderGoods', 'order_id', 'order_id');
+    }
+
+    /**
+     * 订单操作记录
+     */ 
+    public function orderAction()
+    {
+        return $this->hasMany('OrderAction', 'order_id', 'order_id');
+    }
+
     // ------------------------ 读取器 ----------------------------
 
     /**
      * 下单时间
      */
     public function getAddTimeAttr($value)
+    { 
+        if ($value) {
+            return date('Y-m-d H:i:s', $value);
+        }
+        return '';
+    }
+
+    /**
+     * 支付时间
+     */
+    public function getPayTimeAttr($value)
     { 
         if ($value) {
             return date('Y-m-d H:i:s', $value);

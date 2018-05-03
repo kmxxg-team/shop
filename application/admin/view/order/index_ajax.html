@@ -33,9 +33,11 @@
         <a href="{:url('orderDetail',array('order_id'=>$item.order_id))}" class="layui-btn layui-btn-xs">
           查看
         </a>
-        <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('setStatus',array('status'=>'delete','model'=>'Order','ids'=>$item['order_id']))}" data-tips="您确定要删除？">
-          删除
-        </a>
+        <if condition="$item.order_status eq '已作废'">
+          <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('Order/delete',array('order_id'=>$item['order_id']))}" data-tips="您确定要删除？">
+            删除
+          </a>
+        </if>
         <div class="layui-btn-group">
         </div>
       </td>

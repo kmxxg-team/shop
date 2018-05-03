@@ -3,22 +3,26 @@
 <block name="body">
 <!-- 页面标题 -->
 <fieldset class="layui-elem-field layui-field-title">
-  <legend>发货单</legend>
+  <legend>退款单</legend>
 </fieldset>
+
+<blockquote class=layui-elem-quote layui-text">
+  <p href="">提示：1.未发货时用户操作取消的订单。2.已付款并取消订单列表。</p>
+</blockquote>
 
 <!-- 搜索表单 -->
 <form class="layui-form layui-form-pane keyword"> 
-  <div class="layui-form-item"> 
-    <div class="layui-inline"> 
-      <label class="layui-form-label">搜索</label> 
-      <div class="layui-input-inline"> 
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">搜索</label>
+      <div class="layui-input-inline">
         <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="可根据名称查询" > 
-      </div> 
+      </div>
     </div>
-    <div class="layui-inline"> 
+    <div class="layui-inline">
       <type type="button" class="layui-btn" id="keyword">查询</button>
     </div>
-  </div> 
+  </div>
 </form>
 
 <!-- 批量操作按钮 -->

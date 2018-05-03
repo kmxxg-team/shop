@@ -11,11 +11,11 @@
 <legend>
   <!-- 返回列表按钮 -->
   <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
-    订单详情信息
+    退款详情
 </legend> 
 </fieldset>
 
-  <form class="layui-form" action="{:url('OrderOption')}" method="post">
+  <form class="layui-form" action="{:url('audit')}" method="post">
     <input type="hidden" name="order_id" value="{$order_info.order_id|default=''}">
 
     <div class="layui-form-item layui-col-xs10 layui-col-sm10 layui-col-md10" style="border: 5px solid lightblue;">
@@ -144,91 +144,105 @@
 
       <hr />
 
-      <label class="layui-form-label" style="margin-bottom: 10px;">
-        <span class="layui-badge layui-bg-cyan" style="font-size: 15px;">操作记录</span>
+      <label class="layui-form-label">
+        <span class="layui-badge layui-bg-cyan" style="font-size: 15px;">费用信息</span>
       </label>
-      <table class="layui-table" style="label-word-wrap:break-label-word; label-word-break:break-all;">
-        <thead>
-          <tr>
-            <th>操作者</th>
-            <th>操作时间</th>
-            <th>订单状态</th>
-            <th>付款状态</th>
-            <th>发货状态</th>
-            <th>描述</th>
-            <th>备注</th>
-          </tr> 
-        </thead>
-        <tbody>
-          <volist name='order_info.orderAction' id='item'>
-            <if condition="$item.status_desc neq '发送货物'">
-            <tr>
-              <td>
-                <if condition='$item.action_user'>
-                  用户：{$order_info.user.nickname}
-                <else />
-                  管理员:{$order_info.admin.user_name}
-                </if>
-              </td>
-              <td>{$item.log_time}</td>
-              <td>{$item.order_status}</td>
-              <td>{$item.pay_status}</td>
-              <td>{$item.shipping_status}</td>
-              <td>{$item.status_desc}</td>
-              <td>{$item.action_note}</td>
-            </tr>
-            </if>
-          </volist>
-        </tbody>
-      </table>
+      <div class="layui-row layui-col-space10">
+        <div class="layui-col-md4">
+          <label class="layui-form-label label-title">小计：</label>
+          <label class="layui-form-label label-word">{$order_info.total_amount}</label>
+        </div>
+        <div class="layui-col-md4">
+          <label class="layui-form-label label-title">运费：</label>
+          <label class="layui-form-label label-word">{$order_info.shipping_price}</label>
+        </div>
+        <div class="layui-col-md4">
+          <label class="layui-form-label label-title">折扣：</label>
+          <label class="layui-form-label label-word">{$order_info.coupon_price}</label>
+        </div>
+      </div>
+      <div class="layui-row layui-col-space10">
+        
+        <div class="layui-col-md6">
+          <label class="layui-form-label label-title">应付：</label>
+          <label class="layui-form-label label-word" style="color: red;font-weight:bold;">{$order_info.order_amount}</label>
+        </div>
+      </div>
 
       <hr />
-      <div class="layui-form-item">
-        <label class="layui-form-label title">操作备注</label>
-        <div class="layui-input-block">
-          <div class="layui-col-md6">
-            <textarea name="action_note" class="layui-textarea"></textarea> 
+
+      <label class="layui-form-label" style="margin-bottom: 20px;">
+        <span class="layui-badge layui-bg-cyan" style="font-size: 15px;">退款处理</span>
+      </label>
+
+      <if condition="$order_info.pay_status eq '已支付' && '部分付款'">
+        <div class="layui-row layui-col-space10">
+          <label class="layui-form-label label-title">审核意见：</label>
+          <div class="layui-input-block">
+            <input type="radio" name="pay_status" value="3" title="同意退款" <eq name="order_info.pay_status|default=''" value="3">checked</eq>>
+            <input type="radio" name="pay_status" value="4" title="拒绝退款" <eq name="order_info.pay_status|default=''" value="4">checked</eq>>
           </div>
         </div>
-      </div>
-      <div class="layui-form-item">
-        <div class="layui-input-block">
-
-          <!-- 判断当前需要执行操作 带参数作为标识-->
-          <eq name="$order_info.order_status" value='待确认'>
-          <input type="hidden" name="order_status" value="1">
-          <button class="layui-btn" lay-submit lay-filter="submitForm">确认</button>
-          </eq>
-
-          <eq name="$order_info.order_status" value='已确认'>
-            <eq name="$order_info.pay_status" value='未支付'>
-              <neq name="$order_info.pay_code" value='cod'>
-                <input type="hidden" name="pay_status" value="1">
-                <button class="layui-btn" lay-submit lay-filter="submitForm">支付</button>
-                <else />
-                <eq name="$order_info.order_status" value='已确认'>
-                  <eq name="$order_info.shipping_status" value='未发货'>
-                      <a class="layui-btn" href="{:url('DeliveryDoc/delivery', array('order_id' => $order_info['order_id']))}">去发货</a>
-                  </eq>
-                </eq>
-              </neq>
-            </eq>
-          </eq>
-
-          <eq name="$order_info.order_status" value='已确认'>
-            <eq name="$order_info.pay_status" value='已支付'>
-                <a class="layui-btn" href="{:url('DeliveryDoc/delivery', array('order_id' => $order_info['order_id']))}">去发货</a>
-            </eq>
-          </eq>
-          
-          <neq name="$order_info.order_status" value='已作废'>
-            <a class="layui-btn" id="ajax-action" href="javascript:;" data-url="{:url('Order/orderOption', array('order_id' => $order_info['order_id']))}" jump-url="{:url('Order/index')}">无效</a>
-          </neq>
-
-          <a class="layui-btn" href="{:url('Order/index')}">取消</a>
-          
+        <div class="layui-row layui-col-space10">
+          <label class="layui-form-label label-title">退款方式：</label>
+            <div class="layui-input-block">
+           <!--  <input type="radio" name="status" value="1" title="支付原路退回" <eq name="order_info.status|default=''" value="1">checked</eq>>
+            <input type="radio" name="status" value="2" title="退回用户余额" <eq name="order_info.status|default=''" value="2">checked</eq>> -->
+          </div>
         </div>
-      </div>
+        <div class="layui-row layui-col-space10">
+          <label class="layui-form-label label-title">处理备注：</label>
+          <div class="layui-input-block">
+            <div class="layui-col-md6">
+              <textarea name="admin_note" class="layui-textarea"></textarea> 
+            </div>
+          </div>
+        </div>
+
+        <hr / >
+        
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+
+             <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            
+          </div>
+        </div>
+        
+
+      <else />
+        
+        <div class="layui-row layui-col-space10">
+          <label class="layui-form-label label-title">审核意见：</label>
+          <label class="layui-form-label label-word">{$order_info.pay_status}</label>
+        </div>
+        <div class="layui-row layui-col-space10">
+          <label class="layui-form-label label-title">退款方式：</label>
+          <!-- <label class="layui-form-label label-word">{$order_info.pay_status}</label> -->
+        </div>
+        <div class="layui-row layui-col-space10">
+          <label class="layui-form-label label-title">处理备注：</label>
+          <div class="layui-input-block">
+            <div class="layui-col-md6">
+              <textarea name="admin_note" class="layui-textarea">{$order_info.admin_note|default=''}</textarea> 
+            </div>
+          </div>
+        </div>
+
+        <hr / >
+
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+
+            <!-- 判断当前需要执行操作 带参数作为标识-->
+            <a class="layui-btn" href="{:url('index')}">取消</a>
+            
+          </div>
+        </div>
+  
+      </if>
+    
     </div>
   </form>
 </block>

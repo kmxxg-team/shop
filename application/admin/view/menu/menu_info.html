@@ -35,12 +35,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">所属分组</label>
     <div class="layui-input-block">
-      <select name="group" lay-verify="required">
-        <option value="">请选择</option>
-        <volist name="menu_gorup" id="vo">
-          <option value="{$vo}" <notempty name="info.group"><eq name="vo" value="$info['group']">selected</eq></notempty>>{$vo}</option>
-        </volist>
-      </select>
+       <input type="text" name="group" required lay-verify="required" placeholder="请输入所属分组" autocomplete="off" class="layui-input" value="{$info.group|default=''}">
     </div>
   </div>
   <div class="layui-form-item">
@@ -53,7 +48,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label"><span style="color:red;">* </span>菜单名</label>
     <div class="layui-input-block">
-      <input type="role_name" name="title" required lay-verify="required" placeholder="请输入菜单名" autocomplete="off" class="layui-input" value="{$info.title|default=''}">
+      <input type="text" name="title" required lay-verify="required" placeholder="请输入菜单名" autocomplete="off" class="layui-input" value="{$info.title|default=''}">
     </div>
   </div>
 

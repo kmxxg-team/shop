@@ -27,11 +27,15 @@
       
 
       <td>
-        <a href="{:url('')}" class="layui-btn layui-btn-xs">
-          查看
-        </a>
-        <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('setStatus',array('status'=>'delete','model'=>'DeliveryDoc','ids'=>$item['id']))}" data-tips="您确定要删除？">
-          删除
+        <neq name="$item.order.shipping_status" value='已发货'>
+          <a href="{:url('delivery', array('order_id' => $item['order_id']))}" class="layui-btn layui-btn-xs">
+            <i class="layui-icon is_right">&#xe609;</i>
+            去发货
+          </a>
+        </neq>
+        <a href="{:url('shippingGoods', array('order_id' => $item['order_id']))}" class="layui-btn layui-btn-xs">
+          <i class="layui-icon is_right">&#xe632;</i>
+          配货单
         </a>
         <div class="layui-btn-group">
         </div>

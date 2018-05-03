@@ -1,0 +1,164 @@
+<extend name="public/base">
+
+<block name="body">
+
+<style type="text/css">
+ .content{text-align: left;min-width: 30%;}
+ .layui-form-item{color:gray;}
+ .layui-form-item:hover{color:black;}
+ a:hover{color: orange;}
+</style>
+
+<fieldset class="layui-elem-field layui-field-title">
+<legend>
+  <!-- 返回列表按钮 -->
+  <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
+    退换货详情页
+</legend> 
+</fieldset>
+
+<form class="layui-form" action="{:url('audit')}" method="post">
+  <input type="hidden" name="id" value="{$info.id|default=''}">
+
+<!-- ID -->
+
+  <div class="layui-form-item">
+    <label class="layui-form-label title">订单编号</label>
+    <label class="layui-form-label content">{$info.order_sn}</label>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label title">用户</label>
+    <label class="layui-form-label content">{$info.user.nickname}</label>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label title">申请日期</label>
+    <label class="layui-form-label content">{$info.addtime}</label>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label title">商品名称</label>
+    <label class="layui-form-label content">
+      <a href="">
+        {$info.orderGoods.goods_name}
+      </a>
+    </label>    
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label title">商品规格</label>
+    <label class="layui-form-label content">{$info.orderGoods.spec_key_name}</label>
+  </div>
+  
+
+  <div class="layui-form-item">
+    <label class="layui-form-label title">服务类型</label>
+    <label class="layui-form-label content">{$info.type}</label>
+  </div>
+
+ <neq name="$info.type" value="换货">
+  <eq name="$info.type" value="仅退款">
+    <div class="layui-form-item">
+      <label class="layui-form-label title">退款金额</label>
+      <label class="layui-form-label content">
+        <input style="margin-top: -8px;width: 50%" type="text" value="{$info.refund_money|default=''}" name="refund_money" class="layui-input">
+      </label>
+    </div>
+
+    <eq name="$info.status" value="审核通过">
+      <div class="layui-form-item">
+        <label class="layui-form-label title">退款方式</label>
+        <label class="layui-form-label content">
+          <a href="" class="layui-btn layui-btn-sm layui-btn-radius">支付原路退回</a>
+        </label>
+      </div>
+        
+    </eq>
+  </eq>
+  <div class="layui-form-item">
+    <label class="layui-form-label title">退货原因</label>
+    <label class="layui-form-label content">{$info.reason}</label>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label title">退货描述</label>
+    <label class="layui-form-label content">{$info.describe}</label>
+  </div>
+ </neq>
+
+ <eq name="$info.type" value="换货">
+  <div class="layui-form-item">
+    <label class="layui-form-label title">售后申请原因</label>
+    <label class="layui-form-label content">{$info.reason}</label>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label title">售后申请描述</label>
+    <label class="layui-form-label content">{$info.describe}</label>
+  </div>
+ </eq>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label title">用户上传图片</label>
+    <volist name="info.imgs" id="img">
+      <!-- <img src="$img"> -->
+      <div id="layer-photos-demo" class="layer-photos-demo layui-form-label">
+        <img layer-pid="" layer-src="$img" src="$img" alt="">
+      </div>
+    </volist>
+  </div>
+
+  <eq name="$info.status" value="待审核">
+
+  <div class="layui-form-item">
+    <label class="layui-form-label title"><span style="color:red;">* </span>审核意见</label>
+    <div class="layui-input-block">
+      <input type="radio" name="status" value="-1" title="不通过" <eq name="info.status|default=''" value="-1">checked</eq>>
+      <input type="radio" name="status" value="1" title="审核通过" <eq name="info.status|default=''" value="1">checked</eq>>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label title">审核意见</label>
+    <div class="layui-input-block">
+      <div class="layui-col-md6">
+        <textarea class="layui-textarea" name="remark">{$info.remark}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+
+  <else />
+
+    <div class="layui-form-item">
+      <label class="layui-form-label title">状态</label>
+      <label class="layui-form-label content"><span class="layui-badge layui-bg-cyan">{$info.status}</span></label>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label title">审核意见</label>
+      <label class="layui-form-label content">{$info.remark}</label>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <a class="layui-btn" href="{:url('index')}">取消</a>
+    </div>
+  </div>
+  </eq>
+  
+</form>
+</block>
+<block name="script">
+  <script>
+    //调用示例
+    layer.photos({
+      photos: '#layer-photos-demo'
+      ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+    }); 
+    </script>
+</block>
