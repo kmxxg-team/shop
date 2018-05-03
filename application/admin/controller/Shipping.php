@@ -6,7 +6,7 @@
 // +----------------------------------------------------------------------
 // | Author: 王怀礼 <576106898@qq.com>
 // +----------------------------------------------------------------------
-// | Date: 2017-12-21
+// | Date: 2018-1-10
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -14,30 +14,19 @@ namespace app\admin\controller;
 use app\admin\controller\Base;
 
 /**
- * 后台菜单控制器
+ * 发货单控制器
  */
-class Menu extends Base
+class Shipping extends Base
 {
-	// 菜单模型
-	protected $modelMenu;
+	// 发货单模型
+	protected $modelShipping;
 
 	/**
 	 * 初始化
 	 */
 	public function _initAdmin()
 	{
-		$this->modelMenu = model('Menu');
-
-		$list  = $this->modelMenu
-			->field(true)
-			->column('*')
-		;
-
-		$tree = new \app\common\org\TreeList();
-		$tree_list = $tree->toFormatTree($list);
-
-		$this->assign('tree_list', $tree_list);
-
+		$this->modelShipping = model('Shipping');
 	}
 
 	/**
@@ -45,44 +34,34 @@ class Menu extends Base
 	 */
 	public function index()
 	{
+		$map = [];
+
+		// 按昵称搜索
+        if ($this->request->param('keyword')) {
+            $map['name'] = ['like', '%'. $this->request->param('keyword') . '%'];
+        }
+
 		if ($this->request->isAjax()) {
+			$count = $this->modelShipping->where($map)->count();
 
-			$map = [];
-
-			// 按昵称搜索
-	        if ($this->request->param('keyword')) {
-	            $map['title'] = ['like', '%'. $this->request->param('keyword') . '%'];
-	        }
-	        
-			$count = $this->modelMenu->where($map)->count();
-
-			$list  = $this->modelMenu
+			$list  = $this->modelShipping
 				->where($map)
-				->field(true)
-				->page($this->modelMenu->getPageNow(), $this->modelMenu->getPageLimit())
-				->column('*')
+				->page($this->modelShipping->getPageNow(), $this->modelShipping->getPageLimit())
+				->select()
 			;
 
 			if (!$list) {
 				return $this->error('信息不存在');
 			}
 
-			foreach ($list as $key => $val) {
-	            $list[$key]['parentid_node'] = ($val['pid']) ? 'class = "child-of-node-' . $val['pid'] . '"' : '';
-	        }
-
-	        if (!empty($list)) {
-	            $tree = new \app\common\org\TreeList();
-	            $list = $tree->toFormatTree($list);
-	        }
-
 			$this->assign('list', $list);
+
 			$html = $this->fetch('index_ajax');
 
 			$data = [
 				'list'  => $html,
 				'count' => $count,
-				'limit' => $this->modelMenu->getPageLimit(),
+				'limit' => $this->modelShipping->getPageLimit(),
 			];
 
 			return $this->success('获取成功', '', $data);
@@ -92,28 +71,24 @@ class Menu extends Base
 	}
 
 	/**
-	 * 菜单信息页面
+	 * 编辑信息
 	 */
-	public function menuInfo()
+	public function shippingInfo()
 	{
-		$id = $this->request->param('id');
-
-		// 查询所有父节点
-		$par = db('menu')->field('title, id')->select();
-		$this->assign('par', $par);
+		$shipping_id = $this->request->param('shipping_id');
 
 		$info = array();
 
 		// 判断是否有id传入
-		if ($id) {
-			$info = $this->modelMenu->get($id);
+		if ($shipping_id) {
+			$info = $this->modelShipping->get($shipping_id);
 			$this->assign('info',$info);
 		}
-		return $this->fetch('menu_info');
+		return $this->fetch('shipping_info');
 	}
 
 	/**
-	 * 新增菜单
+	 * 新增信息
 	 */
 	public function add()
 	{	
@@ -122,7 +97,7 @@ class Menu extends Base
 			// 接受数据
 			$data = $this->request->param();
 			
-			$result = $this->modelMenu->save($data);
+			$result = $this->modelShipping->save($data);
 			if ($result) {
 				$this->success('新增成功','index');
 			}
@@ -132,7 +107,7 @@ class Menu extends Base
 	}
 
 	/**
-	 * 编辑菜单
+	 * 编辑信息
 	 */
 	public function edit()
 	{
@@ -140,7 +115,7 @@ class Menu extends Base
 			// 接受数据
 			$data = $this->request->param();
 			
-			$result = $this->modelMenu->update($data);
+			$result = $this->modelShipping->update($data);
 			if ($result) {
 				$this->success('编辑成功','index');
 			}

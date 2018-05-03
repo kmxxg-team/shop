@@ -1,0 +1,30 @@
+<thead>
+  <tr>
+    <th><input type="checkbox" class="check-all"></th>
+    <th>物流公司名称</th>
+    <th>快递公司编码</th>
+    <th>开启状态</th>
+    <th>操作</th>
+  </tr> 
+</thead>
+<tbody>
+  <volist name="list" id="item">
+    <tr>
+      <td><input type="checkbox" class="ids" name="ids[]"></td>
+      <td>{$item.shipping_name}</td>
+      <td>{$item.shipping_code}</td>
+      <td>{$item['is_open']==1 ? '<i class="layui-icon is_right">&#xe616;</i>是' : '<i class="layui-icon is_error">&#x1007;</i>否'}</td>
+
+      <td>
+        <a href="{:url('shippingInfo', array('shipping_id' => $item.shipping_id))}" class="layui-btn layui-btn-xs">
+          编辑
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('setStatus',array('status'=>'delete','model'=>'Shipping','ids'=>$item['shipping_id']))}" data-tips="您确定要删除？">
+          删除
+        </a>
+        <div class="layui-btn-group">
+        </div>
+      </td>
+    </tr>
+  </volist>
+</tbody>

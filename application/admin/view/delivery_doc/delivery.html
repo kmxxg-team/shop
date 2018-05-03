@@ -1,0 +1,215 @@
+<extend name="public/base">
+
+<block name="body">
+<style type="text/css">
+  .label-title{color:gray;}
+  .label-word{text-align: left;}
+  .layui-form-label{height: 10px;}
+  a:hover{color:orange;}
+</style>
+<fieldset class="layui-elem-field layui-field-title">
+<legend>
+  <!-- 返回列表按钮 -->
+  <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
+    发货单详情页
+</legend> 
+</fieldset>
+
+  <form class="layui-form" action="{:url('deliveryConfirm')}" method="post">
+    <input type="hidden" name="id" value="{$doc_info.id|default=''}">
+    <input type="hidden" name="order_id" value="{$doc_info.order_id|default=''}">
+
+    <div class="layui-form-item layui-col-xs10 layui-col-sm10 layui-col-md10" style="border: 5px solid lightblue;">
+      <hr />
+      <label class="layui-form-label">
+        <span class="layui-badge layui-bg-cyan" style="font-size: 15px;">基本信息</span>
+      </label>
+
+      <div class="layui-row layui-col-space10">
+        <div class="layui-col-md4">
+          <label class="layui-form-label label-title">订单号：</label>
+          <label class="layui-form-label label-word">{$doc_info.order_sn}</label>
+        </div>
+        <div class="layui-col-md4">
+          <label class="layui-form-label label-title"><span style="color:red;">* </span>物流公司：</label>
+          <div class="layui-input-block" style="font-size: 8px;">
+            <select name="send_type" lay-verify="required" >
+              <volist name='shipping' id='company'>
+                <option value="{$company.shipping_name}">{$company.shipping_name}</option>
+              </volist>              
+              
+            </select>
+          </div>
+        </div>
+        <div class="layui-col-md4">
+          <label class="layui-form-label label-title"><span style="color:red;">* </span>配送费用：</label>
+          <div class="layui-input-block" style="font-size: 8px;">
+            <input type="text" name="shipping_price" class="layui-input" value="{$doc_info.shipping_price}">
+          </div>
+        </div>
+      </div>
+      <div class="layui-row layui-col-space10">
+        <div class="layui-col-md4">
+          <label class="layui-form-label label-title">下单时间：</label>
+          <label class="layui-form-label label-word" style="min-width: 150px;">{$doc_info.create_time}</label>
+        </div>
+        <div class="layui-col-md4">
+          <label class="layui-form-label label-title"><span style="color:red;">* </span>发货方式：</label>
+          <div class="layui-input-block" style="font-size: 8px;">
+            <select name="send_type" lay-verify="required" id="append-next">
+              <option value="0">自填快递</option>
+              <!-- <option value="1">在线预约</option> -->
+              <!-- <option value="2">电子面单</option> -->
+              <option value="3">无需物流</option>
+            </select>
+          </div>
+        </div>
+      
+        <div class="layui-col-md4">
+          <label class="layui-form-label label-title">配送单号：</label>
+          <div class="layui-input-block" style="font-size: 8px;">
+            <input type="text" name="invoice_no" value="{$doc_info.invoice_no}" class="layui-input" placeholder="若无需物流则不填写" autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <label class="layui-form-label">
+        <span class="layui-badge layui-bg-cyan" style="font-size: 15px;">收货信息</span>
+      </label>
+      <div class="layui-row layui-col-space10">
+        <div class="layui-col-md6">
+          <div class="layui-form-label label-title">收货人：</div>
+          <label class="layui-form-label label-word">{$doc_info.consignee}</label>
+        </div>
+        <div class="layui-col-md6">
+          <label class="layui-form-label label-title">联系方式：</label>
+          <label class="layui-form-label label-word">{$doc_info.mobile}</label>
+        </div>
+        <div class="layui-col-md12">
+          <label class="layui-form-label label-title">收货地址：</label>
+          <label class="layui-form-label label-word" style="min-width: 80%;">{$doc_info.country} {$doc_info.province} {$doc_info.district} {$doc_info.twon} {$doc_info.address}</label>
+        </div>
+      </div>
+      <div class="layui-row layui-col-space10">
+        <div class="layui-col-md6">
+          <label class="layui-form-label label-title">邮编：</label>
+          <label class="layui-form-label label-word">{$doc_info.zipcode}</label>
+        </div>
+        <div class="layui-col-md6">
+          <label class="layui-form-label label-title">配送方式：</label>
+          <label class="layui-form-label label-word">{$doc_info.shipping_name}</label>
+        </div>
+        <div class="layui-col-md12">
+          <label class="layui-form-label label-title">用户备注</label>
+          <label class="layui-form-label label-word">{$user_note}</label>
+        </div>
+      </div>
+
+      <hr />
+
+      <label class="layui-form-label" style="margin-bottom: 10px;">
+        <span class="layui-badge layui-bg-cyan" style="font-size: 15px;">商品信息</span>
+      </label>
+      <table class="layui-table"  style="label-word-wrap:break-label-word; label-word-break:break-all;">
+        <thead>
+          <tr>
+            <th>商品</th>
+            <th>规格属性</th>
+            <th>数量</th>
+            <th>单品价格</th>
+            <th>单品小计</th>
+            <th><!-- <input type="checkbox" class="check-all"> --></th>
+          </tr> 
+        </thead>
+        <tbody>
+          <volist name='doc_info.orderGoods' id='item'>
+            <tr>
+              <td>
+                <a href="">{$item.goods_name}</a>
+              </td>
+              <td>{$item.spec_key_name}</td>
+              <td>{$item.goods_num}</td>
+              <td>{$item.goods_price}</td>
+              <td>{$item.final_price}</td>
+              <td>
+                <switch name="$item.is_send">
+                  <case value="0"><input type="checkbox" name="ids[]" value="{$item.rec_id}"></case>
+                  <case value="1"><label class="layui-btn layui-btn-xs">已发货</label></case>
+                  <case value="2"><label class="layui-btn layui-btn-xs layui-btn-warm">已换货</label></case>
+                  <case value="3"><label class="layui-btn layui-btn-xs layui-btn-danger">已退货</label></case>
+                  <default />未知
+                </switch>
+              </td>
+            </tr>
+          </volist>
+        </tbody>
+      </table>
+
+      <hr />
+
+      <label class="layui-form-label" style="margin-bottom: 10px;">
+        <span class="layui-badge layui-bg-cyan" style="font-size: 15px;">发货记录</span>
+      </label>
+      <table class="layui-table" style="label-word-wrap:break-label-word; label-word-break:break-all;">
+        <thead>
+          <tr>
+            <th>操作者</th>
+            <th>操作时间</th>
+            <th>订单状态</th>
+            <th>付款状态</th>
+            <th>发货状态</th>
+            <th>描述</th>
+            <th>备注</th>
+          </tr> 
+        </thead>
+        <tbody>
+          <volist name='doc_info.orderAction' id='item'>
+            <if condition="$item.status_desc eq '发送货物'">
+            <tr>
+              <td>
+                <if condition='$item.action_user'>
+                  用户：{$doc_info.user.nickname}
+                <else />
+                  管理员:{$doc_info.admin.user_name}
+                </if>
+              </td>
+              <td>{$item.log_time}</td>
+              <td>{$item.order_status}</td>
+              <td>{$item.pay_status}</td>
+              <td>{$item.shipping_status}</td>
+              <td>{$item.status_desc}</td>
+              <td>{$item.action_note}</td>
+            </tr>
+          </if>
+          </volist>
+        </tbody>
+      </table>
+
+      <hr />
+      
+      <div class="layui-form-item">
+        <label class="layui-form-label title">发货单备注</label>
+        <div class="layui-input-block">
+          <div class="layui-col-md6">
+            <textarea name="note" class="layui-textarea"></textarea> 
+          </div>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <neq name="$doc_info.order.shipping_status" value='已发货'>
+            <button class="layui-btn" lay-submit lay-filter="submitForm">确认发货</button>
+          </neq>
+
+          <eq name="$doc_info.order.order_status" value='已作废'>
+            <a class="layui-btn" id="ajax-action" data-tips="您确定要删除？" href="javascript:;" data-url="{:url('Order/delete', array('order_id' => $doc_info['order_id']))}" jump-url="{:url('DeliveryDoc/index')}">删除</a>
+          </eq>
+
+          <a class="layui-btn" href="{:url('index')}">取消</a>
+        </div>
+      </div>
+    </div>
+  </form>
+</block>

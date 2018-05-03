@@ -188,6 +188,29 @@ layui.use(module, function(){
         });
     });
 
+    // ajax提交方法
+    var ajax_action = function(){
+        $('#ajax-action').bind('click', function(){
+            var tips = $('#ajax-action').attr('data-tips');
+            tips = tips || '您确定要操作？';
+            layer.confirm(tips, {btn:['确定', '取消']},
+                function(){
+                    var server_url = $('#ajax-action').attr('data-url');
+                    var jump_url   = $('#ajax-action').attr('jump-url');
+
+                    $.get(server_url, {}, function(result){
+                        if (!result.code) {
+                            error_msg(result.msg);
+                            return false;
+                        }
+                        success_msg(result.msg);
+                        window.location.href = jump_url;
+                    });
+                },
+            );
+        });
+    }
+
 
 
 // ----------------- 普通调用 ---------------------
@@ -206,6 +229,11 @@ layui.use(module, function(){
 
     // 弹框获取html
     tan_get_html('.lay-get-html');
+
+
+    //单个方法ajax提交
+    ajax_action();
+
 });
 
 /**
@@ -222,4 +250,4 @@ function GetRequest() {
       }  
    }  
    return theRequest;  
-}   
+} 

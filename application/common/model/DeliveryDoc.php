@@ -23,9 +23,77 @@ class DeliveryDoc extends Base
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
     protected $pk 	= 'id';
 
-    // 定义关联方法
+    // ----------------------- 关联模型 ---------------------------
+
+    /**
+     * 订单
+     */ 
     public function order()
     {
-        return $this->belongsTo('order', 'order_id', 'order_id');
+        return $this->hasOne('Order', 'order_id', 'order_id');
+    }
+
+    /**
+     * 订单商品
+     */ 
+    public function orderGoods()
+    {
+        return $this->hasMany('OrderGoods', 'order_id', 'order_id');
+    }
+
+    /**
+     * 订单备注
+     */ 
+    public function orderAction()
+    {
+        return $this->hasMany('OrderAction', 'order_id', 'order_id');
+    }
+
+    /**
+     * 关联用户
+     */ 
+    public function user()
+    {
+        return $this->hasOne('User', 'user_id', 'user_id')->field('nickname');
+    }
+
+    /**
+     * 关联用户
+     */ 
+    public function admin()
+    {
+        return $this->hasOne('Admin', 'admin_id', 'user_id')->field('user_name');
+    }
+
+
+    // ------------------------ 读取器 ----------------------------
+
+    /**
+     * 创建时间
+     */
+    public function getCreateTimeAttr($value)
+    { 
+        if ($value) {
+            return date('Y-m-d H:i:s', $value);
+        }
+        return '';
+    }
+
+    /**
+     * 发货方式
+     */
+    public function getSendTypeAttr($value)
+    {
+        $status = [
+            0 => '自填快递',
+	        1 => '在线预约',
+	        2 => '电子面单',
+	        3 => '无需物流',                
+        ];
+
+        if (isset($status[$value])) {
+            return $status[$value];
+        }
+        return '未知';
     }
 }

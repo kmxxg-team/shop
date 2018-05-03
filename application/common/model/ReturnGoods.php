@@ -23,20 +23,41 @@ class ReturnGoods extends Base
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
     protected $pk 	= 'rec_id';
 
-    // 定义关联方法
-    public function goods()
-    {
-        return $this->hasOne('goods', 'goods_id', 'goods_id');
-    }
-
+    // ----------------------- 关联模型 --------------------------
+    
+    /**
+     * 订单关联
+     */
     public function order()
     {
-        return $this->belongsTo('order', 'order_id', 'order_id');
+        return $this->belongsTo('Order', 'order_id', 'order_id');
     }
 
-    public function users()
+    /**
+     * 用户关联
+     */
+    public function user()
     {
-        return $this->hasOne('users', 'user_id', 'user_id');
+        return $this->hasOne('User', 'user_id', 'user_id');
+    }
+
+    /**
+     * 订单货物关联
+     */
+    public function orderGoods()
+    {
+        return $this->belongsTo('OrderGoods', 'rec_id', 'rec_id');
+    }
+
+    /**
+     * 申请时间
+     */
+    public function getAddTimeAttr($value)
+    { 
+        if ($value) {
+            return date('Y-m-d H:i:s', $value);
+        }
+        return '';
     }
 
     // ------------------------ 读取器 ----------------------------
@@ -47,11 +68,11 @@ class ReturnGoods extends Base
     public function getStatusAttr($value)
     {
         $status = [
-            -2 => '用户取消',
-            -1 => '不同意',
+            -2 => '服务单取消',
+            -1 => '审核失败',
             0  => '待审核',
-            1  => '通过',
-            2  => '已发货',
+            1  => '审核通过',
+            2  => '买家发货',
             3  => '已收货',
             4  => '换货完成',
             5  => '退款完成',
