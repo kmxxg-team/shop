@@ -2,7 +2,7 @@
 
 <block name="style">
 <style type="text/css">
-.layui-elem-field{
+.layui-show .layui-elem-field{
 	padding:10px;
 }
 .img-box{
@@ -35,11 +35,9 @@
 <legend>
   <!-- 返回列表按钮 -->
   <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
-  <empty name="$Request.get.goods_id">
-    添加商品
-  <else />
+  <notempty name="$Request.get.goods_id">
     商品设置 - 商品相册
-  </empty>
+  </notempty>
 </legend>
 </fieldset>
 
@@ -47,7 +45,7 @@
   <ul class="layui-tab-title">
     <li class="jump-tab" page-url="{:url('info', ['goods_id'=>$Request.get.goods_id])}">通用信息</li>
     <li class="layui-this">商品相册</li>
-    <li>商品模型</li>
+    <li class="jump-tab" page-url="{:url('typeInfo', ['goods_id'=>$Request.get.goods_id])}">商品模型</li>
     <li>商品物流</li>
     <li>积分折扣</li>
   </ul>

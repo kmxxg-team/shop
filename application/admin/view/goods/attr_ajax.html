@@ -1,0 +1,34 @@
+<!-- 遍历属性项 根据类型分别展示 -->
+<!-- 0手工录入 -->
+<!-- 1从列表中选择 -->
+<!-- 2多行文本框 -->
+<volist name="$data.attr" id="attr" empty="该模型无所属属性项">
+	<switch name="$attr.attr_input_type">
+		<case value="0">
+			<div class="layui-form-item">
+				<label class="layui-form-label">{$attr.attr_name}</label>
+				<div class="layui-input-block">
+					<input type="text" name="attr[{$attr.id}]" autocomplete="off" placeholder="请输入{$attr.attr_name}" class="layui-input">
+				</div>
+			</div>
+		</case>
+		<case value="1">
+			<div class="layui-form-item">
+				<label class="layui-form-label">{$attr.attr_name}</label>
+				<div class="layui-input-block">
+					<volist name="$attr.attr_values" id="value">
+						<input type="radio" name="attr[{$attr.id}]" value="{$value}" title="{$value}">
+					</volist>
+				</div>
+			</div>
+		</case>
+		<case value="2">
+			<div class="layui-form-item layui-form-text">
+				<label class="layui-form-label">{$attr.attr_name}</label>
+				<div class="layui-input-block">
+					<textarea name="attr[{$attr.id}]" placeholder="请输入内容" class="layui-textarea"></textarea>
+				</div>
+			</div>
+		</case>
+	</switch>
+</volist>

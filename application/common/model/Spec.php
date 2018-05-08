@@ -24,15 +24,26 @@ class spec extends Base
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
     protected $pk = 'id';
 
-    // 定义关联方法
+/*---------------------------------- 关联模型 -----------------------------------*/
+    /**
+     * 商品模型关联
+     */
     public function goodsType()
     {
         return $this->belongsTo('goodsType','type_id' ,'id')->field('name');
     }
 
-    // 定义关联方法
+    /**
+     * 规格项关联
+     */
     public function specItem()
     {
-        return $this->hasMany('specItem','spec_id' ,'id')->field('item');
+        return $this->hasMany('specItem','spec_id' ,'id');
     }
+
+/*----------------------------------- 获取器 ------------------------------------*/
+
+
+
+/*----------------------------------- 修改器 ------------------------------------*/
 }

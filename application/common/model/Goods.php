@@ -32,8 +32,38 @@ class Goods extends Base
 		return $this->belongsTo('goodsCategory', 'cat_id', 'id');
 	}
 
-/*----------------------------------- 获取器 ------------------------------------*/
+	/**
+	 * 商品属性关联模型
+	 */
+	public function goodsAttr()
+	{
+		return $this->hasMany('goodsAttr', 'goods_id', 'goods_attr_id');
+	}
 
+	/**
+	 * 商品规格项价格关联模型
+	 */
+	public function SpecGoodsPrice()
+	{
+		return $this->hasMany('specGoodsPrice', 'goods_id', 'item_id');
+	}
+
+/*----------------------------------- 获取器 ------------------------------------*/
+	/**
+	 * 
+	 */
+	public function getSpecItemIdsAttr($value, $data)
+	{
+		$spec_key_str = model('SpecGoodsPrice')->where('goods_id', $data['goods_id'])->column('key');
+        $spec_ids = array();
+        foreach ($spec_key_str as $value) {
+            $value = explode('_', $value);
+            $spec_ids = array_merge($value, $spec_ids);
+        }
+        $spec_ids = array_unique($spec_ids);
+
+        return $spec_ids;
+	}
 
 
 /*----------------------------------- 修改器 ------------------------------------*/

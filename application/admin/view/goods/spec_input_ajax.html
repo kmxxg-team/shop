@@ -1,0 +1,29 @@
+<table class="layui-table" lay-size="sm" lay-skin="line" style="white-space:nowrap;">
+	<thead>
+		<tr>
+			<volist name="spec_name" id="name">
+				<th>{$name}</th>
+			</volist>
+			<th>价格</th>
+			<th>库存</th>
+			<th>SKU</th>
+			<th>是否启用</th>
+		</tr> 
+	</thead>
+	<tbody>
+		<volist name="dika_arr" id="vo" key="id">
+			<tr>
+				<volist name="vo" id="item_id">
+					<td>{$item_name[$item_id]}</td>
+				</volist>
+				<!-- $id-1的原因：$id为dika_arr循环的循环变量 从1开始 而dika_id_item的索引从0开始 -->
+				<td><input type="text" placeholder="请输入价格" name="spec[{$dika_id_item[$id-1]}][price]" value="0" autocomplete="off" class="layui-input"> </td>
+				<td><input type="text" placeholder="请输入库存" name="spec[{$dika_id_item[$id-1]}][store_count]" value="0" autocomplete="off" class="layui-input"> </td>
+				<td><input type="text" placeholder="请输入SKU" name="spec[{$dika_id_item[$id-1]}][sku]" value="" autocomplete="off" class="layui-input"> </td>
+				<td>
+					<input checked="" name="spec[{$dika_id_item[$id-1]}][open]" lay-skin="switch" lay-filter="switchTest" lay-text="是|否" type="checkbox">
+				</td>
+			</tr>
+		</volist>
+	</tbody>
+</table>

@@ -287,7 +287,7 @@ class Spec extends Base
             }
         }
 
-        if ($add_result || $drop_result) {
+        if ($add_result !== false || $drop_result !== false) {
             return true;
         }else{
             return false;

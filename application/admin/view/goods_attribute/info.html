@@ -41,14 +41,6 @@
     </div>
   </div>
 
-  <div class="layui-form-item">
-    <label class="layui-form-label">属性类型</label>
-    <div class="layui-input-block">
-      <input type="radio" name="attr_type" value="0" title="唯一属性" <eq name="info.attr_type|default=''" value="0">checked</eq>>
-      <input type="radio" name="attr_type" value="1" title="单选属性" <eq name="info.attr_type|default=''" value="1">checked</eq>>
-      <input type="radio" name="attr_type" value="2" title="复选属性" <eq name="info.attr_type|default=''" value="2">checked</eq>>
-    </div>
-  </div>
 
   <div class="layui-form-item">
     <label class="layui-form-label">能否进行检索</label>
@@ -63,18 +55,28 @@
     <label class="layui-form-label">该属性的录入方式</label>
     <div class="layui-input-block">
       <input type="radio" name="attr_input_type" value="0" title="手工录入" <eq name="info.attr_input_type|default=''" value="0">checked</eq>>
-      <input type="radio" name="attr_input_type" value="1" title="从下面的列表中选择（一行代表一个可选值）" <eq name="info.attr_input_type|default=''" value="1">checked</eq>>
+      <input type="radio" name="attr_input_type" value="1" title="从下面的列表中选择" lay-filter="select-type" <eq name="info.attr_input_type|default=''" value="1">checked</eq>>
       <input type="radio" name="attr_input_type" value="2" title="多行文本框" <eq name="info.attr_input_type|default=''" value="2">checked</eq>>
     </div>
   </div>
+
+  <!-- <div class="layui-form-item">
+    <label class="layui-form-label">属性类型</label>
+    <div class="layui-input-block">
+      <input type="radio" name="attr_type" value="0" title="唯一属性" <eq name="info.attr_type|default=''" value="0">checked</eq>>
+      <input type="radio" name="attr_type" value="1" title="单选属性" <eq name="info.attr_type|default=''" value="1">checked</eq>>
+      <input type="radio" name="attr_type" value="2" title="复选属性" <eq name="info.attr_type|default=''" value="2">checked</eq>>
+    </div>
+  </div> -->
 
   <div class="layui-form-item">
     <label class="layui-form-label">可选值列表</label>
     <div class="layui-input-block">
       <textarea name="attr_values" rows='10' cols="30" style="width: 500px; height: 150px;" class="layui-input" >{$info.attr_values|default=''}</textarea>
-      <div class="layui-form-mid layui-word-aux">*多个值以换行隔开</div>
+      <div class="layui-form-mid layui-word-aux">*多个值请以 / 隔开，如“红色/蓝色/黑色/白色”</div>
     </div>
   </div>
+
   <div class="layui-form-item">
     <div class="layui-input-block">
       <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>

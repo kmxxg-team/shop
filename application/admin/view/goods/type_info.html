@@ -1,0 +1,188 @@
+<extend name="public/base">
+
+<block name="style">
+<style type="text/css">
+
+</style>
+</block>
+
+<block name="body">
+
+<fieldset class="layui-elem-field layui-field-title">
+<legend>
+  <!-- 返回列表按钮 -->
+  <button class="layui-btn layui-btn-radius layui-btn-primary" onclick="javascript:window.location='{:url(\'index\')}'"><i class="layui-icon">&#xe65c;</i></button>
+  <notempty name="$Request.get.goods_id">
+    商品设置 - 商品模型
+  </notempty>
+</legend>
+</fieldset>
+
+<form class="layui-form" action="{:url('goods/updateSpecAttr')}">
+
+<!-- goods_id -->
+<input type="hidden" name="goods_id" value="{$Request.get.goods_id}" />
+
+<div class="layui-tab">
+  <!-- taps -->
+  <ul class="layui-tab-title">
+    <li class="jump-tab" page-url="{:url('info', ['goods_id'=>$Request.get.goods_id])}">通用信息</li>
+    <li class="jump-tab" page-url="{:url('imgInfo', ['goods_id'=>$Request.get.goods_id])}">商品相册</li>
+    <li class="layui-this">商品模型</li>
+    <li>商品物流</li>
+    <li>积分折扣</li>
+  </ul>
+
+  <!-- content -->
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show" >
+    	<!-- 第一行 -->
+    	<div class="layui-row" style="padding:10px 0;">
+	    	<!-- type -->
+	    	<div class="layui-form-item">
+			    <label class="layui-form-label">
+			    	<span class="layui-badge-dot layui-bg-green"></span>
+			    	&nbsp;商品模型
+				</label>
+			    <div class="layui-input-block">
+			    	<select name="type" lay-filter="goods_type" id="type_selecter">
+			        	<option value="">请选择本商品所属模型</option>
+			        	<volist name="types" id="type">
+				        	<option value="{$type.id}" <eq name="$info.type_id" value="$type.id">selected</eq>>{$type.name}</option>
+			        	</volist>
+			    	</select>
+			    </div>
+			</div>
+    	</div>
+
+    	<hr>
+
+		<!-- 第二行 -->
+		<div class="layui-row" style="padding:10px 0;">
+			<!-- spec -->
+			<fieldset class="layui-elem-field">
+				<legend>规格</legend>
+				<!-- spec item -->
+				<div class="layui-field-box" id="spec_box">
+					选择模型后生成选项
+				</div>
+
+				<!-- spec item input -->
+				<div class="layui-field-box" id="spec-input-box" style="display:none;">
+				</div>
+			</fieldset>
+		</div>
+
+		<!-- 第三行 -->
+		<!-- attr -->
+		<div class="layui-row" style="padding:10px 0;">
+			<fieldset class="layui-elem-field">
+				<legend>属性</legend>
+				<div class="layui-field-box" id="attr_box">
+					选择模型后生成选项
+				</div>
+			</fieldset>
+		</div>
+
+		<!-- submit -->
+		<div class="layui-form-item">
+		    <button class="layui-btn" lay-submit="" lay-filter="submitForm">提交</button>
+		</div>
+    </div>
+  </div>
+</div>
+</form>
+</block>
+
+<block name="script">
+<script type="text/javascript">
+/**
+ * 设置tab标签跳转
+ */
+$('.layui-tab-title .jump-tab').on('click', function(){
+	var url = $(this).attr('page-url');
+	window.location.href = url;
+});
+
+/**
+ * 选择模型后 AJAX请求规格和属性 动态生成表单
+ */
+layui.use('form', function(){
+	var form = layui.form;
+
+	// 选择模型时 获取规格和属性表单
+	form.on('select(goods_type)', function(data){
+		// 获取模型ID
+		var type_id = data.value;
+		$.ajax({
+	 		url  : "{:url('typeInfo')}",
+	 		data : {
+	 			'goods_id': "{$Request.get.goods_id}",
+	 			'type_id' : type_id,
+	 		},
+	 		success : function(result){
+	 			if (result.msg == '模型id未获取') {
+		 			$('#spec_box').html("选择模型后生成选项");
+		 			$('#attr_box').html("选择模型后生成选项");
+	 			}
+
+	 			// 规格和属性表单
+	 			$('#spec_box').html(result.data.spec);
+	 			$('#attr_box').html(result.data.attr);
+
+				// 下方规格价格项 隐藏
+				$('#spec-input-box').hide();
+
+	 			// 重新渲染表单
+	 			form.render();
+	 		},
+	 	});
+	});
+
+	// 选择规格时 拼装规格价格输入框表格
+	form.on('checkbox(spec_item)', function(data){
+		var ele = data.elem;
+		// 给选中的checkbox添加类
+		if (data.elem.checked) {
+			ele.classList.add('checked-specitem');
+		} else {
+			ele.classList.remove('checked-specitem');
+		}
+
+		// 选取规格项信息数组
+		var spec_arr = [];
+		// 拼装规格项信息数组
+		$('.checked-specitem').each(function(){
+			// 规格ID
+			var spec_id = $(this).attr('spec-id');
+			// 规格项ID
+			var item_id = $(this).val();
+
+			// 组装规格项数组
+			// 格式为 [spec_id => [item_id1, item_id2]]
+			if (!spec_arr.hasOwnProperty(spec_id)) {
+				spec_arr[spec_id] = [];
+			}
+			spec_arr[spec_id].push(item_id);
+		});
+
+		// 将选中数据传到后台处理
+		$.ajax({
+			url  : "{:url('Goods/ajaxGetSpecInput')}",
+			data : {'spec_arr' : spec_arr},
+			success : function(data){
+				$('#spec-input-box').html(data);
+				$('#spec-input-box').show();
+	 			form.render();
+			}
+		});
+	});
+
+	$(document).ready(function(){
+		var type_id = $('#type_selecter').val();
+		$.get("{:url('typeInfo')}", );
+	});
+});
+
+</script>
+</block>

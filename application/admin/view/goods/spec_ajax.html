@@ -1,0 +1,14 @@
+<div class="layui-form-item">
+	<div class="layui-input-block" style="margin-left:0px;">
+		<volist name="$data.spec" id="spec" empty="该模型无所属规格项">
+			<div class="layui-form-item">
+				<label class="layui-form-label">{$spec.spec_name}</label>
+				<div class="layui-input-block">
+					<volist name="$spec.specItem" id="spec_item">
+						<input type="checkbox" value="{$spec_item.id}" spec-id="{$spec.id}" title="{$spec_item.item}" lay-filter="spec_item">
+					</volist>
+				</div>
+			</div>
+		</volist>
+	</div>
+</div>

@@ -129,3 +129,46 @@ function stringUnique($separator, $str)
 
     return $str;
 }
+
+/** 
+* 所有数组的笛卡尔积 
+* 
+* @param unknown_type $data 
+*/  
+function combineDika() {  
+	$data = func_get_args();  
+	$data = current($data);
+	$count = count($data);
+	$result = array();  
+
+	// 取出第一个元素 $data中第一个元素将会释放
+    $first = array_shift($data);
+	foreach($first as $item) {  
+		//取出第一个数组里的各个元素组成新的二元数组，示例: array('红', '黄', '黑') 转为 array(array('红'),array('黄'), array('黑'))
+		$result[] = array($item); 
+	}
+
+	foreach($data as $item) {
+		//追加后续数组的元素到第一个数组里  
+		$result = combineArray($result, $item);  
+	}  
+	return $result;  
+}
+
+/** 
+* 两个数组的笛卡尔积 
+* 
+* @param unknown_type $arr1 ，示例: array(array('红'),array('黄'), array('黑'))
+* @param unknown_type $arr2 
+*/  
+function combineArray($arr1,$arr2) {  
+	$result = array();  
+	foreach ($arr1 as $item1) {  
+		foreach ($arr2 as $item2) {  
+			$temp = $item1; // $item1是数组
+			$temp[] = $item2;  //追加上元素$item2
+			$result[] = $temp;  //组成新数组
+		}  
+	}  
+	return $result;  
+}  

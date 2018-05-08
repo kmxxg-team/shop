@@ -23,4 +23,15 @@ class specItem extends Base
 
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
     protected $pk = 'id';
+
+    
+    /*---------------------------------- 关联模型 -----------------------------------*/
+	/**
+	 * 规格项关联模型
+	 */
+	public function spec()
+	{
+		return $this->belongsTo('spec', 'spec_id', 'id');
+	}
+
 }
