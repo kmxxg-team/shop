@@ -114,29 +114,7 @@ layui.use('form', function(){
 	form.on('select(goods_type)', function(data){
 		// 获取模型ID
 		var type_id = data.value;
-		$.ajax({
-	 		url  : "{:url('typeInfo')}",
-	 		data : {
-	 			'goods_id': "{$Request.get.goods_id}",
-	 			'type_id' : type_id,
-	 		},
-	 		success : function(result){
-	 			if (result.msg == '模型id未获取') {
-		 			$('#spec_box').html("选择模型后生成选项");
-		 			$('#attr_box').html("选择模型后生成选项");
-	 			}
-
-	 			// 规格和属性表单
-	 			$('#spec_box').html(result.data.spec);
-	 			$('#attr_box').html(result.data.attr);
-
-				// 下方规格价格项 隐藏
-				$('#spec-input-box').hide();
-
-	 			// 重新渲染表单
-	 			form.render();
-	 		},
-	 	});
+		getAjaxSpecHtml(type_id);
 	});
 
 	// 选择规格时 拼装规格价格输入框表格
@@ -178,11 +156,74 @@ layui.use('form', function(){
 		});
 	});
 
+	/**
+	 * 进入页面直接请求html页面
+	 */
 	$(document).ready(function(){
 		var type_id = $('#type_selecter').val();
-		$.get("{:url('typeInfo')}", );
+		getAjaxSpecHtml(type_id);
+
+		// 选取规格项信息数组
+		var spec_arr = [];
+		// 拼装规格项信息数组
+		$('.checked-specitem').each(function(){
+			// 规格ID
+			var spec_id = $(this).attr('spec-id');
+			// 规格项ID
+			var item_id = $(this).val();
+
+			// 组装规格项数组
+			// 格式为 [spec_id => [item_id1, item_id2]]
+			if (!spec_arr.hasOwnProperty(spec_id)) {
+				spec_arr[spec_id] = [];
+			}
+			spec_arr[spec_id].push(item_id);
+		});
+
+		// 将选中数据传到后台处理
+		$.ajax({
+			url  : "{:url('Goods/ajaxGetSpecInput')}",
+			data : {'spec_arr' : spec_arr},
+			success : function(data){
+				$('#spec-input-box').html(data);
+				$('#spec-input-box').show();
+	 			form.render();
+			}
+		});
 	});
+
+	/**
+	 * 获取规格项和属性 生成html
+	 */
+	function getAjaxSpecHtml(type_id)
+	{
+		$.ajax({
+	 		url  : "{:url('typeInfo')}",
+	 		data : {
+	 			'goods_id': "{$Request.get.goods_id}",
+	 			'type_id' : type_id,
+	 		},
+	 		success : function(result){
+	 			if (result.msg == '模型id未获取') {
+		 			$('#spec_box').html("选择模型后生成选项");
+		 			$('#attr_box').html("选择模型后生成选项");
+	 			}
+
+	 			// 规格和属性表单
+	 			$('#spec_box').html(result.data.spec);
+	 			$('#attr_box').html(result.data.attr);
+
+				// 下方规格价格项 隐藏
+				$('#spec-input-box').hide();
+
+				// 重新渲染表单
+				form.render();
+	 		},
+	 	});
+	}
+
 });
+
 
 </script>
 </block>

@@ -8,7 +8,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">{$attr.attr_name}</label>
 				<div class="layui-input-block">
-					<input type="text" name="attr[{$attr.id}]" autocomplete="off" placeholder="请输入{$attr.attr_name}" class="layui-input">
+					<input type="text" name="attr[{$attr.id}]" autocomplete="off" placeholder="请输入{$attr.attr_name}" class="layui-input" <present name="info.attr_values[$attr.id]">value="{$info.attr_values[$attr.id]}"</present>>
 				</div>
 			</div>
 		</case>
@@ -17,7 +17,7 @@
 				<label class="layui-form-label">{$attr.attr_name}</label>
 				<div class="layui-input-block">
 					<volist name="$attr.attr_values" id="value">
-						<input type="radio" name="attr[{$attr.id}]" value="{$value}" title="{$value}">
+						<input type="radio" name="attr[{$attr.id}]" value="{$value}" title="{$value}" <present name="info.attr_values[$attr.id]"><eq name="info.attr_values[$attr.id]" value="$value">checked</eq></present>>
 					</volist>
 				</div>
 			</div>
@@ -26,7 +26,7 @@
 			<div class="layui-form-item layui-form-text">
 				<label class="layui-form-label">{$attr.attr_name}</label>
 				<div class="layui-input-block">
-					<textarea name="attr[{$attr.id}]" placeholder="请输入内容" class="layui-textarea"></textarea>
+					<textarea name="attr[{$attr.id}]" placeholder="请输入内容" class="layui-textarea"><present name="info.attr_values[$attr.id]">{$info.attr_values[$attr.id]}</present></textarea>
 				</div>
 			</div>
 		</case>

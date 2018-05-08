@@ -275,7 +275,7 @@ class Goods extends Base
         // 获取商品信息
         $info = $this->modelGoods->find($id);
 
-        // dump($info->spec_item_ids);
+        // dump($info->attr_values); die;
 
         // 接受商品模型 获取所属规格和属性
         if ($this->request->isAjax()) {
@@ -304,6 +304,7 @@ class Goods extends Base
                 $data['attr'][$key]['attr_values']  = explode('/', $attr['attr_values']);
             }
 
+            $this->assign('info', $info);
             $this->assign('data', $data);
             $html['spec'] = $this->fetch('spec_ajax');
             $html['attr'] = $this->fetch('attr_ajax');
@@ -311,8 +312,8 @@ class Goods extends Base
             return $this->success('获取成功', null, $html);
         }
 
-        $this->assign('types', $types);
         $this->assign('info', $info);
+        $this->assign('types', $types);
         return $this->fetch('type_info');
     }
 

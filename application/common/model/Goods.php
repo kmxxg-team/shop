@@ -45,12 +45,13 @@ class Goods extends Base
 	 */
 	public function SpecGoodsPrice()
 	{
-		return $this->hasMany('specGoodsPrice', 'goods_id', 'item_id');
+		return $this->hasMany('specGoodsPrice', 'goods_id', 'id');
 	}
 
 /*----------------------------------- 获取器 ------------------------------------*/
 	/**
-	 * 
+	 * 规格项ID获取器
+	 * 获取该商品 所选规格项的ID 的索引数组
 	 */
 	public function getSpecItemIdsAttr($value, $data)
 	{
@@ -65,6 +66,14 @@ class Goods extends Base
         return $spec_ids;
 	}
 
+	/**
+	 * 商品属性获取器
+	 * 获取该商品对应的模型属性与值的数组 array('属性id' => '属性值')
+	 */
+	public function getAttrValuesAttr($value, $data)
+	{
+		return model('goodsAttr')->where('goods_id', $data['goods_id'])->column('attr_value', 'attr_id');
+	}
 
 /*----------------------------------- 修改器 ------------------------------------*/
 	/**

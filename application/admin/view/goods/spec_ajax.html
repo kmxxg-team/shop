@@ -5,7 +5,7 @@
 				<label class="layui-form-label">{$spec.spec_name}</label>
 				<div class="layui-input-block">
 					<volist name="$spec.specItem" id="spec_item">
-						<input type="checkbox" value="{$spec_item.id}" spec-id="{$spec.id}" title="{$spec_item.item}" lay-filter="spec_item">
+						<input type="checkbox" value="{$spec_item.id}" spec-id="{$spec.id}" title="{$spec_item.item}" lay-filter="spec_item" <present name="info"><in name="spec_item.id" value="$info.spec_item_ids">checked class="checked-specitem"</in></present>>
 					</volist>
 				</div>
 			</div>
